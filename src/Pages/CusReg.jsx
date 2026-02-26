@@ -11,7 +11,7 @@ import {
 } from "@/Pages/ui/select";
 import { toast } from "sonner";
 import { registerCustomer } from "@/api/customer";
-import api from "@/lib/axios";
+import api from "@/Lib/axios";
 
 const CustomerRegistrationForm = () => {
   const videoRef = useRef(null);

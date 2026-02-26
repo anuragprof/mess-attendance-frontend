@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react"
 import ScanQR from "../Components/ScanQR"
 import Card from "../Components/Card"
-import api from "../lib/axios"
+import api from "../Lib/axios"
 
 export default function Scan() {
   const [status, setStatus] = useState(null)

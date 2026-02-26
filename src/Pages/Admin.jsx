@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Card from "../Components/Card";
 import { toast } from "sonner";
-import axios from "@/lib/axios";
+import axios from "@/Lib/axios";
 import {
   Select,
   SelectContent,
