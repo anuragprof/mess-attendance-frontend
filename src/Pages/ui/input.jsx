@@ -1,5 +1,5 @@
 import React, { forwardRef } from "react";
-import { cn } from "@/lib/utils"; // ensure the path matches your folder (case-sensitive)
+import { cn } from "@/Lib/utils"; // ensure the path matches your folder (case-sensitive)
 
 const Input = forwardRef(function Input({ className, type, ...props }, ref) {
   return (

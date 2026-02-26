@@ -1,7 +1,7 @@
 import React, { forwardRef } from "react";
 import * as SelectPrimitive from "@radix-ui/react-select";
 import { Check, ChevronDown, ChevronUp } from "lucide-react";
-import { cn } from "@/lib/utils"; // ensure path matches your actual folder name/case
+import { cn } from "@/Lib/utils"; // ensure path matches your actual folder name/case
 
 // Basic Radix Select parts
 const Select = SelectPrimitive.Root;
