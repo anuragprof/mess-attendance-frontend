@@ -1,5 +1,5 @@
 // src/features/auth/api.js
-import { api } from "../../lib/api";
+import { api } from "../../Lib/api";
 
 export async function loginVendor({ email, password }) {
   // POST /api/vendor/login (sets cookies + csrf)
