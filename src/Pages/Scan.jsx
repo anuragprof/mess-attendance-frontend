@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react"
-import ScanQR from "../components/ScanQR"
-import Card from "../components/Card"
+import ScanQR from "../Components/ScanQR"
+import Card from "../Components/Card"
 import api from "../lib/axios"
 
 export default function Scan() {
