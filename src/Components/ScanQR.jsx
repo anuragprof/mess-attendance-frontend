@@ -13,7 +13,7 @@ export default function ScanQR({ onDetected }) {
             if (result?.[0]?.rawValue) onDetected(result[0].rawValue)
           }}
           onError={(err) => setError(err?.message || 'Camera error')}
-            constraints={{ facingMode: { ideal: 'environment' } }}          
+            constraints={{ facingMode:"user" }}//{ ideal: 'environment' } }}          
           styles={{ container: { width: '100%' }, video: { width: '100%' } }}
         />
       </div>
