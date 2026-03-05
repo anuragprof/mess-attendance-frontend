@@ -36,7 +36,7 @@ export default function App() {
       {/* Navbar only when logged in */}
       {me && <Navbar me={me} setMe={setMe} />}
       
-      <main className="mx-auto max-w-6xl p-4">
+      <main className={me ? "mx-auto max-w-6xl p-4" : ""}>
         <Routes>
           <Route path="/" element={<Navigate to="/login" />} />
           
