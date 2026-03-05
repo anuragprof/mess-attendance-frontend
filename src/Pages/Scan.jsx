@@ -11,6 +11,17 @@ export default function Scan() {
   const lastScanRef = useRef(null)
   const scanLockRef = useRef(false)
 
+  /* ================= VOICE FEEDBACK ================= */
+  function speak(text) {
+    if (!window.speechSynthesis) return
+    const msg = new SpeechSynthesisUtterance(text)
+    msg.lang = "en-US"
+    msg.rate = 0.9
+    msg.pitch = 1
+    window.speechSynthesis.cancel()
+    window.speechSynthesis.speak(msg)
+  }
+
   const fetchRecentScans = async () => {
     try {
       const res = await api.get("/scan/recent")
@@ -44,16 +55,33 @@ export default function Scan() {
       switch (backendStatus) {
         case "success":
           type = "success"
+          speak("Successful")
           fetchRecentScans()
           break
+
         case "already_redeemed":
+          type = "warning"
+          speak("Already redeemed")
+          break
+
         case "daily_limit_reached":
           type = "warning"
+          speak("Daily limit reached")
           break
+
         case "expired":
+          type = "error"
+          speak("Subscription expired")
+          break
+
         case "plan_completed":
+          type = "error"
+          speak("Plan completed")
+          break
+
         default:
           type = "error"
+          speak("Invalid QR code")
       }
 
       setStatus({
@@ -66,6 +94,7 @@ export default function Scan() {
         type: "error",
         text: e?.response?.data?.detail || "Scan failed",
       })
+      speak("Scan failed")
     } finally {
       setLoading(false)
       setTimeout(() => {
@@ -115,7 +144,6 @@ export default function Scan() {
               {status.customer && (
                 <div className="flex flex-col md:flex-row items-center gap-6">
 
-                  {/* ✅ Only change: use photo_url */}
                   {status.customer.photo_url && (
                     <img
                       src={status.customer.photo_url}
@@ -193,7 +221,6 @@ export default function Scan() {
                   key={scan.id}
                   className="flex items-center gap-4 p-3 border rounded-xl bg-zinc-50"
                 >
-                  {/* ✅ Only change: use photo_url */}
                   {scan.photo_url && (
                     <img
                       src={scan.photo_url}
