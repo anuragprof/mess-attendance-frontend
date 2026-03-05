@@ -181,7 +181,7 @@ const CustomerRegistrationForm = () => {
               onChange={(e) =>
                 setFormData({ ...formData, phoneNumber: e.target.value })
               }
-              placeholder="Enter phone number"
+              placeholder="Enter Whatsapp number"
             />
           </div>
         </div>
