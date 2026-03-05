@@ -4,8 +4,8 @@ import { loginVendor, getVendorMe } from "./api";
 import { useNavigate } from "react-router-dom";
 
 export default function LoginForm({ setMe }) {
-  const [email, setEmail] = useState("test@mess.com");
-  const [password, setPassword] = useState("secret123");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState("");
 
