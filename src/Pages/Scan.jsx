@@ -60,7 +60,7 @@ export default function Scan() {
           break
 
         case "already_redeemed":
-          type = "warning"
+          type = "error"
           speak("Already redeemed")
           break
 
