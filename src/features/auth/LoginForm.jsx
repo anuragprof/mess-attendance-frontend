@@ -35,7 +35,7 @@ export default function LoginForm({ setMe }) {
 
 
 
-  <div className="min-h-screen flex items-center justify-center bg-cover bg-center" style={{ backgroundImage: "url('/login-bg.jpg')" }} >
+  <div className="min-h-screen flex items-center justify-center bg-cover bg-center" style={{ backgroundImage: "url('/login-bg')" }} >
 
     
     <div style={{ maxWidth: 420, margin: "40px auto", padding: 24, border: "1px solid #333", borderRadius: 12 }}>
