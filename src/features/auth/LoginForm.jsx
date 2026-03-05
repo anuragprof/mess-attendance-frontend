@@ -32,8 +32,14 @@ export default function LoginForm({ setMe }) {
 
 
   return (
+
+
+
+  <div className="min-h-screen flex items-center justify-center bg-cover bg-center" style={{ backgroundImage: "url('/login-bg.jpg')" }} >
+
+    
     <div style={{ maxWidth: 420, margin: "40px auto", padding: 24, border: "1px solid #333", borderRadius: 12 }}>
-      <h2 style={{ marginBottom: 16 }}>Vendor Login</h2>
+      <h2 style={{ marginBottom: 16 }}>Mess Login</h2>
 
       <form onSubmit={handleLogin}>
         <div style={{ marginBottom: 12 }}>
@@ -69,5 +75,6 @@ export default function LoginForm({ setMe }) {
         {err && <p style={{ color: "tomato", marginTop: 12 }}>{err}</p>}
       </form>
     </div>
+  </div>
   );
 }
