@@ -174,14 +174,14 @@ const CustomerRegistrationForm = () => {
           </div>
 
           <div className="space-y-2">
-            <Label>Phone Number</Label>
+            <Label>WhatsApp Number</Label>
             <Input
               type="tel"
               value={formData.phoneNumber}
               onChange={(e) =>
                 setFormData({ ...formData, phoneNumber: e.target.value })
               }
-              placeholder="Enter Whatsapp number"
+              placeholder="Enter WhatsApp number"
             />
           </div>
         </div>
