@@ -37,7 +37,7 @@ export default function LoginForm({ setMe }) {
 
   <div className="min-h-screen w-full flex items-center justify-center bg-cover bg-center" style={{ backgroundImage: "url('/login-bg.jpeg')" }} >
 
-    <div className="max-w-md w-full p-6 rounded-xl border border-white/30 bg-white/80 backdrop-blur-md shadow-2xl">
+    <div className="max-w-md w-full p-6 rounded-xl border border-white/30 bg-white/65 backdrop-blur-md shadow-2xl">
       <h2 className="text-xl font-semibold mb-4 text-center">Mess Login</h2>
 
       <form onSubmit={handleLogin}>
