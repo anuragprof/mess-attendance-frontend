@@ -23,6 +23,7 @@ const CustomerRegistrationForm = () => {
 
   const [planAmount, setPlanAmount] = useState(0);
   const [amountPaid, setAmountPaid] = useState("");
+  const [startDate, setStartDate] = useState("");
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -117,6 +118,13 @@ const CustomerRegistrationForm = () => {
       return;
     }
 
+    if (!startDate || startDate.length !== 8) {
+      toast.error("Start date must be in MMDDYYYY format");
+      return;
+    }
+
+    const formattedStartDate = `${startDate.slice(4,8)}-${startDate.slice(0,2)}-${startDate.slice(2,4)}`;
+
     try {
       setLoading(true);
 
@@ -127,6 +135,7 @@ const CustomerRegistrationForm = () => {
       data.append("plan_id", formData.planId);
       data.append("photo", formData.photo);
 
+      data.append("start_date", formattedStartDate);
       data.append("total_amount", planAmount);
       data.append("total_amount_paid", amountPaid || 0);
 
@@ -145,6 +154,7 @@ const CustomerRegistrationForm = () => {
 
       setPlanAmount(0);
       setAmountPaid("");
+      setStartDate("");
 
     } catch (err) {
       console.error(err);
@@ -205,6 +215,19 @@ const CustomerRegistrationForm = () => {
               setFormData({ ...formData, email: e.target.value })
             }
             placeholder="Enter email address"
+          />
+        </div>
+
+        {/* Start Date */}
+        <div className="space-y-2">
+          <Label>Start Date (MMDDYYYY)</Label>
+          <Input
+            type="text"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+            placeholder="MMDDYYYY"
+            maxLength={8}
+            required
           />
         </div>
 
