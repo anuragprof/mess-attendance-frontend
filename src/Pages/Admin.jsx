@@ -142,7 +142,6 @@ export default function Admin() {
                     customer.days_left <= 0 ? "bg-red-50" : ""
                   }`}
                 >
-                  {/* Photo */}
                   <td className="p-2">
                     <img
                       src={customer.photo_url}
@@ -159,7 +158,6 @@ export default function Admin() {
                   <td className="p-2">{customer.full_name}</td>
                   <td className="p-2">{customer.email}</td>
 
-                  {/* QR */}
                   <td className="p-2">
                     <img
                       src={customer.qr_url}
@@ -193,7 +191,6 @@ export default function Admin() {
                     )}
                   </td>
 
-                  {/* Actions */}
                   <td className="p-2 relative">
                     <div className="relative inline-block text-left">
                       <button
@@ -392,9 +389,15 @@ export default function Admin() {
             className="bg-white p-6 rounded-2xl w-full max-w-3xl"
             onClick={(e) => e.stopPropagation()}
           >
-            <h3 className="text-xl font-semibold mb-6 text-center">
-              {previewCustomer.full_name}
-            </h3>
+                <div className="flex justify-center items-center gap-4 mb-6">
+                  <h3 className="text-xl font-semibold">
+                    {previewCustomer.full_name}
+                  </h3>
+
+                  <span className="text-zinc-600 text-sm bg-zinc-100 px-3 py-1 rounded-lg">
+                    📞 {previewCustomer.phone_number}
+                  </span>
+                </div>
 
             <div className="grid md:grid-cols-2 gap-6 items-center">
               <div className="flex flex-col items-center">
