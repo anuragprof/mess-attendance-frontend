@@ -23,7 +23,10 @@ const CustomerRegistrationForm = () => {
 
   const [planAmount, setPlanAmount] = useState(0);
   const [amountPaid, setAmountPaid] = useState("");
-  const [startDate, setStartDate] = useState("");
+
+  const [startMonth, setStartMonth] = useState("");
+  const [startDay, setStartDay] = useState("");
+  const [startYear, setStartYear] = useState("");
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -118,12 +121,15 @@ const CustomerRegistrationForm = () => {
       return;
     }
 
-    if (!startDate || startDate.length !== 8) {
-      toast.error("Start date must be in MMDDYYYY format");
+    if (!startMonth || !startDay || !startYear) {
+      toast.error("Please enter start date");
       return;
     }
 
-    const formattedStartDate = `${startDate.slice(4,8)}-${startDate.slice(0,2)}-${startDate.slice(2,4)}`;
+    const formattedStartDate = `${startYear}-${startMonth.padStart(
+      2,
+      "0"
+    )}-${startDay.padStart(2, "0")}`;
 
     try {
       setLoading(true);
@@ -154,7 +160,10 @@ const CustomerRegistrationForm = () => {
 
       setPlanAmount(0);
       setAmountPaid("");
-      setStartDate("");
+
+      setStartMonth("");
+      setStartDay("");
+      setStartYear("");
 
     } catch (err) {
       console.error(err);
@@ -205,30 +214,45 @@ const CustomerRegistrationForm = () => {
           </div>
         </div>
 
-        {/* Email */}
-        <div className="space-y-2">
-          <Label>Email Address</Label>
-          <Input
-            type="email"
-            value={formData.email}
-            onChange={(e) =>
-              setFormData({ ...formData, email: e.target.value })
-            }
-            placeholder="Enter email address"
-          />
-        </div>
+        {/* Email + Start Date */}
+        <div className="grid gap-6 md:grid-cols-2">
 
-        {/* Start Date */}
-        <div className="space-y-2">
-          <Label>Start Date (MMDDYYYY)</Label>
-          <Input
-            type="text"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-            placeholder="MMDDYYYY"
-            maxLength={8}
-            required
-          />
+          <div className="space-y-2">
+            <Label>Email Address</Label>
+            <Input
+              type="email"
+              value={formData.email}
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
+              placeholder="Enter email address"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label>Start Date</Label>
+            <div className="flex gap-2">
+              <Input
+                placeholder="MM"
+                maxLength={2}
+                value={startMonth}
+                onChange={(e) => setStartMonth(e.target.value)}
+              />
+              <Input
+                placeholder="DD"
+                maxLength={2}
+                value={startDay}
+                onChange={(e) => setStartDay(e.target.value)}
+              />
+              <Input
+                placeholder="YYYY"
+                maxLength={4}
+                value={startYear}
+                onChange={(e) => setStartYear(e.target.value)}
+              />
+            </div>
+          </div>
+
         </div>
 
         {/* Camera */}
