@@ -21,6 +21,9 @@ const CustomerRegistrationForm = () => {
   const [loading, setLoading] = useState(false);
   const [plans, setPlans] = useState([]);
 
+  const [planAmount, setPlanAmount] = useState(0);
+  const [amountPaid, setAmountPaid] = useState("");
+
   const [formData, setFormData] = useState({
     fullName: "",
     phoneNumber: "",
@@ -124,6 +127,9 @@ const CustomerRegistrationForm = () => {
       data.append("plan_id", formData.planId);
       data.append("photo", formData.photo);
 
+      data.append("total_amount", planAmount);
+      data.append("total_amount_paid", amountPaid || 0);
+
       const res = await registerCustomer(data);
 
       toast.success("Customer registered successfully ✅");
@@ -136,6 +142,9 @@ const CustomerRegistrationForm = () => {
         planId: "",
         photo: null,
       });
+
+      setPlanAmount(0);
+      setAmountPaid("");
 
     } catch (err) {
       console.error(err);
@@ -254,9 +263,15 @@ const CustomerRegistrationForm = () => {
           <Label>Meal Plan</Label>
           <Select
             value={formData.planId}
-            onValueChange={(v) =>
-              setFormData({ ...formData, planId: v })
-            }
+            onValueChange={(v) => {
+              const selectedPlan = plans.find((p) => String(p.id) === v);
+
+              setFormData({ ...formData, planId: v });
+
+              if (selectedPlan) {
+                setPlanAmount(selectedPlan.price || 0);
+              }
+            }}
           >
             <SelectTrigger>
               <SelectValue placeholder="Select Plan" />
@@ -270,6 +285,39 @@ const CustomerRegistrationForm = () => {
             </SelectContent>
           </Select>
         </div>
+
+        {/* Payment Section */}
+        {formData.planId && (
+          <div className="space-y-3 rounded-xl border p-4">
+            <Label>Payment</Label>
+
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="space-y-2">
+                <Label>Plan Amount</Label>
+                <Input value={planAmount} disabled />
+              </div>
+
+              <div className="space-y-2">
+                <Label>Amount Paid</Label>
+                <Input
+                  type="number"
+                  value={amountPaid}
+                  onChange={(e) => setAmountPaid(e.target.value)}
+                  placeholder="Leave blank if unpaid"
+                />
+              </div>
+            </div>
+
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setAmountPaid(planAmount)}
+              className="w-full"
+            >
+              Pay Full Amount
+            </Button>
+          </div>
+        )}
 
         <Button
           type="submit"
