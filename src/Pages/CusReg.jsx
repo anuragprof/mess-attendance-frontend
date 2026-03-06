@@ -269,7 +269,7 @@ const CustomerRegistrationForm = () => {
               setFormData({ ...formData, planId: v });
 
               if (selectedPlan) {
-                setPlanAmount(selectedPlan.price || 0);
+                setPlanAmount(selectedPlan.price_cents || 0);
               }
             }}
           >
