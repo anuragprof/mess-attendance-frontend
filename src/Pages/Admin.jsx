@@ -126,6 +126,7 @@ export default function Admin() {
                 <th className="p-2 text-left">Photo</th>
                 <th className="p-2 text-left">ID</th>
                 <th className="p-2 text-left">Name</th>
+                <th className="p-2 text-left">Phone</th>
                 <th className="p-2 text-left">Email</th>
                 <th className="p-2 text-left">QR</th>
                 <th className="p-2 text-left">Expiry</th>
@@ -151,11 +152,12 @@ export default function Admin() {
                     />
                   </td>
 
-                  <td className="p-2 font-mono">
-                    CUST-{customer.id}
-                  </td>
+                  <td className="p-2 font-mono">CUST-{customer.id}</td>
 
                   <td className="p-2">{customer.full_name}</td>
+
+                  <td className="p-2">{customer.phone_number}</td>
+
                   <td className="p-2">{customer.email}</td>
 
                   <td className="p-2">
@@ -244,7 +246,7 @@ export default function Admin() {
 
               {filteredCustomers.length === 0 && (
                 <tr>
-                  <td colSpan="8" className="p-4 text-center text-zinc-500">
+                  <td colSpan="9" className="p-4 text-center text-zinc-500">
                     No customers found
                   </td>
                 </tr>
@@ -254,7 +256,7 @@ export default function Admin() {
         </div>
       </Card>
 
-      {/* ================= EDIT MODAL ================= */}
+      {/* EDIT MODAL */}
       {editingCustomer && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-40">
           <div className="bg-white p-6 rounded-xl w-full max-w-md space-y-4">
@@ -298,13 +300,14 @@ export default function Admin() {
               onValueChange={(v) =>
                 setEditingCustomer({
                   ...editingCustomer,
-                  plan_id: v,
+                  plan_id: Number(v),
                 })
               }
             >
               <SelectTrigger>
                 <SelectValue placeholder="Select Plan" />
               </SelectTrigger>
+
               <SelectContent>
                 {plans.map((plan) => (
                   <SelectItem key={plan.id} value={String(plan.id)}>
@@ -333,7 +336,7 @@ export default function Admin() {
         </div>
       )}
 
-      {/* ================= RENEW MODAL ================= */}
+      {/* RENEW MODAL */}
       {renewCustomer && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-40">
           <div className="bg-white p-6 rounded-xl w-full max-w-md space-y-4">
@@ -351,6 +354,7 @@ export default function Admin() {
               <SelectTrigger>
                 <SelectValue placeholder="Select Plan" />
               </SelectTrigger>
+
               <SelectContent>
                 {plans.map((plan) => (
                   <SelectItem key={plan.id} value={String(plan.id)}>
@@ -379,7 +383,7 @@ export default function Admin() {
         </div>
       )}
 
-      {/* ================= PREVIEW MODAL ================= */}
+      {/* PREVIEW MODAL */}
       {previewCustomer && (
         <div
           className="fixed inset-0 bg-black/60 flex items-center justify-center z-50"
@@ -389,15 +393,15 @@ export default function Admin() {
             className="bg-white p-6 rounded-2xl w-full max-w-3xl"
             onClick={(e) => e.stopPropagation()}
           >
-                <div className="flex justify-center items-center gap-4 mb-6">
-                  <h3 className="text-xl font-semibold">
-                    {previewCustomer.full_name}
-                  </h3>
+            <div className="flex justify-center items-center gap-4 mb-6">
+              <h3 className="text-xl font-semibold">
+                {previewCustomer.full_name}
+              </h3>
 
-                  <span className="text-zinc-600 text-sm bg-zinc-100 px-3 py-1 rounded-lg">
-                    📞 {previewCustomer.phone_number}
-                  </span>
-                </div>
+              <span className="text-zinc-600 text-sm bg-zinc-100 px-3 py-1 rounded-lg">
+                📞 {previewCustomer.phone_number}
+              </span>
+            </div>
 
             <div className="grid md:grid-cols-2 gap-6 items-center">
               <div className="flex flex-col items-center">
