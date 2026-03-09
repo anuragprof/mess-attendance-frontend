@@ -1,3 +1,4 @@
+
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/Pages/ui/button";
 import { Input } from "@/Pages/ui/input";
@@ -35,6 +36,20 @@ const CustomerRegistrationForm = () => {
     planId: "",
     photo: null,
   });
+
+  /* ---------------- AUTO SET TODAY DATE ---------------- */
+
+  useEffect(() => {
+    const today = new Date();
+
+    const day = String(today.getDate()).padStart(2, "0");
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    const year = today.getFullYear();
+
+    setStartDay(day);
+    setStartMonth(month);
+    setStartYear(year);
+  }, []);
 
   /* ---------------- LOAD PLANS ---------------- */
 
@@ -232,24 +247,28 @@ const CustomerRegistrationForm = () => {
           <div className="space-y-2">
             <Label>Start Date</Label>
             <div className="flex gap-2">
-              <Input
-                placeholder="MM"
-                maxLength={2}
-                value={startMonth}
-                onChange={(e) => setStartMonth(e.target.value)}
-              />
+
               <Input
                 placeholder="DD"
                 maxLength={2}
                 value={startDay}
                 onChange={(e) => setStartDay(e.target.value)}
               />
+
+              <Input
+                placeholder="MM"
+                maxLength={2}
+                value={startMonth}
+                onChange={(e) => setStartMonth(e.target.value)}
+              />
+
               <Input
                 placeholder="YYYY"
-                maxLength={4}
                 value={startYear}
-                onChange={(e) => setStartYear(e.target.value)}
+                readOnly
+                className="bg-muted"
               />
+
             </div>
           </div>
 
@@ -333,7 +352,7 @@ const CustomerRegistrationForm = () => {
           </Select>
         </div>
 
-        {/* Payment Section */}
+        {/* Payment */}
         {formData.planId && (
           <div className="space-y-3 rounded-xl border p-4">
             <Label>Payment</Label>
@@ -380,3 +399,4 @@ const CustomerRegistrationForm = () => {
 };
 
 export default CustomerRegistrationForm;
+
