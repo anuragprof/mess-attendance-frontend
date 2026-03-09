@@ -174,14 +174,17 @@ onChange={(e) => setSearch(e.target.value)}
 
               <td className="p-2">{customer.full_name}</td>
 
-              <td className="p-2 flex items-center gap-2">
-                {customer.phone_number}
-                <button
-                  onClick={() => sendWhatsAppMessage(customer.phone_number)}
-                  className="bg-green-500 text-white px-2 py-1 rounded text-xs hover:bg-green-600"
-                >
-                  WhatsApp
-                </button>
+              <td className="p-2">
+                <div className="flex items-center gap-2">
+                  <span>{customer.phone_number}</span>
+
+                  <button
+                    onClick={() => sendWhatsAppMessage(customer.phone_number)}
+                    className="bg-green-500 text-white px-2 py-1 rounded text-xs hover:bg-green-600"
+                  >
+                    WhatsApp
+                  </button>
+                </div>
               </td>
 
               <td className="p-2">{customer.email}</td>
