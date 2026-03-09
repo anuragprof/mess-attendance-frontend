@@ -22,6 +22,8 @@ const Tab = ({ to, children }) => {
 export default function Navbar({ me, setMe }) {
   const navigate = useNavigate();
 
+  console.log(me);
+
   const handleLogout = async () => {
     try {
       await logoutVendor();   // 🔥 Backend logout (clears cookies)
