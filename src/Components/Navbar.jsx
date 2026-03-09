@@ -50,7 +50,7 @@ export default function Navbar({ me, setMe }) {
               <div className="w-6 h-6 flex items-center justify-center rounded-full bg-emerald-600 text-white text-xs font-semibold">
                 {me.name}
               </div>
-              <span className="text-sm text-zinc-700">{me.name}</span>
+              {/* <span className="text-sm text-zinc-700">{me.name}</span> */}
             </div>
           )}
 
