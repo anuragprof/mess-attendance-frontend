@@ -39,7 +39,7 @@ export default function Navbar({ me, setMe }) {
       <div className="mx-auto max-w-6xl p-3 flex items-center justify-between">
         
         {/* Left Side - App Name */}
-        <div className="font-semibold">Happy Foods</div>
+        <div className="font-semibold">{me.name}</div>
 
         {/* Right Side */}
         <div className="flex items-center gap-4">
