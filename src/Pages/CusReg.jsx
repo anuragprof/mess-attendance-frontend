@@ -245,7 +245,7 @@ const CustomerRegistrationForm = () => {
           </div>
 
           <div className="space-y-2">
-            <Label>Start Date</Label>
+            <Label>Start Date dd/mm/yyyy</Label>
             <div className="flex gap-2">
 
               <Input
