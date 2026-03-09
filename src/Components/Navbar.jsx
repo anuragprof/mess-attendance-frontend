@@ -45,7 +45,7 @@ export default function Navbar({ me, setMe }) {
           {/* Vendor Name */}
           {me && (
             <div className="text-sm text-zinc-600 bg-zinc-100 px-3 py-1 rounded-full">
-              👤 {me.name}
+              👤 {me.email}
             </div>
           )}
 
