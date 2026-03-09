@@ -145,7 +145,7 @@ onChange={(e) => setSearch(e.target.value)}
             <th className="p-2 text-left">ID</th>
             <th className="p-2 text-left">Name</th>
             <th className="p-2 text-left">Phone</th>
-            <th className="p-2 text-left">Email</th>
+            {/* <th className="p-2 text-left">Email</th> */}
             <th className="p-2 text-left">QR</th>
             <th className="p-2 text-left">Expiry</th>
             <th className="p-2 text-left">Days Left</th>
@@ -187,7 +187,7 @@ onChange={(e) => setSearch(e.target.value)}
                 </div>
               </td>
 
-              <td className="p-2">{customer.email}</td>
+              {/* <td className="p-2">{customer.email}</td> */}
 
               <td className="p-2">
                 <img
@@ -275,7 +275,7 @@ onChange={(e) => setSearch(e.target.value)}
 
           {filteredCustomers.length === 0 && (
             <tr>
-              <td colSpan="9" className="p-4 text-center text-zinc-500">
+              <td colSpan="8" className="p-4 text-center text-zinc-500">
                 No customers found
               </td>
             </tr>
