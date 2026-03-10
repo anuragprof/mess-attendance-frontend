@@ -9,7 +9,7 @@ import Login from "./Pages/Login";
 import Scan from "./Pages/Scan";
 import CustomerRegistration from "./Pages/CusReg";
 import Admin from "./Pages/Admin";
-import Billing from "/Pages/Billing";
+import Billing from "./Pages/Billing";
 
 import { getVendorMe } from "./features/auth/api";
 
