@@ -26,9 +26,9 @@ export default function Navbar({ me, setMe }) {
 
   const handleLogout = async () => {
     try {
-      await logoutVendor();   // 🔥 Backend logout (clears cookies)
-      setMe(null);            // 🔥 Clear frontend state
-      navigate("/login");     // 🔥 Redirect to login
+      await logoutVendor();
+      setMe(null);
+      navigate("/login");
     } catch (err) {
       console.error("Logout failed:", err);
     }
@@ -55,6 +55,9 @@ export default function Navbar({ me, setMe }) {
             <Tab to="/scan">Scan</Tab>
             <Tab to="/register">Register</Tab>
             <Tab to="/admin">Admin</Tab>
+
+            {/* Billing Button Added */}
+            <Tab to="/billing">Billing</Tab>
 
             {!me ? (
               <Tab to="/login">Login</Tab>
