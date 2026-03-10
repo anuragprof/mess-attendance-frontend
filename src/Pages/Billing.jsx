@@ -69,10 +69,7 @@ export default function Billing() {
     const fetchCustomers = async () => {
       if (!debouncedQuery) return;
 
-      const res = await axios.get(
-        `/customers/search?q=${debouncedQuery}`
-      );
-
+      const res = await axios.get(`/customers/search?q=${debouncedQuery}`);
       setCustomers(res.data);
     };
 
@@ -172,10 +169,7 @@ export default function Billing() {
 
         {recentPayments.map((p) => (
 
-          <div
-            key={p.id}
-            className="border-b py-3 text-sm"
-          >
+          <div key={p.id} className="border-b py-3 text-sm">
 
             <p className="font-medium">
               {p.customer_name}
@@ -207,17 +201,24 @@ export default function Billing() {
 
           {selectedCustomer ? (
 
-            <div className="flex justify-between border p-3 rounded">
+            <div className="flex justify-between items-center border p-3 rounded-lg">
 
-              <div>
+              <div className="flex items-center gap-3">
 
-                <p className="font-medium">
-                  {selectedCustomer.name}
-                </p>
+                <img
+                  src={selectedCustomer.photo_url || "/avatar.png"}
+                  className="w-10 h-10 rounded-full object-cover"
+                />
 
-                <p className="text-xs text-gray-500">
-                  {selectedCustomer.phone} • {selectedCustomer.email}
-                </p>
+                <div>
+                  <p className="font-medium">
+                    {selectedCustomer.full_name}
+                  </p>
+
+                  <p className="text-xs text-gray-500">
+                    {selectedCustomer.phone_number}
+                  </p>
+                </div>
 
               </div>
 
@@ -256,7 +257,7 @@ export default function Billing() {
 
               {customers.length > 0 && (
 
-                <div className="absolute w-full bg-white border rounded mt-1 z-10">
+                <div className="absolute w-full bg-white border rounded mt-1 z-10 max-h-60 overflow-y-auto">
 
                   {customers.map((c) => (
 
@@ -265,10 +266,23 @@ export default function Billing() {
                       onMouseDown={() =>
                         handleSelectCustomer(c)
                       }
-                      className="block w-full text-left px-3 py-2 hover:bg-gray-100"
+                      className="flex items-center gap-3 w-full text-left px-3 py-2 hover:bg-gray-100"
                     >
 
-                      {c.name} • {c.phone}
+                      <img
+                        src={c.photo_url || "/avatar.png"}
+                        className="w-8 h-8 rounded-full"
+                      />
+
+                      <div>
+                        <p className="text-sm font-medium">
+                          {c.full_name}
+                        </p>
+
+                        <p className="text-xs text-gray-500">
+                          {c.phone_number}
+                        </p>
+                      </div>
 
                     </button>
 
@@ -348,10 +362,8 @@ export default function Billing() {
             }
             onClick={() => setPaymentMode("cash")}
           >
-
             <Banknote className="mr-2 h-4 w-4" />
             Cash
-
           </Button>
 
           <Button
@@ -362,10 +374,8 @@ export default function Billing() {
             }
             onClick={() => setPaymentMode("upi")}
           >
-
             <Smartphone className="mr-2 h-4 w-4" />
             UPI
-
           </Button>
 
         </div>
@@ -394,12 +404,10 @@ export default function Billing() {
         >
 
           {loadingPayment ? (
-
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               Recording Payment...
             </>
-
           ) : (
             "Record Payment"
           )}
