@@ -56,13 +56,13 @@ export default function Billing() {
       setPlans(res.data);
     };
 
-    const fetchPayments = async () => {
-      const res = await axios.get("/payments");
-      setPayments(res.data);
-    };
+    // const fetchPayments = async () => {
+    //   const res = await axios.get("/payments");
+    //   setPayments(res.data);
+    // };
 
     fetchPlans();
-    fetchPayments();
+    // fetchPayments();
   }, []);
 
   useEffect(() => {
@@ -130,8 +130,8 @@ export default function Billing() {
 
       handleClearCustomer();
 
-      const res = await axios.get("/payments");
-      setPayments(res.data);
+    //   const res = await axios.get("/payments");
+    //   setPayments(res.data);
 
     } catch {
       toast.error("Failed to record payment");
