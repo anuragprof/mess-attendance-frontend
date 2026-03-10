@@ -9,6 +9,7 @@ import Login from "./Pages/Login";
 import Scan from "./Pages/Scan";
 import CustomerRegistration from "./Pages/CusReg";
 import Admin from "./Pages/Admin";
+import Billing from "/Pages/Billing";
 
 import { getVendorMe } from "./features/auth/api";
 
@@ -50,7 +51,7 @@ export default function App() {
               )
             }
           />
-
+          <Route path="/billing" element={<Billing />} />
           <Route path="/scan" element={<Scan />} />
           <Route path="/register" element={<CustomerRegistration />} />
           <Route path="/admin" element={<Admin />} />
