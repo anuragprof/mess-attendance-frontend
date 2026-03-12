@@ -149,7 +149,7 @@ const openHistory = async () => {
     const res = await axios.get(
       `/customers/${selectedCustomer.id}/billing`
     );
-
+    console.log(res.data);
     setHistory(res.data);
     setShowHistory(true);
 
