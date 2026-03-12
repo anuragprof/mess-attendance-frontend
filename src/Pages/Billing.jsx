@@ -103,7 +103,7 @@ export default function Billing() {
 
   useEffect(() => {
     if (selectedPlan) {
-      setAmountPaid(selectedPlan.price);
+      setAmountPaid(selectedPlan.price_cents);
     }
   }, [selectedPlanId]);
 
@@ -322,7 +322,7 @@ export default function Billing() {
                   value={plan.id.toString()}
                 >
 
-                  {plan.name} — ₹{plan.price}
+                  {plan.name} — ₹{plan.price_cents}
 
                 </SelectItem>
 
