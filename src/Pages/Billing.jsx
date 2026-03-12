@@ -140,23 +140,23 @@ export default function Billing() {
     }
   };
 
-    const openHistory = async () => {
+ const openHistory = async () => {
 
-      if (!selectedCustomer) return;
+    if (!selectedCustomer) return;
 
-      try {
+    try {
 
-        const res = await axios.get(
-          `/payments/customer/${selectedCustomer.id}`
-        );
+      const res = await axios.get(
+        `/customers/${selectedCustomer.id}/billing`
+      );
 
-        setHistory(res.data.transactions);
-        setShowHistory(true);
+      setHistory(res.data.transactions);
+      setShowHistory(true);
 
-      } catch (err) {
-        toast.error("Failed to load history");
-      }
-    };
+    } catch (err) {
+      toast.error("Failed to load history");
+    }
+  };
 
   const recentPayments = [...payments]
     .sort((a, b) => new Date(b.date) - new Date(a.date))
