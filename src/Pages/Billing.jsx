@@ -425,60 +425,119 @@ const openHistory = async () => {
 
       {/* Payment History Modal */}
 
-      {showHistory && (
+{/* Payment History Modal */}
 
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center">
+{showHistory && (
 
-          <div className="bg-white rounded-xl w-96 p-6">
+  <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
 
-            <div className="flex justify-between mb-4">
+    <div className="bg-white rounded-xl w-[700px] max-h-[80vh] overflow-y-auto p-6">
 
-              <h3 className="font-semibold">
-                Payment History
-              </h3>
+      {/* Header */}
 
-              <button
-                onClick={() => setShowHistory(false)}
-              >
-                <X size={18} />
-              </button>
+      <div className="flex justify-between items-center mb-6">
 
-            </div>
+        <div>
+          <h3 className="text-lg font-semibold">
+            Payment History — {selectedCustomer?.full_name}
+          </h3>
 
-            {history.length === 0 ? (
-
-              <p className="text-sm text-gray-500">
-                No payment history
-              </p>
-
-            ) : (
-
-              history.map((h) => (
-
-                <div
-                  key={h.id}
-                  className="border-b py-2 text-sm"
-                >
-
-                  <p>
-                    ₹{h.amount} • {h.payment_mode}
-                  </p>
-
-                  <p className="text-gray-500 text-xs">
-                    {new Date(h.date).toLocaleDateString()}
-                  </p>
-
-                </div>
-
-              ))
-
-            )}
-
-          </div>
-
+          <p className="text-sm text-gray-500">
+            {selectedCustomer?.phone_number}
+          </p>
         </div>
 
+        <button
+          onClick={() => setShowHistory(false)}
+          className="text-gray-500 hover:text-black"
+        >
+          <X size={20} />
+        </button>
+
+      </div>
+
+
+      {history.length === 0 ? (
+
+        <p className="text-sm text-gray-500">
+          No payment history
+        </p>
+
+      ) : (
+
+        <table className="w-full text-sm">
+
+          <thead>
+
+            <tr className="border-b text-gray-500">
+
+              <th className="text-left py-2">Date</th>
+
+              <th className="text-left py-2">Plan</th>
+
+              <th className="text-right py-2">Plan Fee</th>
+
+              <th className="text-right py-2">Paid</th>
+
+              <th className="text-right py-2">Balance</th>
+
+              <th className="text-right py-2">Mode</th>
+
+            </tr>
+
+          </thead>
+
+          <tbody>
+
+            {history.map((h, i) => (
+
+              <tr key={i} className="border-b">
+
+                <td className="py-3">
+                  {new Date(h.date).toLocaleDateString()}
+                </td>
+
+                <td className="max-w-[240px] truncate">
+                  {h.plan_name}
+                </td>
+
+                <td className="text-right font-medium">
+                  ₹{h.plan_fee}
+                </td>
+
+                <td className="text-right text-green-600 font-medium">
+                  ₹{h.paid}
+                </td>
+
+                <td className="text-right text-red-500 font-medium">
+                  ₹{h.balance}
+                </td>
+
+                <td className="text-right">
+
+                  <span className="px-2 py-1 text-xs rounded bg-yellow-100 text-yellow-700">
+
+                    {h.mode}
+
+                  </span>
+
+                </td>
+
+              </tr>
+
+            ))}
+
+          </tbody>
+
+        </table>
+
       )}
+
+    </div>
+
+  </div>
+
+)}
 
     </div>
   );
