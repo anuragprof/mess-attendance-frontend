@@ -52,7 +52,7 @@ export default function Billing() {
 
   useEffect(() => {
     const fetchPlans = async () => {
-      const res = await axios.get("/plans");
+      const res = await axios.get("/plans/");
       setPlans(res.data);
     };
 
