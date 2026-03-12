@@ -147,7 +147,7 @@ export default function Billing() {
     try {
 
       const res = await axios.get(
-        `/customers/${selectedCustomer.id}/billing`
+        `/customers/${selectedCustomer.id}/billing/`
       );
 
       setHistory(res.data.transactions);
