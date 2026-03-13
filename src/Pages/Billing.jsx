@@ -25,6 +25,11 @@ import {
 
 export default function Billing() {
 
+  /* ===================== NEW ===================== */
+  const [billingTab, setBillingTab] = useState("payment");
+  const [renewTab, setRenewTab] = useState("renew");
+  /* ================================================= */
+
   const [plans, setPlans] = useState([]);
   const [payments, setPayments] = useState([]);
 
@@ -158,148 +163,167 @@ export default function Billing() {
 
     <div className="max-w-7xl mx-auto p-6 grid lg:grid-cols-3 gap-8 items-start">
 
-      {/* Recent Payments */}
+      {/* ================= Recent Payments ================= */}
 
-      <div className="bg-white border rounded-xl shadow-sm overflow-hidden">
+      <div className="bg-white border rounded-xl shadow-sm p-4">
 
-        <div className="px-4 py-3 border-b font-semibold text-gray-700">
+        <h2 className="font-semibold mb-4">
           Recent Payments
-        </div>
+        </h2>
 
-        <div className="divide-y">
+        {recentPayments.map((p) => (
 
-          {recentPayments.map((p) => (
+          <div key={p.id} className="border-b py-3 text-sm">
 
-            <div key={p.id} className="px-4 py-3 text-sm">
+            <p className="font-medium">
+              {p.customer_name}
+            </p>
 
-              <p className="font-medium text-gray-800">
-                {p.customer_name}
-              </p>
+            <p className="text-gray-500">
+              ₹{p.amount} • {p.payment_mode}
+            </p>
 
-              <p className="text-gray-500">
-                ₹{p.amount} ({p.payment_mode})
-              </p>
+          </div>
 
-            </div>
-
-          ))}
-
-        </div>
+        ))}
 
       </div>
 
-      {/* Billing Form */}
+      {/* ================= Billing Card ================= */}
 
       <div className="lg:col-span-2 bg-gradient-to-b from-blue-50 to-white border-2 border-blue-200 rounded-2xl p-8 shadow-lg space-y-6">
 
-        {/* Tabs */}
+        {/* ================= NEW TOP TABS ================= */}
 
         <div className="flex bg-gray-200 rounded-full p-1 w-fit">
 
-          <button className="px-8 py-2 rounded-full bg-blue-600 text-white text-sm font-medium shadow">
+          <button
+            onClick={() => setBillingTab("payment")}
+            className={`px-8 py-2 rounded-full text-sm font-medium ${
+              billingTab === "payment"
+                ? "bg-blue-600 text-white shadow"
+                : "text-gray-500"
+            }`}
+          >
             Record Payment
           </button>
 
-          <button className="px-8 py-2 rounded-full text-gray-500 text-sm font-medium">
+          <button
+            onClick={() => setBillingTab("renew")}
+            className={`px-8 py-2 rounded-full text-sm font-medium ${
+              billingTab === "renew"
+                ? "bg-blue-600 text-white shadow"
+                : "text-gray-500"
+            }`}
+          >
             Renew Plan
           </button>
 
         </div>
 
-        {/* Customer Search */}
+        {/* ================= RECORD PAYMENT ================= */}
 
-        <div className="space-y-2">
+        {billingTab === "payment" && (
 
-          <Label>Customer *</Label>
+          <>
+            {/* CUSTOMER SEARCH */}
 
-          {selectedCustomer ? (
+            <div className="space-y-2">
 
-            <div className="flex justify-between items-center border p-3 rounded-lg bg-white">
+              <Label>Customer *</Label>
 
-              <div className="flex items-center gap-3">
+              {selectedCustomer ? (
 
-                <img
-                  src={selectedCustomer.photo_url || "/avatar.png"}
-                  className="w-10 h-10 rounded-full object-cover"
-                />
+                <div className="flex justify-between items-center border p-3 rounded-lg bg-white">
 
-                <div>
-                  <p className="font-medium">
-                    {selectedCustomer.full_name}
-                  </p>
+                  <div className="flex items-center gap-3">
 
-                  <p className="text-xs text-gray-500">
-                    {selectedCustomer.phone_number}
-                  </p>
-                </div>
+                    <img
+                      src={selectedCustomer.photo_url || "/avatar.png"}
+                      className="w-10 h-10 rounded-full object-cover"
+                    />
 
-              </div>
+                    <div>
+                      <p className="font-medium">
+                        {selectedCustomer.full_name}
+                      </p>
 
-              <div className="flex gap-2">
+                      <p className="text-xs text-gray-500">
+                        {selectedCustomer.phone_number}
+                      </p>
+                    </div>
 
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={openHistory}
-                >
-                  History
-                </Button>
+                  </div>
 
-                <button onClick={handleClearCustomer}>
-                  <X size={16} />
-                </button>
+                  <div className="flex gap-2">
 
-              </div>
-
-            </div>
-
-          ) : (
-
-            <div className="relative">
-
-              <Search className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
-
-              <Input
-                className="pl-9 h-11 rounded-lg border-gray-300"
-                placeholder="Search customer..."
-                value={searchQuery}
-                onChange={(e) =>
-                  handleSearchChange(e.target.value)
-                }
-              />
-
-              {customers.length > 0 && (
-
-                <div className="absolute w-full bg-white border rounded mt-1 z-10 max-h-60 overflow-y-auto shadow">
-
-                  {customers.map((c) => (
-
-                    <button
-                      key={c.id}
-                      onMouseDown={() =>
-                        handleSelectCustomer(c)
-                      }
-                      className="flex items-center gap-3 w-full text-left px-3 py-2 hover:bg-gray-100"
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={openHistory}
                     >
+                      History
+                    </Button>
 
-                      <img
-                        src={c.photo_url || "/avatar.png"}
-                        className="w-8 h-8 rounded-full"
-                      />
-
-                      <div>
-                        <p className="text-sm font-medium">
-                          {c.full_name}
-                        </p>
-
-                        <p className="text-xs text-gray-500">
-                          {c.phone_number}
-                        </p>
-                      </div>
-
+                    <button onClick={handleClearCustomer}>
+                      <X size={16} />
                     </button>
 
-                  ))}
+                  </div>
+
+                </div>
+
+              ) : (
+
+                <div className="relative">
+
+                  <Search className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
+
+                  <Input
+                    className="pl-9 h-11"
+                    placeholder="Search customer..."
+                    value={searchQuery}
+                    onChange={(e) =>
+                      handleSearchChange(e.target.value)
+                    }
+                  />
+
+                  {customers.length > 0 && (
+
+                    <div className="absolute w-full bg-white border rounded mt-1 z-10 max-h-60 overflow-y-auto">
+
+                      {customers.map((c) => (
+
+                        <button
+                          key={c.id}
+                          onMouseDown={() =>
+                            handleSelectCustomer(c)
+                          }
+                          className="flex items-center gap-3 w-full text-left px-3 py-2 hover:bg-gray-100"
+                        >
+
+                          <img
+                            src={c.photo_url || "/avatar.png"}
+                            className="w-8 h-8 rounded-full"
+                          />
+
+                          <div>
+                            <p className="text-sm font-medium">
+                              {c.full_name}
+                            </p>
+
+                            <p className="text-xs text-gray-500">
+                              {c.phone_number}
+                            </p>
+                          </div>
+
+                        </button>
+
+                      ))}
+
+                    </div>
+
+                  )}
 
                 </div>
 
@@ -307,135 +331,201 @@ export default function Billing() {
 
             </div>
 
-          )}
+            {/* PLAN */}
 
-        </div>
+            <div className="space-y-2">
 
-        {/* Plan */}
+              <Label>Mess Plan *</Label>
 
-        <div className="space-y-2">
-
-          <Label>Mess Plan *</Label>
-
-          <Select
-            value={selectedPlanId}
-            onValueChange={setSelectedPlanId}
-          >
-
-            <SelectTrigger className="h-11 rounded-lg">
-              <SelectValue placeholder="Select plan" />
-            </SelectTrigger>
-
-            <SelectContent>
-
-              {plans.map((plan) => (
-
-                <SelectItem
-                  key={plan.id}
-                  value={plan.id.toString()}
-                >
-
-                  {plan.name} — ₹{plan.price_cents}
-
-                </SelectItem>
-
-              ))}
-
-            </SelectContent>
-
-          </Select>
-
-        </div>
-
-<div className="grid md:grid-cols-2 gap-6 items-end">
-
-          {/* Amount */}
-
-          <div className="space-y-2">
-
-            <Label>Amount Paid *</Label>
-
-            <Input
-              type="number"
-              className="h-11 rounded-lg"
-              value={amountPaid}
-              onChange={(e) =>
-                setAmountPaid(e.target.value)
-              }
-            />
-
-          </div>
-
-          {/* Payment Mode */}
-
-          <div className="space-y-2 flex flex-col items-end">
-
-            <Label className="self-start">Payment Method *</Label>
-
-            <div className="flex gap-3">
-
-              <Button
-                variant={paymentMode === "cash" ? "default" : "outline"}
-                onClick={() => setPaymentMode("cash")}
-                className="rounded-full px-6"
+              <Select
+                value={selectedPlanId}
+                onValueChange={setSelectedPlanId}
               >
-                <Banknote className="mr-2 h-4 w-4" />
-                Cash
-              </Button>
 
-              <Button
-                variant={paymentMode === "upi" ? "default" : "outline"}
-                onClick={() => setPaymentMode("upi")}
-                className="rounded-full px-6"
-              >
-                <Smartphone className="mr-2 h-4 w-4" />
-                UPI
-              </Button>
+                <SelectTrigger className="h-11">
+                  <SelectValue placeholder="Select plan" />
+                </SelectTrigger>
+
+                <SelectContent>
+
+                  {plans.map((plan) => (
+
+                    <SelectItem
+                      key={plan.id}
+                      value={plan.id.toString()}
+                    >
+
+                      {plan.name} — ₹{plan.price_cents}
+
+                    </SelectItem>
+
+                  ))}
+
+                </SelectContent>
+
+              </Select>
 
             </div>
 
+            {/* AMOUNT + PAYMENT */}
+
+            <div className="grid md:grid-cols-2 gap-6 items-end">
+
+              <div className="space-y-2">
+
+                <Label>Amount Paid *</Label>
+
+                <Input
+                  type="number"
+                  className="h-11"
+                  value={amountPaid}
+                  onChange={(e) =>
+                    setAmountPaid(e.target.value)
+                  }
+                />
+
+              </div>
+
+              <div className="space-y-2 flex flex-col items-end">
+
+                <Label className="self-start">
+                  Payment Method *
+                </Label>
+
+                <div className="flex gap-3">
+
+                  <Button
+                    variant={paymentMode === "cash" ? "default" : "outline"}
+                    onClick={() => setPaymentMode("cash")}
+                    className="rounded-full px-6"
+                  >
+                    <Banknote className="mr-2 h-4 w-4" />
+                    Cash
+                  </Button>
+
+                  <Button
+                    variant={paymentMode === "upi" ? "default" : "outline"}
+                    onClick={() => setPaymentMode("upi")}
+                    className="rounded-full px-6"
+                  >
+                    <Smartphone className="mr-2 h-4 w-4" />
+                    UPI
+                  </Button>
+
+                </div>
+
+              </div>
+
+            </div>
+
+            {/* NOTES */}
+
+            <div className="space-y-2">
+
+              <Label>Notes</Label>
+
+              <Textarea
+                className="min-h-[110px]"
+                value={notes}
+                onChange={(e) =>
+                  setNotes(e.target.value)
+                }
+              />
+
+            </div>
+
+            {/* SUBMIT */}
+
+            <Button
+              onClick={handleSubmit}
+              disabled={loadingPayment}
+              className="w-full h-12 bg-gradient-to-r from-blue-600 to-blue-500"
+            >
+
+              {loadingPayment ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Recording Payment...
+                </>
+              ) : (
+                "Record Payment"
+              )}
+
+            </Button>
+
+          </>
+        )}
+
+        {/* ================= RENEW PLAN (NEW) ================= */}
+
+        {billingTab === "renew" && (
+
+          <div className="space-y-6">
+
+            <div className="flex border-b gap-8 text-sm">
+
+              <button
+                onClick={() => setRenewTab("renew")}
+                className={`pb-3 ${
+                  renewTab === "renew"
+                    ? "border-b-2 border-blue-500 text-blue-600"
+                    : "text-gray-500"
+                }`}
+              >
+                Renew Plan
+              </button>
+
+              <button
+                onClick={() => setRenewTab("upgrade")}
+                className={`pb-3 ${
+                  renewTab === "upgrade"
+                    ? "border-b-2 border-blue-500 text-blue-600"
+                    : "text-gray-500"
+                }`}
+              >
+                Upgrade/Downgrade
+              </button>
+
+              <button
+                onClick={() => setRenewTab("cancel")}
+                className={`pb-3 ${
+                  renewTab === "cancel"
+                    ? "border-b-2 border-blue-500 text-blue-600"
+                    : "text-gray-500"
+                }`}
+              >
+                Cancel Plan
+              </button>
+
+            </div>
+
+            <Input placeholder="Search customer..." />
+
+            {renewTab === "renew" && (
+              <Button className="w-full h-12">
+                Submit Renewal
+              </Button>
+            )}
+
+            {renewTab === "upgrade" && (
+              <Button className="w-full">
+                Apply Plan Change
+              </Button>
+            )}
+
+            {renewTab === "cancel" && (
+              <Button variant="destructive" className="w-full">
+                Cancel Subscription
+              </Button>
+            )}
+
           </div>
 
-        </div>
-
-        {/* Notes */}
-
-        <div className="space-y-2">
-
-          <Label>Notes</Label>
-
-          <Textarea
-            className="rounded-lg min-h-[110px]"
-            value={notes}
-            onChange={(e) =>
-              setNotes(e.target.value)
-            }
-          />
-
-        </div>
-
-        {/* Submit */}
-
-        <Button
-          onClick={handleSubmit}
-          disabled={loadingPayment}
-          className="w-full h-12 text-base font-medium bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 rounded-xl"
-        >
-
-          {loadingPayment ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Recording Payment...
-            </>
-          ) : (
-            "Record Payment"
-          )}
-
-        </Button>
+        )}
 
       </div>
 
-      {/* Payment History Modal */}
+      {/* ================= PAYMENT HISTORY MODAL ================= */}
 
       {showHistory && (
 
@@ -464,75 +554,6 @@ export default function Billing() {
 
             </div>
 
-            {history.length === 0 ? (
-
-              <p className="text-sm text-gray-500">
-                No payment history
-              </p>
-
-            ) : (
-
-              <table className="w-full text-sm">
-
-                <thead>
-
-                  <tr className="border-b text-gray-500">
-
-                    <th className="text-left py-2">Date</th>
-                    <th className="text-left py-2">Plan</th>
-                    <th className="text-right py-2">Plan Fee</th>
-                    <th className="text-right py-2">Paid</th>
-                    <th className="text-right py-2">Balance</th>
-                    <th className="text-right py-2">Mode</th>
-
-                  </tr>
-
-                </thead>
-
-                <tbody>
-
-                  {history.map((h, i) => (
-
-                    <tr key={i} className="border-b">
-
-                      <td className="py-3">
-                        {new Date(h.date).toLocaleDateString()}
-                      </td>
-
-                      <td className="max-w-[240px] truncate">
-                        {h.plan_name}
-                      </td>
-
-                      <td className="text-right font-medium">
-                        ₹{h.plan_fee}
-                      </td>
-
-                      <td className="text-right text-green-600 font-medium">
-                        ₹{h.paid}
-                      </td>
-
-                      <td className="text-right text-red-500 font-medium">
-                        ₹{h.balance}
-                      </td>
-
-                      <td className="text-right">
-
-                        <span className="px-2 py-1 text-xs rounded bg-yellow-100 text-yellow-700">
-                          {h.mode}
-                        </span>
-
-                      </td>
-
-                    </tr>
-
-                  ))}
-
-                </tbody>
-
-              </table>
-
-            )}
-
           </div>
 
         </div>
@@ -543,4 +564,3 @@ export default function Billing() {
 
   );
 }
-
