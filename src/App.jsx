@@ -10,7 +10,6 @@ import Scan from "./Pages/Scan";
 import CustomerRegistration from "./Pages/CusReg";
 import Admin from "./Pages/Admin";
 import Billing from "./Pages/Billing";
-import AppLayout from "./Components/AppLayout";
 
 import { getVendorMe } from "./features/auth/api";
 
@@ -30,7 +29,7 @@ export default function App() {
   }, []);
 
   return (
-    <div className="text-zinc-900">
+    <div className="min-h-screen bg-zinc-50 text-zinc-900">
 
       {/* ✅ ADD TOASTER HERE */}
       <Toaster position="top-center" richColors    toastOptions={{ className: "mx-auto" }}  />
@@ -38,28 +37,26 @@ export default function App() {
       {/* Navbar only when logged in */}
       {me && <Navbar me={me} setMe={setMe} />}
       
-      <AppLayout>
-        <main className={me ? "w-full" : ""}>
-          <Routes>
-            <Route path="/" element={<Navigate to="/login" />} />
-            
-            <Route
-              path="/login"
-              element={
-                me ? (
-                  <Navigate to="/register" replace />
-                ) : (
-                  <Login setMe={setMe} />
-                )
-              }
-            />
-            <Route path="/billing" element={<Billing />} />
-            <Route path="/scan" element={<Scan />} />
-            <Route path="/register" element={<CustomerRegistration />} />
-            <Route path="/admin" element={<Admin />} />
-          </Routes>
-        </main>
-      </AppLayout>
+      <main className={me ? "mx-auto max-w-6xl p-4" : ""}>
+        <Routes>
+          <Route path="/" element={<Navigate to="/login" />} />
+          
+          <Route
+            path="/login"
+            element={
+              me ? (
+                <Navigate to="/register" replace />
+              ) : (
+                <Login setMe={setMe} />
+              )
+            }
+          />
+          <Route path="/billing" element={<Billing />} />
+          <Route path="/scan" element={<Scan />} />
+          <Route path="/register" element={<CustomerRegistration />} />
+          <Route path="/admin" element={<Admin />} />
+        </Routes>
+      </main>
     </div>
   );
 }
