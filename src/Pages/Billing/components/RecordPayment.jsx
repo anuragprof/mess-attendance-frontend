@@ -55,21 +55,25 @@ export default function RecordPayment() {
   };
 
   const handleSubmit = async () => {
-    if (!selectedCustomer || !selectedPlanId || !amountPaid) {
+    if (!selectedCustomer || !amountPaid) {
       toast.error("Please fill required fields");
       return;
     }
 
     try {
       setLoadingPayment(true);
-      await axios.post("/payments", {
-        customer_id: selectedCustomer.id,
-        plan_id: selectedPlanId,
-        amount: amountPaid,
-        payment_mode: paymentMode,
-        notes: notes,
-      });
-      toast.success("Payment recorded");
+
+      const formData = new FormData();
+      formData.append("amount", amountPaid);
+      formData.append("payment_mode", paymentMode);
+      if (notes) formData.append("notes", notes);
+
+      await axios.post(
+        `/customers/${selectedCustomer.id}/transaction`,
+        formData
+      );
+
+      toast.success("Payment recorded successfully");
       handleClearCustomer();
     } catch {
       toast.error("Failed to record payment");
