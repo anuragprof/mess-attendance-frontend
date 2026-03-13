@@ -347,44 +347,56 @@ export default function Billing() {
 
         </div>
 
-        {/* Amount */}
+<div className="grid md:grid-cols-2 gap-6 items-end">
 
-        <div className="space-y-2">
+<div className="grid md:grid-cols-2 gap-6 items-end">
 
-          <Label>Amount Paid *</Label>
+          {/* Amount */}
 
-          <Input
-            type="number"
-            className="h-11 rounded-lg"
-            value={amountPaid}
-            onChange={(e) =>
-              setAmountPaid(e.target.value)
-            }
-          />
+          <div className="space-y-2">
 
-        </div>
+            <Label>Amount Paid *</Label>
 
-        {/* Payment Mode */}
+            <Input
+              type="number"
+              className="h-11 rounded-lg"
+              value={amountPaid}
+              onChange={(e) =>
+                setAmountPaid(e.target.value)
+              }
+            />
 
-        <div className="flex gap-3 pt-2">
+          </div>
 
-          <Button
-            variant={paymentMode === "cash" ? "default" : "outline"}
-            onClick={() => setPaymentMode("cash")}
-            className="rounded-full px-6"
-          >
-            <Banknote className="mr-2 h-4 w-4" />
-            Cash
-          </Button>
+          {/* Payment Mode */}
 
-          <Button
-            variant={paymentMode === "upi" ? "default" : "outline"}
-            onClick={() => setPaymentMode("upi")}
-            className="rounded-full px-6"
-          >
-            <Smartphone className="mr-2 h-4 w-4" />
-            UPI
-          </Button>
+          <div className="space-y-2 flex flex-col items-end">
+
+            <Label className="self-start">Payment Method *</Label>
+
+            <div className="flex gap-3">
+
+              <Button
+                variant={paymentMode === "cash" ? "default" : "outline"}
+                onClick={() => setPaymentMode("cash")}
+                className="rounded-full px-6"
+              >
+                <Banknote className="mr-2 h-4 w-4" />
+                Cash
+              </Button>
+
+              <Button
+                variant={paymentMode === "upi" ? "default" : "outline"}
+                onClick={() => setPaymentMode("upi")}
+                className="rounded-full px-6"
+              >
+                <Smartphone className="mr-2 h-4 w-4" />
+                UPI
+              </Button>
+
+            </div>
+
+          </div>
 
         </div>
 
