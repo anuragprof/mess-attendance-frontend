@@ -196,8 +196,8 @@ const CustomerRegistrationForm = () => {
   };
 
   return (
-    <div className="mx-auto max-w-3xl rounded-2xl bg-card p-8 shadow-lg">
-      <h2 className="mb-8 text-center text-2xl font-bold">
+    <div className="mx-auto max-w-3xl rounded-2xl bg-gradient-to-b from-blue-50 to-white border-2 border-blue-200 p-8 shadow-lg">
+      <h2 className="mb-8 text-center text-2xl font-bold text-blue-700 tracking-tight">
         Customer Registration
       </h2>
 
@@ -354,7 +354,7 @@ const CustomerRegistrationForm = () => {
 
         {/* Payment */}
         {formData.planId && (
-          <div className="space-y-3 rounded-xl border p-4">
+          <div className="space-y-3 rounded-xl border border-blue-200 bg-blue-50/60 p-4">
             <Label>Payment</Label>
 
             <div className="grid gap-4 md:grid-cols-2">
