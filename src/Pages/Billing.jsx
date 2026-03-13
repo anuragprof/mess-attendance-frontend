@@ -26,8 +26,8 @@ import {
 export default function Billing() {
 
   /* ===================== NEW ===================== */
-  const [billingTab, setBillingTab] = useState("payment");
-  const [renewTab, setRenewTab] = useState("renew");
+  const [billingTab, setBillingTab] = useState("renew");
+  const [renewTab, setRenewTab] = useState("payment");
   /* ================================================= */
 
   const [plans, setPlans] = useState([]);
@@ -197,27 +197,27 @@ export default function Billing() {
 
         <div className="flex bg-gray-200 rounded-full p-1 w-fit">
 
-          <button
-            onClick={() => setBillingTab("payment")}
-            className={`px-8 py-2 rounded-full text-sm font-medium ${
-              billingTab === "payment"
-                ? "bg-blue-600 text-white shadow"
-                : "text-gray-500"
-            }`}
-          >
-            Record Payment
-          </button>
+        <button
+          onClick={() => setBillingTab("renew")}
+          className={`px-8 py-2 rounded-full text-sm font-medium ${
+            billingTab === "renew"
+              ? "bg-blue-600 text-white shadow"
+              : "text-gray-500"
+          }`}
+        >
+          Renew Plan
+        </button>
 
-          <button
-            onClick={() => setBillingTab("renew")}
-            className={`px-8 py-2 rounded-full text-sm font-medium ${
-              billingTab === "renew"
-                ? "bg-blue-600 text-white shadow"
-                : "text-gray-500"
-            }`}
-          >
-            Renew Plan
-          </button>
+        <button
+          onClick={() => setBillingTab("payment")}
+          className={`px-8 py-2 rounded-full text-sm font-medium ${
+            billingTab === "payment"
+              ? "bg-blue-600 text-white shadow"
+              : "text-gray-500"
+          }`}
+        >
+          Record Payment
+        </button>
 
         </div>
 
