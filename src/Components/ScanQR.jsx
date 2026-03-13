@@ -5,8 +5,8 @@ export default function ScanQR({ onDetected }) {
   const [error, setError] = useState(null)
 
   return (
-    <div className="bg-white rounded-2xl shadow p-4">
-      <div className="mb-3 font-medium">Scan Student QR</div>
+    <div className="bg-gradient-to-b from-blue-50 to-white border-2 border-blue-200 rounded-2xl shadow-lg p-5">
+      <div className="mb-4 text-lg font-bold text-blue-700 tracking-tight">Scan Student QR</div>
       <div className="rounded-2xl border-4 border-emerald-500 overflow-hidden">
         <Scanner
           onScan={(result) => {
