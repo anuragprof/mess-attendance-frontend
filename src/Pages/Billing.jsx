@@ -349,8 +349,6 @@ export default function Billing() {
 
 <div className="grid md:grid-cols-2 gap-6 items-end">
 
-<div className="grid md:grid-cols-2 gap-6 items-end">
-
           {/* Amount */}
 
           <div className="space-y-2">
