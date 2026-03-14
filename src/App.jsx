@@ -43,7 +43,7 @@ export default function App() {
           path="/login"
           element={
             me ? (
-              <Navigate to="/register" replace />
+              <Navigate to="/admin" replace />
             ) : (
               <Login setMe={setMe} />
             )
