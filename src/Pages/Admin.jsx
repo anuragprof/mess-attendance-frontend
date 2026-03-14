@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import Card from "../Components/Card";
 import { toast } from "sonner";
 import axios from "@/Lib/axios";
@@ -128,7 +129,17 @@ Thank you.
 window.open(whatsappUrl, "_blank");
 };
 
-return ( <div className="space-y-6"> <Card title="Manage Customers">
+return ( <div className="space-y-6"> <Card title={
+  <div className="flex items-center justify-between w-full">
+    <span>Manage Customers</span>
+    <Link
+      to="/register"
+      className="bg-blue-600 text-white hover:bg-blue-700 text-sm px-4 py-2 rounded-xl transition shadow-sm font-medium flex items-center gap-1"
+    >
+      + Add Customer
+    </Link>
+  </div>
+}>
 <input
 type="text"
 placeholder="Search by ID, name, or email..."
