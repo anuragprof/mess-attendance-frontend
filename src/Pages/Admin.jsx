@@ -129,17 +129,13 @@ Thank you.
 window.open(whatsappUrl, "_blank");
 };
 
-return ( <div className="space-y-6"> <Card title={
-  <div className="flex items-center justify-between w-full">
-    <span>Manage Customers</span>
-    <Link
-      to="/register"
-      className="bg-blue-600 text-white hover:bg-blue-700 text-sm px-4 py-2 rounded-xl transition shadow-sm font-medium flex items-center gap-1"
-    >
-      + Add Customer
-    </Link>
+return ( <div className="space-y-6">
+  <div className="mb-2">
+    <h1 className="text-2xl font-bold tracking-tight text-gray-900">Customers</h1>
+    <p className="text-sm text-zinc-500 mt-1">Manage your active, expired, and new customer registrations.</p>
   </div>
-}>
+
+  <Card title="Customer Database">
 <input
 type="text"
 placeholder="Search by ID, name, or email..."

@@ -4,7 +4,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Toaster } from "sonner";   // ✅ ADD THIS
 
-import Navbar from "./Components/Navbar";
+import DashboardLayout from "./Layouts/DashboardLayout";
 import Login from "./Pages/Login";
 import Scan from "./Pages/Scan";
 import CustomerRegistration from "./Pages/CusReg";
@@ -34,29 +34,35 @@ export default function App() {
       {/* ✅ ADD TOASTER HERE */}
       <Toaster position="top-center" richColors    toastOptions={{ className: "mx-auto" }}  />
 
-      {/* Navbar only when logged in */}
-      {me && <Navbar me={me} setMe={setMe} />}
-      
-      <main className={me ? "mx-auto max-w-6xl p-4" : ""}>
-        <Routes>
-          <Route path="/" element={<Navigate to="/login" />} />
-          
-          <Route
-            path="/login"
-            element={
-              me ? (
-                <Navigate to="/register" replace />
-              ) : (
-                <Login setMe={setMe} />
-              )
-            }
-          />
-          <Route path="/billing" element={<Billing />} />
-          <Route path="/scan" element={<Scan />} />
-          <Route path="/register" element={<CustomerRegistration />} />
-          <Route path="/admin" element={<Admin />} />
-        </Routes>
-      </main>
+      {/* Main App Routes */}
+      <Routes>
+        <Route path="/" element={<Navigate to="/login" />} />
+        
+        <Route
+          path="/login"
+          element={
+            me ? (
+              <Navigate to="/register" replace />
+            ) : (
+              <Login setMe={setMe} />
+            )
+          }
+        />
+
+        {/* Full Screen Unauthenticated/Kiosk Views */}
+        <Route path="/scan" element={<Scan />} />
+
+        {/* Dashboard layout views */}
+        <Route path="/billing" element={
+          <DashboardLayout me={me} setMe={setMe}><Billing /></DashboardLayout>
+        } />
+        <Route path="/admin" element={
+          <DashboardLayout me={me} setMe={setMe}><Admin /></DashboardLayout>
+        } />
+        <Route path="/register" element={
+          <DashboardLayout me={me} setMe={setMe}><CustomerRegistration /></DashboardLayout>
+        } />
+      </Routes>
     </div>
   );
 }

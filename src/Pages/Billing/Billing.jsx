@@ -33,16 +33,11 @@ export default function Billing() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto p-6 space-y-6">
+    <div className="space-y-6">
       {/* ── Page Header ── */}
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold tracking-tight text-gray-900">Billing</h1>
-        <Link
-          to="/register"
-          className="bg-blue-600 text-white hover:bg-blue-700 text-sm px-4 py-2 rounded-xl transition shadow-sm font-medium flex items-center gap-1"
-        >
-          + Add Customer
-        </Link>
+      <div className="mb-2">
+        <h1 className="text-2xl font-bold tracking-tight text-gray-900">Billing & Payments</h1>
+        <p className="text-sm text-zinc-500 mt-1">Process renewals and view transaction history across customers.</p>
       </div>
 
       <div className="grid lg:grid-cols-3 gap-8 items-start">
