@@ -10,7 +10,7 @@ const SidebarItem = ({ to, icon, label }) => {
       to={to}
       className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
         active
-          ? "bg-emerald-600 text-white font-medium shadow-md shadow-emerald-600/20"
+          ? "bg-blue-600 text-white font-medium shadow-md shadow-blue-600/20"
           : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900"
       }`}
     >
@@ -34,7 +34,7 @@ export default function Sidebar({ me, setMe }) {
   };
 
   return (
-    <aside className="w-64 bg-white border-r border-zinc-200 h-screen fixed top-0 left-0 flex flex-col shadow-sm z-20">
+    <aside className="w-64 gradient-card h-screen fixed top-0 left-0 flex flex-col shadow-sm z-20 rounded-none border-y-0 border-l-0">
       
       {/* Brand Header */}
       <div className="h-16 flex items-center px-6 border-b border-zinc-100">

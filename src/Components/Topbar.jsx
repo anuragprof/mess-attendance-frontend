@@ -19,7 +19,7 @@ export default function Topbar() {
 
         <Link
           to="/register"
-          className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm shadow-emerald-600/20 px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-all transform hover:scale-[1.02] active:scale-95"
+          className="bg-blue-600 hover:bg-blue-700 text-white shadow-sm shadow-blue-600/20 px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-all transform hover:scale-[1.02] active:scale-95"
         >
           <span>➕</span> Add Customer
         </Link>
