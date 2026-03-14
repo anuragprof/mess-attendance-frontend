@@ -22,7 +22,7 @@ import {
   renewSubscription,
 } from "@/api/billing";
 
-export default function RenewPlan() {
+export default function RenewPlan({ onRenewalComplete }) {
   // ── state ─────────────────────────────────────────────
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [currentPlan, setCurrentPlan] = useState(null);
@@ -111,6 +111,7 @@ export default function RenewPlan() {
         `${result.plan_name} renewed until ${result.end_date}`,
       );
       handleClear();
+      if (onRenewalComplete) onRenewalComplete();
     } catch (err) {
       const msg =
         err.response?.data?.detail || "Failed to renew subscription";

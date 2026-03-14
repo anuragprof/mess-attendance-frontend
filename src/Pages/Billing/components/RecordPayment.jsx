@@ -20,7 +20,7 @@ import { Banknote, Smartphone, Loader2 } from "lucide-react";
 import CustomerSearch from "./CustomerSearch";
 import PaymentHistoryModal from "./PaymentHistoryModal";
 
-export default function RecordPayment() {
+export default function RecordPayment({ onPaymentRecorded }) {
   const [plans, setPlans] = useState([]);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [selectedPlanId, setSelectedPlanId] = useState("");
@@ -75,6 +75,7 @@ export default function RecordPayment() {
 
       toast.success("Payment recorded successfully");
       handleClearCustomer();
+      if (onPaymentRecorded) onPaymentRecorded();
     } catch {
       toast.error("Failed to record payment");
     } finally {

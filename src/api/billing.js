@@ -26,3 +26,12 @@ export const renewSubscription = async (customerId, data) => {
   const res = await api.post(`/customers/${customerId}/renew`, data);
   return res.data;
 };
+
+/**
+ * Fetch the 10 most recent transactions for the vendor.
+ * GET /customers/transactions/recent
+ */
+export const fetchRecentTransactions = async () => {
+  const res = await api.get("/customers/transactions/recent");
+  return res.data;
+};
