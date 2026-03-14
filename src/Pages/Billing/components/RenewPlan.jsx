@@ -28,7 +28,6 @@ export default function RenewPlan() {
   const [currentPlan, setCurrentPlan] = useState(null);
   const [plans, setPlans] = useState([]);
   const [selectedPlanId, setSelectedPlanId] = useState("");
-  const [totalAmount, setTotalAmount] = useState("");
   const [amountPaid, setAmountPaid] = useState("");
   const [paymentMode, setPaymentMode] = useState("cash");
   const [loading, setLoading] = useState(false);
@@ -42,7 +41,6 @@ export default function RenewPlan() {
       setCurrentPlan(null);
       setPlans([]);
       setSelectedPlanId("");
-      setTotalAmount("");
       setAmountPaid("");
       return;
     }
@@ -58,14 +56,12 @@ export default function RenewPlan() {
         setCurrentPlan(planData);
         setPlans(allPlans);
 
-        // Pre-select current plan
+        // Pre-select current plan + auto-fill amount
         if (planData.has_active_plan && planData.plan_id) {
           setSelectedPlanId(planData.plan_id.toString());
-          // Auto-populate with current plan price
-          const match = allPlans.find((p) => p.id === planData.plan_id);
-          if (match) {
-            setTotalAmount(match.price_cents.toString());
-          }
+          setAmountPaid(
+            planData.plan_price?.toString() || ""
+          );
         }
       } catch {
         toast.error("Failed to load plan information");
@@ -77,10 +73,10 @@ export default function RenewPlan() {
     load();
   }, [selectedCustomer]);
 
-  // ── Auto-populate amount when plan changes ──
+  // ── Auto-populate amount paid when plan changes ──
   useEffect(() => {
     if (selectedPlan) {
-      setTotalAmount(selectedPlan.price_cents.toString());
+      setAmountPaid(selectedPlan.price_cents.toString());
     }
   }, [selectedPlanId]);
 
@@ -89,15 +85,14 @@ export default function RenewPlan() {
     setSelectedCustomer(null);
     setCurrentPlan(null);
     setSelectedPlanId("");
-    setTotalAmount("");
     setAmountPaid("");
     setPaymentMode("cash");
   };
 
   // ── Submit renewal ──
   const handleSubmit = async () => {
-    if (!selectedCustomer || !selectedPlanId || !totalAmount) {
-      toast.error("Please fill all required fields");
+    if (!selectedCustomer || !selectedPlanId) {
+      toast.error("Please select a customer and plan");
       return;
     }
 
@@ -106,8 +101,7 @@ export default function RenewPlan() {
 
       const data = {
         plan_id: parseInt(selectedPlanId),
-        total_amount: parseFloat(totalAmount),
-        total_amount_paid: parseFloat(amountPaid || "0"),
+        amount_paid: parseFloat(amountPaid || "0"),
         payment_mode: paymentMode,
       };
 
@@ -161,13 +155,13 @@ export default function RenewPlan() {
               <p className="font-medium">{currentPlan.days_left}</p>
             </div>
             <div>
-              <span className="text-gray-500">Total</span>
-              <p className="font-medium">₹{currentPlan.total_amount}</p>
+              <span className="text-gray-500">Plan Price</span>
+              <p className="font-medium">₹{currentPlan.plan_price}</p>
             </div>
             <div>
-              <span className="text-gray-500">Balance</span>
+              <span className="text-gray-500">Remaining</span>
               <p className="font-medium text-red-600">
-                ₹{currentPlan.balance}
+                ₹{currentPlan.remaining}
               </p>
             </div>
           </div>
@@ -182,7 +176,7 @@ export default function RenewPlan() {
 
       {/* ── PLAN DROPDOWN ── */}
       {selectedCustomer && plans.length > 0 && (
-        <div className="space-y-2">
+        <div className="space-y-1">
           <Label>Select Plan *</Label>
           <Select value={selectedPlanId} onValueChange={setSelectedPlanId}>
             <SelectTrigger className="h-11">
@@ -197,58 +191,49 @@ export default function RenewPlan() {
               ))}
             </SelectContent>
           </Select>
+          <p className="text-xs text-gray-400 mt-1">
+            Current plan is pre-selected. Choose a different plan to upgrade or
+            downgrade.
+          </p>
         </div>
       )}
 
-      {/* ── AMOUNT + PAYMENT MODE ── */}
+      {/* ── AMOUNT PAID + PAYMENT MODE ── */}
       {selectedCustomer && selectedPlanId && (
         <div className="grid md:grid-cols-2 gap-6 items-end">
-          {/* Total Amount */}
-          <div className="space-y-2">
-            <Label>Total Amount *</Label>
-            <Input
-              type="number"
-              className="h-11"
-              value={totalAmount}
-              onChange={(e) => setTotalAmount(e.target.value)}
-            />
-          </div>
-
           {/* Amount Paid */}
           <div className="space-y-2">
-            <Label>Amount Paid</Label>
+            <Label>Amount Paid *</Label>
             <Input
               type="number"
               className="h-11"
-              placeholder="0"
               value={amountPaid}
               onChange={(e) => setAmountPaid(e.target.value)}
             />
           </div>
-        </div>
-      )}
 
-      {selectedCustomer && selectedPlanId && (
-        <div className="space-y-2">
-          <Label>Payment Method</Label>
-          <div className="flex gap-3">
-            <Button
-              variant={paymentMode === "cash" ? "default" : "outline"}
-              onClick={() => setPaymentMode("cash")}
-              className="rounded-full px-6"
-            >
-              <Banknote className="mr-2 h-4 w-4" />
-              Cash
-            </Button>
+          {/* Payment Method */}
+          <div className="space-y-2">
+            <Label>Payment Method</Label>
+            <div className="flex gap-3">
+              <Button
+                variant={paymentMode === "cash" ? "default" : "outline"}
+                onClick={() => setPaymentMode("cash")}
+                className="rounded-full px-6"
+              >
+                <Banknote className="mr-2 h-4 w-4" />
+                Cash
+              </Button>
 
-            <Button
-              variant={paymentMode === "upi" ? "default" : "outline"}
-              onClick={() => setPaymentMode("upi")}
-              className="rounded-full px-6"
-            >
-              <Smartphone className="mr-2 h-4 w-4" />
-              UPI
-            </Button>
+              <Button
+                variant={paymentMode === "upi" ? "default" : "outline"}
+                onClick={() => setPaymentMode("upi")}
+                className="rounded-full px-6"
+              >
+                <Smartphone className="mr-2 h-4 w-4" />
+                UPI
+              </Button>
+            </div>
           </div>
         </div>
       )}
