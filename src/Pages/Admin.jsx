@@ -129,24 +129,31 @@ Thank you.
 window.open(whatsappUrl, "_blank");
 };
 
-return ( <div className="space-y-6">
-  <div className="mb-2">
-    <h1 className="text-2xl font-bold tracking-tight text-gray-900">Customers</h1>
-    <p className="text-sm text-zinc-500 mt-1">Manage your active, expired, and new customer registrations.</p>
-  </div>
+return (
+  <div className="space-y-6">
+    
+    {/* Page Header */}
+    <div>
+      <h1 className="text-2xl font-bold tracking-tight text-gray-900">Manage Customers</h1>
+      <p className="text-sm text-zinc-500 mt-1">
+        View, search, edit, and renew your customers.
+      </p>
+    </div>
 
-  <Card title="Customer Database">
-<input
-type="text"
-placeholder="Search by ID, name, or email..."
-className="border p-2 mb-4 w-full rounded"
-value={search}
-onChange={(e) => setSearch(e.target.value)}
-/>
+    {/* Floating Card Content */}
+    <div className="bg-white rounded-2xl shadow-sm border border-zinc-200">
+      <div className="p-6">
+        <input
+          type="text"
+          placeholder="Search by ID, name, or email..."
+          className="bg-zinc-50 border border-zinc-200 p-2.5 mb-6 w-full rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all text-sm placeholder:text-zinc-400"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
 
-    <div className="overflow-x-auto">
-      <table className="w-full border border-zinc-200">
-        <thead className="bg-zinc-200">
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-zinc-50 border-y border-zinc-200 text-xs uppercase text-zinc-500 tracking-wider">
           <tr>
             <th className="p-2 text-left">Photo</th>
             <th className="p-2 text-left min-w-[180px]">Name</th>
@@ -292,9 +299,10 @@ onChange={(e) => setSearch(e.target.value)}
         </tbody>
       </table>
     </div>
-  </Card>
+  </div>
+</div>
 
-  {/* EDIT MODAL */}
+{/* EDIT MODAL */}
   {editingCustomer && (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-40">
       <div className="bg-white p-6 rounded-xl w-full max-w-md space-y-4">

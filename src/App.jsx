@@ -4,7 +4,8 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Toaster } from "sonner";   // ✅ ADD THIS
 
-import DashboardLayout from "./Layouts/DashboardLayout";
+import Navbar from "./Components/Navbar";
+import DashboardLayout from "./Components/DashboardLayout";
 import Login from "./Pages/Login";
 import Scan from "./Pages/Scan";
 import CustomerRegistration from "./Pages/CusReg";
@@ -34,7 +35,7 @@ export default function App() {
       {/* ✅ ADD TOASTER HERE */}
       <Toaster position="top-center" richColors    toastOptions={{ className: "mx-auto" }}  />
 
-      {/* Main App Routes */}
+      {/* The Dashboard layout will only wrap specific routes using the layout pattern */}
       <Routes>
         <Route path="/" element={<Navigate to="/login" />} />
         
@@ -49,19 +50,15 @@ export default function App() {
           }
         />
 
-        {/* Full Screen Unauthenticated/Kiosk Views */}
+        {/* Layout completely hidden on scan */}
         <Route path="/scan" element={<Scan />} />
 
-        {/* Dashboard layout views */}
-        <Route path="/billing" element={
-          <DashboardLayout me={me} setMe={setMe}><Billing /></DashboardLayout>
-        } />
-        <Route path="/admin" element={
-          <DashboardLayout me={me} setMe={setMe}><Admin /></DashboardLayout>
-        } />
-        <Route path="/register" element={
-          <DashboardLayout me={me} setMe={setMe}><CustomerRegistration /></DashboardLayout>
-        } />
+        {/* Routes protected by DashboardLayout */}
+        <Route element={<DashboardLayout me={me} setMe={setMe} />}>
+          <Route path="/billing" element={<Billing />} />
+          <Route path="/register" element={<CustomerRegistration />} />
+          <Route path="/admin" element={<Admin />} />
+        </Route>
       </Routes>
     </div>
   );
