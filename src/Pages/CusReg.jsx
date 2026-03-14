@@ -196,7 +196,7 @@ const CustomerRegistrationForm = () => {
   };
 
   return (
-    <div className="mx-auto max-w-3xl rounded-2xl bg-gradient-to-b from-blue-50 to-white border-2 border-blue-200 p-8 shadow-lg">
+    <div className="mx-auto max-w-3xl gradient-card p-8">
       <h2 className="mb-8 text-center text-2xl font-bold text-blue-700 tracking-tight">
         Customer Registration
       </h2>

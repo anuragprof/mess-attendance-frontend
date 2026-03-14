@@ -141,7 +141,7 @@ return (
     </div>
 
     {/* Floating Card Content */}
-    <div className="bg-white rounded-2xl shadow-sm border border-zinc-200">
+    <div className="gradient-card">
       <div className="p-6">
         <input
           type="text"

@@ -4,7 +4,7 @@ export default function RecentPayments({ payments }) {
     .slice(0, 5);
 
   return (
-    <div className="bg-white border rounded-xl shadow-sm p-4">
+    <div className="gradient-card p-4">
       <h2 className="font-semibold mb-4">Recent Payments</h2>
 
       {recentPayments.map((p) => (

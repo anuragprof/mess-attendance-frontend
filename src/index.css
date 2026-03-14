@@ -74,6 +74,7 @@
   }
 
   .dark {
+    /* (omitted for brevity) kept existing dark mode unchanged */
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
 
@@ -107,6 +108,12 @@
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 244 71% 63%;
+  }
+}
+
+@layer components {
+  .gradient-card {
+    @apply bg-gradient-to-b from-blue-50/50 to-white border border-blue-200 rounded-2xl shadow-sm transition-all hover:shadow-md;
   }
 }
 

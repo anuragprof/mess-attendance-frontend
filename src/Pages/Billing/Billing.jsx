@@ -46,7 +46,7 @@ export default function Billing() {
       <RecentPayments payments={payments} />
 
       {/* ===== Billing Card ===== */}
-      <div className="lg:col-span-2 bg-gradient-to-b from-blue-50 to-white border-2 border-blue-200 rounded-2xl p-8 shadow-lg space-y-6">
+      <div className="lg:col-span-2 gradient-card p-8 space-y-6">
 
         {/* TOP TABS */}
         <div className="flex bg-gray-200 rounded-full p-1 w-fit">
