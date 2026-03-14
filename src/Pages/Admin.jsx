@@ -153,13 +153,11 @@ onChange={(e) => setSearch(e.target.value)}
         <thead className="bg-zinc-200">
           <tr>
             <th className="p-2 text-left">Photo</th>
-            <th className="p-2 text-left">ID</th>
-            <th className="p-2 text-left">Name</th>
+            <th className="p-2 text-left min-w-[180px]">Name</th>
             <th className="p-2 text-left">Phone</th>
             {/* <th className="p-2 text-left">Email</th> */}
             <th className="p-2 text-left">QR</th>
             <th className="p-2 text-left">Expiry</th>
-            <th className="p-2 text-left">Days Left</th>
             <th className="p-2 text-left">Actions</th>
           </tr>
         </thead>
@@ -168,8 +166,10 @@ onChange={(e) => setSearch(e.target.value)}
           {filteredCustomers.map((customer) => (
             <tr
               key={customer.id}
-              className={`border-t ${
-                customer.days_left <= 0 ? "bg-red-50" : ""
+              className={`border-b border-x last:border-b transition-colors relative ${
+                customer.days_left <= 0 
+                  ? "bg-red-50 border-red-200" 
+                  : "bg-white border-green-300 shadow-sm"
               }`}
             >
               <td className="p-2">
@@ -181,9 +181,12 @@ onChange={(e) => setSearch(e.target.value)}
                 />
               </td>
 
-              <td className="p-2 font-mono">CUST-{customer.id}</td>
-
-              <td className="p-2">{customer.full_name}</td>
+              <td className="p-2">
+                <div className="flex flex-col">
+                  <span className="font-medium text-gray-900">{customer.full_name}</span>
+                  <span className="text-xs text-zinc-500 font-mono">CUST-{customer.id}</span>
+                </div>
+              </td>
 
               <td className="p-2">
                 <div className="flex items-center gap-2">
@@ -210,27 +213,26 @@ onChange={(e) => setSearch(e.target.value)}
               </td>
 
               <td className="p-2">
-                {formatDate(customer.subscription_expiry)}
-              </td>
-
-              <td className="p-2">
-                {typeof customer.days_left === "number" ? (
-                  <span
-                    className={
-                      customer.days_left <= 0
-                        ? "text-red-700 font-bold"
-                        : customer.days_left <= 5
-                        ? "text-red-600 font-semibold"
-                        : "text-green-600 font-semibold"
-                    }
-                  >
-                    {customer.days_left > 0
-                      ? `${customer.days_left} days`
-                      : "Expired"}
-                  </span>
-                ) : (
-                  "—"
-                )}
+                <div className="flex flex-col">
+                  <span>{formatDate(customer.subscription_expiry)}</span>
+                  {typeof customer.days_left === "number" ? (
+                    <span
+                      className={`text-sm font-semibold ${
+                        customer.days_left <= 0
+                          ? "text-red-700"
+                          : customer.days_left <= 5
+                          ? "text-red-600"
+                          : "text-green-600"
+                      }`}
+                    >
+                      {customer.days_left > 0
+                        ? `${customer.days_left} days`
+                        : "Expired"}
+                    </span>
+                  ) : (
+                    <span className="text-sm font-semibold text-zinc-500">—</span>
+                  )}
+                </div>
               </td>
 
               <td className="p-2 relative">
@@ -286,7 +288,7 @@ onChange={(e) => setSearch(e.target.value)}
 
           {filteredCustomers.length === 0 && (
             <tr>
-              <td colSpan="8" className="p-4 text-center text-zinc-500">
+              <td colSpan="6" className="p-4 text-center text-zinc-500">
                 No customers found
               </td>
             </tr>
