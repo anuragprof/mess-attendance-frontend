@@ -117,6 +117,18 @@
   }
 }
 
+/* Sidebar backdrop fade-in animation */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@layer utilities {
+  .animate-fade-in {
+    animation: fadeIn 0.2s ease-out;
+  }
+}
+
 /* 4️⃣ After all this, you can safely use @apply */
 @layer base {
   * {

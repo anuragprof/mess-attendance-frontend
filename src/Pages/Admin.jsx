@@ -229,7 +229,7 @@ window.open(whatsappUrl, "_blank");
           onChange={(e) => setSearch(e.target.value)}
         />
 
-        <div className="overflow-x-auto overflow-y-auto max-h-[240px]">
+        <div className="overflow-x-auto overflow-y-auto max-h-[60vh] lg:max-h-[240px]">
           <table className="w-full">
             <thead className="bg-zinc-50 border-y border-zinc-200 text-xs uppercase text-zinc-500 tracking-wider">
           <tr>
@@ -389,7 +389,7 @@ window.open(whatsappUrl, "_blank");
     </div>
   </div>
   
-  <div className="grid md:grid-cols-2 gap-3">
+  <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
     <div className="h-[240px]">
       {mealDistribution ? (
         <MealDistributionChart data={mealDistribution} />
@@ -595,7 +595,7 @@ window.open(whatsappUrl, "_blank");
     </div>
   )}
 
-  <div className="grid md:grid-cols-2 gap-4">
+  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
     <Card title="Issue QR / Student">Coming soon…</Card>
     <Card title="Meals & Slots">Coming soon…</Card>
   </div>

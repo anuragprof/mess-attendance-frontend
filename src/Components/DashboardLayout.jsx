@@ -1,9 +1,12 @@
 import { Outlet, useLocation } from "react-router-dom";
+import { useState } from "react";
 import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
+import MobileBottomNav from "./MobileBottomNav";
 
 export default function DashboardLayout({ me, setMe }) {
   const location = useLocation();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Map routes to dynamic titles and subtitles for the Topbar
   let pageTitle = "";
@@ -32,22 +35,34 @@ export default function DashboardLayout({ me, setMe }) {
   return (
     <div className="flex min-h-screen bg-zinc-50 font-sans text-zinc-900">
       
-      {/* Sidebar fixed on the left */}
-      <Sidebar me={me} setMe={setMe} />
+      {/* Sidebar — always rendered, visibility controlled via props + CSS */}
+      <Sidebar
+        me={me}
+        setMe={setMe}
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+      />
 
-      {/* Main Content Area starts to the right of the 64 (16rem) wide sidebar */}
-      <div className="flex-1 flex flex-col ml-64 min-w-0">
+      {/* Main Content Area — full width on mobile, offset on desktop */}
+      <div className="flex-1 flex flex-col lg:ml-64 min-w-0">
         
-        <Topbar title={pageTitle} subtitle={pageSubtitle} />
+        <Topbar
+          title={pageTitle}
+          subtitle={pageSubtitle}
+          onMenuToggle={() => setSidebarOpen(true)}
+        />
 
-        {/* Page Content Slot */}
-        <main className="flex-1 p-8">
+        {/* Page Content Slot — extra bottom padding on mobile for bottom nav */}
+        <main className="flex-1 p-4 lg:p-8 pb-20 lg:pb-8">
           <div className="max-w-6xl mx-auto">
             <Outlet />
           </div>
         </main>
 
       </div>
+
+      {/* Mobile Bottom Navigation */}
+      <MobileBottomNav />
     </div>
   );
 }
