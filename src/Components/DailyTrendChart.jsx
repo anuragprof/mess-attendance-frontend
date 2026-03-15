@@ -33,7 +33,7 @@ export default function DailyTrendChart({ data, todayTotal, yesterdayTotal }) {
 
    return (
     <div className="bg-white p-6 rounded-2xl shadow-sm border border-zinc-100 flex flex-col h-full">
-      <div className="flex justify-between items-start mb-6">
+      <div className="flex justify-between items-start mb-2">
         <div>
           <h3 className="text-lg font-semibold text-gray-800">Overall Daily Trend</h3>
           <p className="text-sm text-zinc-500 mt-1">Meal scans throughout the day</p>
@@ -51,7 +51,7 @@ export default function DailyTrendChart({ data, todayTotal, yesterdayTotal }) {
         </div>
       </div>
       
-      <div className="flex-grow min-h-[250px]">
+      <div className="w-full h-[180px] mt-2">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart
             data={data}

@@ -31,16 +31,16 @@ export default function MealDistributionChart({ data }) {
   };
 
   return (
-    <div className="bg-white p-6 rounded-2xl shadow-sm border border-zinc-100 flex flex-col h-full">
-      <h3 className="text-lg font-semibold text-gray-800 mb-6">Meal Distribution</h3>
+    <div className="bg-white p-6 rounded-2xl shadow-sm border border-zinc-100 flex flex-col items-center justify-between h-full">
+      <h3 className="text-lg font-semibold text-gray-800 w-full mb-2">Meal Distribution</h3>
       
-      <div className="flex-grow min-h-[250px] relative">
+      <div className="relative w-full h-[180px] flex items-center justify-center">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie
               data={data}
-              innerRadius={70}
-              outerRadius={100}
+              innerRadius={50}
+              outerRadius={80}
               paddingAngle={2}
               dataKey="value"
             >
@@ -61,12 +61,12 @@ export default function MealDistributionChart({ data }) {
         {/* Absolute positioned center text as fallback if renderCustomLabel has issues with some Recharts versions */}
         <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
           <span className="text-xs text-zinc-500 font-medium">Total Meals</span>
-          <span className="text-2xl font-bold text-gray-800">{totalMeals}</span>
+          <span className="text-xl font-bold text-gray-800">{totalMeals}</span>
         </div>
       </div>
       
       {/* Legend built manually for better styling control */}
-      <div className="flex justify-center gap-6 mt-4">
+      <div className="flex justify-center gap-6 mt-2">
         {data.map((entry, index) => (
           <div key={`legend-${index}`} className="flex items-center gap-2">
             <div 
