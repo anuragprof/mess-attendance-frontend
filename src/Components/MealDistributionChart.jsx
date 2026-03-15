@@ -31,7 +31,7 @@ export default function MealDistributionChart({ data }) {
   };
 
   return (
-    <div className="bg-white p-4 rounded-2xl shadow-sm border border-zinc-100 flex flex-col items-center justify-between h-full">
+    <div className="gradient-card p-4 flex flex-col items-center justify-between h-full">
       <h3 className="text-base font-semibold text-gray-800 w-full mb-1">Meal Distribution</h3>
       
       <div className="relative w-full flex-grow flex items-center justify-center min-h-0">

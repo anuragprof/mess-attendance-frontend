@@ -32,7 +32,7 @@ export default function DailyTrendChart({ data, todayTotal, yesterdayTotal }) {
    };
 
    return (
-    <div className="bg-white p-4 rounded-2xl shadow-sm border border-zinc-100 flex flex-col h-full">
+    <div className="gradient-card p-4 flex flex-col h-full">
       <div className="flex justify-between items-start mb-1">
         <div>
           <h3 className="text-base font-semibold text-gray-800">Daily Trend</h3>
