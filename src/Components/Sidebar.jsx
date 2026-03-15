@@ -1,15 +1,13 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { logoutVendor } from "../features/auth/api";
 
-const SidebarItem = ({ to, icon, label, target }) => {
+const SidebarItem = ({ to, icon, label }) => {
   const { pathname } = useLocation();
   const active = pathname === to;
 
   return (
     <Link
       to={to}
-      target={target}
-      rel={target === "_blank" ? "noopener noreferrer" : undefined}
       className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
         active
           ? "bg-blue-600 text-white font-medium shadow-md shadow-blue-600/20"
@@ -50,7 +48,7 @@ export default function Sidebar({ me, setMe }) {
         <nav className="flex flex-col gap-1.5">
           <SidebarItem to="/admin" icon="👥" label="Customers" />
           <SidebarItem to="/billing" icon="💳" label="Billing" />
-          <SidebarItem to="/scan" icon="📷" label="Scan QR" target="_blank" />
+          <SidebarItem to="/scan" icon="📷" label="Scan QR" />
         </nav>
       </div>
 
