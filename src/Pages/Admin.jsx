@@ -137,15 +137,18 @@ fetchCustomers();
 
 };
 
-const filteredCustomers = customers.filter((c) => {
-const query = search.toLowerCase();
-return (
-c.full_name.toLowerCase().includes(query) ||
-c.email.toLowerCase().includes(query) ||
-String(c.id).includes(query) ||
-`cust-${c.id}`.toLowerCase().includes(query)
-);
-});
+const filteredCustomers = [...customers]
+  .sort((a, b) => b.id - a.id) // Sort by ID descending (Most recent first)
+  .filter((c) => {
+    const query = search.toLowerCase();
+    return (
+      (c.full_name || "").toLowerCase().includes(query) ||
+      (c.email || "").toLowerCase().includes(query) ||
+      (c.phone_number || "").toLowerCase().includes(query) ||
+      String(c.id).includes(query) ||
+      `cust-${c.id}`.toLowerCase().includes(query)
+    );
+  });
 
 const formatDate = (dateString) => {
 if (!dateString) return "—";
@@ -200,7 +203,7 @@ window.open(whatsappUrl, "_blank");
         </thead>
 
         <tbody>
-          {filteredCustomers.slice(0, 5).map((customer) => (
+          {(search ? filteredCustomers : filteredCustomers.slice(0, 5)).map((customer) => (
             <tr
               key={customer.id}
               className={`border-b border-x last:border-b transition-colors relative ${
