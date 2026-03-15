@@ -138,9 +138,9 @@ fetchCustomers();
 };
 
 const filteredCustomers = [...customers]
-  .sort((a, b) => b.id - a.id) // Sort by ID descending (Most recent first)
   .filter((c) => {
     const query = search.toLowerCase();
+    if (!query) return true;
     return (
       (c.full_name || "").toLowerCase().includes(query) ||
       (c.email || "").toLowerCase().includes(query) ||
@@ -148,6 +148,38 @@ const filteredCustomers = [...customers]
       String(c.id).includes(query) ||
       `cust-${c.id}`.toLowerCase().includes(query)
     );
+  })
+  .sort((a, b) => {
+    if (!search) return b.id - a.id;
+    
+    const query = search.toLowerCase();
+    
+    const getScore = (c) => {
+      let score = 0;
+      const name = (c.full_name || "").toLowerCase();
+      const phone = (c.phone_number || "").toLowerCase();
+      const cid = `cust-${c.id}`.toLowerCase();
+      
+      // Highest priority: Exact matches
+      if (name === query || phone === query || cid === query || String(c.id) === query) {
+        score = 100;
+      } 
+      // Medium priority: Starts with query
+      else if (name.startsWith(query) || phone.startsWith(query) || cid.startsWith(query)) {
+        score = 50;
+      }
+      // Lower priority: Includes query
+      else {
+        score = 10;
+      }
+      return score;
+    };
+
+    const scoreA = getScore(a);
+    const scoreB = getScore(b);
+
+    if (scoreA !== scoreB) return scoreB - scoreA;
+    return b.id - a.id; // Secondary sort: Most recent first
   });
 
 const formatDate = (dateString) => {
