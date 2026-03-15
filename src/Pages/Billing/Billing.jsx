@@ -33,15 +33,7 @@ export default function Billing() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto p-6 space-y-6">
-      {/* ── Page Header ── */}
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight text-gray-900">Billing</h1>
-        <p className="text-sm text-zinc-500 mt-1">
-          Manage subscriptions, record payments, and view transaction history.
-        </p>
-      </div>
-
+    <div className="max-w-7xl mx-auto p-6 space-y-4">
       <div className="grid lg:grid-cols-3 gap-8 items-start">
       <RecentPayments payments={payments} />
 

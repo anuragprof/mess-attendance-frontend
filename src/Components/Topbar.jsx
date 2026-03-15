@@ -1,11 +1,14 @@
 import { Link } from "react-router-dom";
 
-export default function Topbar() {
+export default function Topbar({ title, subtitle }) {
   return (
     <header className="h-16 bg-white/80 backdrop-blur-md border-b border-zinc-200 sticky top-0 z-10 flex items-center justify-between px-8 shadow-sm">
       
-      {/* Left side: Spacer */}
-      <div className="flex-1"></div>
+      {/* Left side: Page Title */}
+      <div className="flex-1 flex flex-col justify-center">
+        {title && <h1 className="text-xl font-bold tracking-tight text-gray-900 leading-tight">{title}</h1>}
+        {subtitle && <p className="text-xs text-zinc-500 leading-none mt-0.5">{subtitle}</p>}
+      </div>
 
       {/* Right side: Actions */}
       <div className="flex items-center gap-4">

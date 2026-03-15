@@ -197,10 +197,6 @@ const CustomerRegistrationForm = () => {
 
   return (
     <div className="mx-auto max-w-3xl gradient-card p-8">
-      <h2 className="mb-8 text-center text-2xl font-bold text-blue-700 tracking-tight">
-        Customer Registration
-      </h2>
-
       <form onSubmit={handleSubmit} className="space-y-6">
 
         {/* Name + Phone */}

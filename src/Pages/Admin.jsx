@@ -171,19 +171,11 @@ Thank you.
 window.open(whatsappUrl, "_blank");
 };
 
-return (
-  <div className="space-y-6">
+  return (
+  <div className="space-y-4">
     
-    {/* Page Header */}
-    <div>
-      <h1 className="text-2xl font-bold tracking-tight text-gray-900">Manage Customers</h1>
-      <p className="text-sm text-zinc-500 mt-1">
-        View, search, edit, and renew your customers.
-      </p>
-    </div>
-
     {/* Floating Card Content */}
-    <div className="gradient-card">
+    <div className="gradient-card mt-2">
       <div className="p-4">
         <input
           type="text"
