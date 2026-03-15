@@ -137,19 +137,23 @@ fetchCustomers();
 
 };
 
-const filteredCustomers = [...customers]
-  .filter((c) => {
-    const query = search.toLowerCase();
-    if (!query) return true;
-    return (
-      (c.full_name || "").toLowerCase().includes(query) ||
-      (c.email || "").toLowerCase().includes(query) ||
-      (c.phone_number || "").toLowerCase().includes(query) ||
-      String(c.id).includes(query) ||
-      `cust-${c.id}`.toLowerCase().includes(query)
-    );
-  })
-  .sort((a, b) => {
+const filteredCustomers = Array.from(
+    new Map(
+      customers
+        .filter((c) => {
+          const query = search.toLowerCase();
+          if (!query) return true;
+          return (
+            (c.full_name || "").toLowerCase().includes(query) ||
+            (c.email || "").toLowerCase().includes(query) ||
+            (c.phone_number || "").toLowerCase().includes(query) ||
+            String(c.id).includes(query) ||
+            `cust-${c.id}`.toLowerCase().includes(query)
+          );
+        })
+        .map(c => [c.id, c]) // Deduplicate by ID just in case
+    ).values()
+  ).sort((a, b) => {
     if (!search) return b.id - a.id;
     
     const query = search.toLowerCase();
@@ -162,16 +166,21 @@ const filteredCustomers = [...customers]
       
       // Highest priority: Exact matches
       if (name === query || phone === query || cid === query || String(c.id) === query) {
-        score = 100;
+        score = 1000;
       } 
       // Medium priority: Starts with query
       else if (name.startsWith(query) || phone.startsWith(query) || cid.startsWith(query)) {
-        score = 50;
+        score = 500;
       }
       // Lower priority: Includes query
       else {
-        score = 10;
+        score = 100;
       }
+
+      // Relevance penalty: Longer names that don't match as closely should be lower
+      // This ensures "test3" (score ~995) beats "test30" (score ~994)
+      score -= name.length; 
+
       return score;
     };
 
@@ -179,7 +188,7 @@ const filteredCustomers = [...customers]
     const scoreB = getScore(b);
 
     if (scoreA !== scoreB) return scoreB - scoreA;
-    return b.id - a.id; // Secondary sort: Most recent first
+    return b.id - a.id; // Tie-breaker: Most recent first
   });
 
 const formatDate = (dateString) => {
