@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import Card from "../Components/Card";
 import { toast } from "sonner";
@@ -26,11 +26,16 @@ const [previewCustomer, setPreviewCustomer] = useState(null);
 const [mealDistribution, setMealDistribution] = useState(null);
 const [dailyTrend, setDailyTrend] = useState(null);
 
+// Track mount state to suppress errors during logout/unmount
+const mountedRef = useRef(true);
+
 useEffect(() => {
+  mountedRef.current = true;
   fetchCustomers();
   fetchPlans();
   fetchMealDistribution();
   fetchDailyTrend();
+  return () => { mountedRef.current = false; };
 }, []);
 
 const fetchCustomers = async () => {
@@ -38,9 +43,9 @@ try {
 const res = await axios.get("/customers/", {
 withCredentials: true,
 });
-setCustomers(res.data);
+if (mountedRef.current) setCustomers(res.data);
 } catch {
-toast.error("Failed to load customers");
+if (mountedRef.current) toast.error("Failed to load customers");
 }
 };
 
@@ -49,9 +54,9 @@ try {
 const res = await axios.get("/plans/", {
 withCredentials: true,
 });
-setPlans(res.data);
+if (mountedRef.current) setPlans(res.data);
 } catch {
-toast.error("Failed to load plans");
+if (mountedRef.current) toast.error("Failed to load plans");
 }
 };
 
