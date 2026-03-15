@@ -172,30 +172,30 @@ window.open(whatsappUrl, "_blank");
 };
 
   return (
-  <div className="space-y-4">
+  <div className="space-y-2">
     
     {/* Floating Card Content */}
-    <div className="gradient-card mt-2">
-      <div className="p-4">
+    <div className="gradient-card mt-1">
+      <div className="p-3">
         <input
           type="text"
           placeholder="Search by ID, name, or email..."
-          className="bg-zinc-50 border border-zinc-200 p-2 mb-4 w-full rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all text-sm placeholder:text-zinc-400"
+          className="bg-zinc-50 border border-zinc-200 p-2 mb-2 w-full rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all text-sm placeholder:text-zinc-400"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
 
-        <div className="overflow-x-auto overflow-y-auto max-h-[280px]">
+        <div className="overflow-x-auto overflow-y-auto max-h-[240px]">
           <table className="w-full">
             <thead className="bg-zinc-50 border-y border-zinc-200 text-xs uppercase text-zinc-500 tracking-wider">
           <tr>
-            <th className="p-1.5 text-left">Photo</th>
-            <th className="p-1.5 text-left min-w-[150px]">Name</th>
-            <th className="p-1.5 text-left">Phone</th>
-            {/* <th className="p-1.5 text-left">Email</th> */}
-            <th className="p-1.5 text-left">QR</th>
-            <th className="p-1.5 text-left">Expiry</th>
-            <th className="p-1.5 text-left">Actions</th>
+            <th className="p-1 text-left">Photo</th>
+            <th className="p-1 text-left min-w-[150px]">Name</th>
+            <th className="p-1 text-left">Phone</th>
+            {/* <th className="p-1 text-left">Email</th> */}
+            <th className="p-1 text-left">QR</th>
+            <th className="p-1 text-left">Expiry</th>
+            <th className="p-1 text-left">Actions</th>
           </tr>
         </thead>
 
@@ -209,52 +209,52 @@ window.open(whatsappUrl, "_blank");
                   : "bg-white border-green-300 shadow-sm"
               }`}
             >
-              <td className="p-1.5">
+              <td className="p-1">
                 <img
                   src={customer.photo_url}
                   alt="customer"
                   onClick={() => setPreviewCustomer(customer)}
-                  className="w-10 h-10 object-cover rounded-xl border shadow-sm cursor-pointer hover:scale-105 transition"
+                  className="w-8 h-8 object-cover rounded-xl border shadow-sm cursor-pointer hover:scale-105 transition"
                 />
               </td>
 
-              <td className="p-1.5">
+              <td className="p-1">
                 <div className="flex flex-col">
-                  <span className="font-medium text-gray-900">{customer.full_name}</span>
-                  <span className="text-xs text-zinc-500 font-mono">CUST-{customer.id}</span>
+                  <span className="font-medium text-gray-900 leading-tight text-sm">{customer.full_name}</span>
+                  <span className="text-[10px] text-zinc-500 font-mono">CUST-{customer.id}</span>
                 </div>
               </td>
 
-              <td className="p-1.5">
+              <td className="p-1">
                 <div className="flex items-center gap-2">
-                  <span>{customer.phone_number}</span>
+                  <span className="text-sm">{customer.phone_number}</span>
 
                   <button
                     onClick={() => sendWhatsAppMessage(customer.phone_number)}
-                    className="bg-green-500 text-white px-2 py-1 rounded text-xs hover:bg-green-600"
+                    className="bg-green-500 text-white px-1.5 py-0.5 rounded text-[10px] hover:bg-green-600"
                   >
                     WhatsApp
                   </button>
                 </div>
               </td>
 
-              {/* <td className="p-1.5">{customer.email}</td> */}
+              {/* <td className="p-1">{customer.email}</td> */}
 
-              <td className="p-1.5">
+              <td className="p-1">
                 <img
                   src={customer.qr_url}
                   alt="qr"
                   onClick={() => setPreviewCustomer(customer)}
-                  className="w-12 h-12 border rounded-md cursor-pointer hover:scale-105 transition"
+                  className="w-10 h-10 border rounded-md cursor-pointer hover:scale-105 transition"
                 />
               </td>
 
-              <td className="p-1.5">
+              <td className="p-1">
                 <div className="flex flex-col">
-                  <span>{formatDate(customer.subscription_expiry)}</span>
+                  <span className="text-sm">{formatDate(customer.subscription_expiry)}</span>
                   {typeof customer.days_left === "number" ? (
                     <span
-                      className={`text-sm font-semibold ${
+                      className={`text-xs font-semibold ${
                         customer.days_left <= 0
                           ? "text-red-700"
                           : customer.days_left <= 5
@@ -272,10 +272,10 @@ window.open(whatsappUrl, "_blank");
                 </div>
               </td>
 
-              <td className="p-1.5 relative">
+              <td className="p-1 relative">
                 <div className="relative inline-block text-left">
                   <button
-                    className="bg-gray-600 text-white px-3 py-1 rounded"
+                    className="bg-gray-600 text-white px-2 py-0.5 rounded text-xs"
                     onClick={() =>
                       setOpenDropdown(
                         openDropdown === customer.id ? null : customer.id
@@ -337,14 +337,16 @@ window.open(whatsappUrl, "_blank");
 </div>
 
 {/* Analytics Section */}
-<div className="mt-4">
-  <div className="mb-2">
-    <h2 className="text-xl font-bold tracking-tight text-gray-900">Analytics</h2>
-    <p className="text-sm text-zinc-500">Meal distribution and daily scan trend</p>
+<div className="mt-2 text-zinc-800">
+  <div className="mb-1 flex items-center justify-between">
+    <div>
+      <h2 className="text-lg font-bold tracking-tight">Analytics</h2>
+      <p className="text-[10px] text-zinc-500">Meal distribution and daily scan trend</p>
+    </div>
   </div>
   
-  <div className="grid md:grid-cols-2 gap-4">
-    <div className="h-[280px]">
+  <div className="grid md:grid-cols-2 gap-3">
+    <div className="h-[240px]">
       {mealDistribution ? (
         <MealDistributionChart data={mealDistribution} />
       ) : (
@@ -354,7 +356,7 @@ window.open(whatsappUrl, "_blank");
       )}
     </div>
     
-    <div className="h-[280px]">
+    <div className="h-[240px]">
       {dailyTrend ? (
         <DailyTrendChart 
           data={dailyTrend.trend} 
