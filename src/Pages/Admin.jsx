@@ -4,12 +4,14 @@ import Card from "../Components/Card";
 import { toast } from "sonner";
 import axios from "@/Lib/axios";
 import {
-Select,
-SelectContent,
-SelectItem,
-SelectTrigger,
-SelectValue,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/Pages/ui/select";
+import MealDistributionChart from "../Components/MealDistributionChart";
+import DailyTrendChart from "../Components/DailyTrendChart";
 
 export default function Admin() {
 const [customers, setCustomers] = useState([]);
@@ -20,9 +22,15 @@ const [renewCustomer, setRenewCustomer] = useState(null);
 const [openDropdown, setOpenDropdown] = useState(null);
 const [previewCustomer, setPreviewCustomer] = useState(null);
 
+// Analytics State
+const [mealDistribution, setMealDistribution] = useState(null);
+const [dailyTrend, setDailyTrend] = useState(null);
+
 useEffect(() => {
-fetchCustomers();
-fetchPlans();
+  fetchCustomers();
+  fetchPlans();
+  fetchMealDistribution();
+  fetchDailyTrend();
 }, []);
 
 const fetchCustomers = async () => {
@@ -45,6 +53,40 @@ setPlans(res.data);
 } catch {
 toast.error("Failed to load plans");
 }
+};
+
+const fetchMealDistribution = async () => {
+  try {
+    const res = await axios.get("/analytics/meal-distribution", {
+      withCredentials: true,
+    });
+    // Format for Recharts PieChart expected structure
+    const formattedData = [
+      { name: "Breakfast", value: res.data.breakfast },
+      { name: "Lunch", value: res.data.lunch },
+      { name: "Dinner", value: res.data.dinner },
+    ].filter(item => item.value > 0); // Only pass segments with values to render cleaner
+
+    // If all are zero, provide a default so chart renders an empty placeholder loop
+    if (formattedData.length === 0) {
+      formattedData.push({ name: "No Data", value: 1, fill: "#f4f4f5" }); 
+    }
+    
+    setMealDistribution(formattedData);
+  } catch (error) {
+    console.error("Failed to fetch meal distribution:", error);
+  }
+};
+
+const fetchDailyTrend = async () => {
+  try {
+    const res = await axios.get("/analytics/daily-trend", {
+      withCredentials: true,
+    });
+    setDailyTrend(res.data);
+  } catch (error) {
+    console.error("Failed to fetch daily trend:", error);
+  }
 };
 
 const deleteCustomer = async (id) => {
@@ -151,7 +193,7 @@ return (
           onChange={(e) => setSearch(e.target.value)}
         />
 
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto max-h-[400px]">
           <table className="w-full">
             <thead className="bg-zinc-50 border-y border-zinc-200 text-xs uppercase text-zinc-500 tracking-wider">
           <tr>
@@ -166,7 +208,7 @@ return (
         </thead>
 
         <tbody>
-          {filteredCustomers.map((customer) => (
+          {filteredCustomers.slice(0, 5).map((customer) => (
             <tr
               key={customer.id}
               className={`border-b border-x last:border-b transition-colors relative ${
@@ -298,6 +340,40 @@ return (
           )}
         </tbody>
       </table>
+    </div>
+  </div>
+</div>
+
+{/* Analytics Section */}
+<div className="mt-8">
+  <div className="mb-4">
+    <h2 className="text-xl font-bold tracking-tight text-gray-900">Analytics</h2>
+    <p className="text-sm text-zinc-500">Meal distribution and daily scan trend</p>
+  </div>
+  
+  <div className="grid md:grid-cols-2 gap-6">
+    <div className="h-[350px]">
+      {mealDistribution ? (
+        <MealDistributionChart data={mealDistribution} />
+      ) : (
+        <div className="h-full w-full flex items-center justify-center bg-white rounded-2xl shadow-sm border border-zinc-100">
+          <p className="text-zinc-500 animate-pulse">Loading meal distribution...</p>
+        </div>
+      )}
+    </div>
+    
+    <div className="h-[350px]">
+      {dailyTrend ? (
+        <DailyTrendChart 
+          data={dailyTrend.trend} 
+          todayTotal={dailyTrend.today_total} 
+          yesterdayTotal={dailyTrend.yesterday_total} 
+        />
+      ) : (
+        <div className="h-full w-full flex items-center justify-center bg-white rounded-2xl shadow-sm border border-zinc-100">
+          <p className="text-zinc-500 animate-pulse">Loading daily trend...</p>
+        </div>
+      )}
     </div>
   </div>
 </div>
