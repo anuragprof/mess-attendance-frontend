@@ -78,6 +78,7 @@ export default function Sidebar({ me, setMe, isOpen, onClose }) {
           <nav className="flex flex-col gap-1.5">
             <SidebarItem to="/admin" icon="👥" label="Customers" onClick={handleNavClick} />
             <SidebarItem to="/billing" icon="💳" label="Billing" onClick={handleNavClick} />
+            <SidebarItem to="/reports" icon="📊" label="Reports" onClick={handleNavClick} />
             <SidebarItem to="/scan" icon="📷" label="Scan QR" onClick={handleNavClick} />
           </nav>
         </div>

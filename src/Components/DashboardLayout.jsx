@@ -25,6 +25,10 @@ export default function DashboardLayout({ me, setMe }) {
       pageTitle = "Customer Registration";
       pageSubtitle = "Register new mess users and capture details.";
       break;
+    case "/reports":
+      pageTitle = "Reports";
+      pageSubtitle = "Analyze mess attendance and meal counts.";
+      break;
     default:
       pageTitle = "Dashboard";
       pageSubtitle = "Welcome back!";

@@ -1,11 +1,11 @@
 import { Link, useLocation } from "react-router-dom";
-import { ScanLine, Users, CreditCard, UserPlus } from "lucide-react";
+import { ScanLine, Users, CreditCard, UserPlus, BarChart3 } from "lucide-react";
 
 const navItems = [
   { to: "/scan", icon: ScanLine, label: "Scan" },
-  { to: "/admin", icon: Users, label: "Customers" },
+  { to: "/admin", icon: Users, label: "Users" },
   { to: "/billing", icon: CreditCard, label: "Billing" },
-  { to: "/register", icon: UserPlus, label: "Register" },
+  { to: "/reports", icon: BarChart3, label: "Reports" },
 ];
 
 export default function MobileBottomNav() {
