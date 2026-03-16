@@ -36,7 +36,7 @@ export default function Reports() {
         params.end_date = endDate;
       }
 
-      const res = await axios.get("/attendance/report", {
+      const res = await axios.get("/reports/attendance-summary", {
         params,
         withCredentials: true,
       });
