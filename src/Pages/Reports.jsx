@@ -180,7 +180,7 @@ export default function Reports() {
         </div>
         
         {/* Charts */}
-        <div className="h-[200px] lg:col-span-1">
+        <div className="h-[300px] w-full lg:col-span-1">
           {loading ? (
             <div className="gradient-card h-full animate-pulse bg-zinc-100 rounded-xl" />
           ) : attendanceTrend.length > 0 ? (
@@ -193,7 +193,7 @@ export default function Reports() {
           )}
         </div>
         
-        <div className="h-[200px] lg:col-span-1">
+        <div className="h-[300px] w-full lg:col-span-1">
            {loading ? (
             <div className="gradient-card h-full animate-pulse bg-zinc-100 rounded-xl" />
           ) : mealDistribution.length > 0 ? (
