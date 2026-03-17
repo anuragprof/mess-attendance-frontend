@@ -21,6 +21,8 @@ const [editingCustomer, setEditingCustomer] = useState(null);
 const [renewCustomer, setRenewCustomer] = useState(null);
 const [openDropdown, setOpenDropdown] = useState(null);
 const [previewCustomer, setPreviewCustomer] = useState(null);
+const [isUpdating, setIsUpdating] = useState(false);
+
 
 // Analytics State
 const [mealDistribution, setMealDistribution] = useState(null);
@@ -107,22 +109,36 @@ toast.error("Delete failed");
 };
 
 const handleUpdate = async () => {
-const data = new FormData();
-data.append("full_name", editingCustomer.full_name);
-data.append("phone_number", editingCustomer.phone_number);
-data.append("email", editingCustomer.email);
-data.append("plan_id", editingCustomer.plan_id);
+    if (!editingCustomer) return;
+    
+    setIsUpdating(true);
+    try {
+        const original = customers.find(c => c.id === editingCustomer.id);
+        const payload = {};
+        
+        if (editingCustomer.full_name !== original.full_name) payload.full_name = editingCustomer.full_name;
+        if (editingCustomer.phone_number !== original.phone_number) payload.phone_number = editingCustomer.phone_number;
+        if (editingCustomer.email !== original.email) payload.email = editingCustomer.email;
 
+        // If nothing changed, just close
+        if (Object.keys(payload).length === 0) {
+            setEditingCustomer(null);
+            return;
+        }
 
-await axios.put(`/customers/${editingCustomer.id}`, data, {
-  withCredentials: true,
-});
+        await axios.patch(`/customers/${editingCustomer.id}`, payload, {
+            withCredentials: true,
+        });
 
-toast.success("Customer updated");
-setEditingCustomer(null);
-fetchCustomers();
-
-
+        toast.success("Customer updated successfully");
+        setEditingCustomer(null);
+        fetchCustomers();
+    } catch (error) {
+        console.error("Update failed:", error);
+        toast.error(error.response?.data?.detail || "Update failed");
+    } finally {
+        setIsUpdating(false);
+    }
 };
 
 const handleRenew = async () => {
@@ -423,76 +439,82 @@ window.open(whatsappUrl, "_blank");
 
 {/* EDIT MODAL */}
   {editingCustomer && (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-40">
-      <div className="bg-white p-6 rounded-xl w-full max-w-md space-y-4">
-        <h3 className="text-lg font-semibold">Edit Information</h3>
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-40 p-4">
+      <div className="bg-white p-6 rounded-2xl w-full max-w-md shadow-2xl space-y-4 border border-zinc-200">
+        <div className="flex justify-between items-center mb-2">
+          <h3 className="text-xl font-bold text-zinc-800">Edit Information</h3>
+          <span className="text-xs font-mono text-zinc-400">ID: {editingCustomer.id}</span>
+        </div>
 
-        <input
-          className="border p-2 w-full rounded"
-          value={editingCustomer.full_name}
-          onChange={(e) =>
-            setEditingCustomer({
-              ...editingCustomer,
-              full_name: e.target.value,
-            })
-          }
-        />
+        <div className="space-y-3">
+          <div>
+            <label className="text-[10px] uppercase font-bold text-zinc-500 ml-1">Full Name</label>
+            <input
+              className="w-full bg-zinc-50 border border-zinc-200 p-2.5 rounded-xl focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all"
+              placeholder="Full Name"
+              value={editingCustomer.full_name || ""}
+              onChange={(e) =>
+                setEditingCustomer({
+                  ...editingCustomer,
+                  full_name: e.target.value,
+                })
+              }
+            />
+          </div>
 
-        <input
-          className="border p-2 w-full rounded"
-          value={editingCustomer.phone_number}
-          onChange={(e) =>
-            setEditingCustomer({
-              ...editingCustomer,
-              phone_number: e.target.value,
-            })
-          }
-        />
+          <div>
+            <label className="text-[10px] uppercase font-bold text-zinc-500 ml-1">Phone Number</label>
+            <input
+              className="w-full bg-zinc-50 border border-zinc-200 p-2.5 rounded-xl focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all"
+              placeholder="Phone Number"
+              value={editingCustomer.phone_number || ""}
+              onChange={(e) =>
+                setEditingCustomer({
+                  ...editingCustomer,
+                  phone_number: e.target.value,
+                })
+              }
+            />
+          </div>
 
-        <input
-          className="border p-2 w-full rounded"
-          value={editingCustomer.email}
-          onChange={(e) =>
-            setEditingCustomer({
-              ...editingCustomer,
-              email: e.target.value,
-            })
-          }
-        />
+          <div>
+            <label className="text-[10px] uppercase font-bold text-zinc-500 ml-1">Email Address</label>
+            <input
+              className="w-full bg-zinc-50 border border-zinc-200 p-2.5 rounded-xl focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all"
+              placeholder="Email"
+              value={editingCustomer.email || ""}
+              onChange={(e) =>
+                setEditingCustomer({
+                  ...editingCustomer,
+                  email: e.target.value,
+                })
+              }
+            />
+          </div>
+        </div>
 
-        <Select
-          value={String(editingCustomer.plan_id || "")}
-          onValueChange={(v) =>
-            setEditingCustomer({
-              ...editingCustomer,
-              plan_id: Number(v),
-            })
-          }
-        >
-          <SelectTrigger>
-            <SelectValue placeholder="Select Plan" />
-          </SelectTrigger>
-
-          <SelectContent>
-            {plans.map((plan) => (
-              <SelectItem key={plan.id} value={String(plan.id)}>
-                {plan.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-
-        <div className="flex gap-3">
+        <div className="flex gap-3 pt-4">
           <button
-            className="bg-green-600 text-white px-4 py-2 rounded flex-1"
+            className={`flex-1 bg-emerald-600 text-white font-bold py-3 rounded-xl shadow-lg shadow-emerald-600/20 hover:bg-emerald-700 transition-all flex items-center justify-center gap-2 ${
+              isUpdating ? "opacity-70 cursor-not-allowed" : ""
+            }`}
             onClick={handleUpdate}
+            disabled={isUpdating}
           >
-            Save
+            {isUpdating ? (
+              <>
+                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                Saving...
+              </>
+            ) : (
+              "Save Changes"
+            )}
           </button>
 
           <button
-            className="bg-gray-400 text-white px-4 py-2 rounded flex-1"
+            className="flex-1 bg-zinc-100 text-zinc-600 font-bold py-3 rounded-xl hover:bg-zinc-200 transition-all"
             onClick={() => setEditingCustomer(null)}
+            disabled={isUpdating}
           >
             Cancel
           </button>
