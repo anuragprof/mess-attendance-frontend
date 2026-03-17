@@ -1,4 +1,6 @@
-import Sidebar from "@/Components/Sidebar";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { logoutVendor } from "../features/auth/api";
+import { X } from "lucide-react";
 import ModuleSwitcher from "./ModuleSwitcher";
 import { useModule, MODULES } from "../context/ModuleContext";
 
