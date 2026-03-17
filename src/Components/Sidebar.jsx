@@ -1,6 +1,6 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { logoutVendor } from "../features/auth/api";
-import { X } from "lucide-react";
+import Sidebar from "@/Components/Sidebar";
+import ModuleSwitcher from "./ModuleSwitcher";
+import { useModule, MODULES } from "../context/ModuleContext";
 
 const SidebarItem = ({ to, icon, label, onClick }) => {
   const { pathname } = useLocation();
@@ -24,6 +24,7 @@ const SidebarItem = ({ to, icon, label, onClick }) => {
 
 export default function Sidebar({ me, setMe, isOpen, onClose }) {
   const navigate = useNavigate();
+  const { activeModule } = useModule();
 
   const handleLogout = async () => {
     try {
@@ -73,13 +74,27 @@ export default function Sidebar({ me, setMe, isOpen, onClose }) {
           </button>
         </div>
 
-        <div className="px-6 py-4">
-          <p className="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">Main Menu</p>
+        <div className="px-6 py-4 flex flex-col h-full overflow-y-auto">
+          {/* Module Switcher */}
+          <ModuleSwitcher />
+
+          <p className="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">Navigation</p>
           <nav className="flex flex-col gap-1.5">
-            <SidebarItem to="/admin" icon="👥" label="Customers" onClick={handleNavClick} />
-            <SidebarItem to="/billing" icon="💳" label="Billing" onClick={handleNavClick} />
-            <SidebarItem to="/reports" icon="📊" label="Reports" onClick={handleNavClick} />
-            <SidebarItem to="/scan" icon="📷" label="Scan QR" onClick={handleNavClick} />
+            {activeModule === MODULES.ATTENDANCE ? (
+              <>
+                <SidebarItem to="/admin" icon="👥" label="Customers" onClick={handleNavClick} />
+                <SidebarItem to="/billing" icon="💳" label="Billing" onClick={handleNavClick} />
+                <SidebarItem to="/reports" icon="📊" label="Attendance Reports" onClick={handleNavClick} />
+                <SidebarItem to="/scan" icon="📷" label="Scan QR" onClick={handleNavClick} />
+              </>
+            ) : (
+              <>
+                <SidebarItem to="/accounting/dashboard" icon="📈" label="Finance Dashboard" onClick={handleNavClick} />
+                <SidebarItem to="/accounting/expenses" icon="🧾" label="Expenses" onClick={handleNavClick} />
+                <SidebarItem to="/accounting/categories" icon="📁" label="Categories" onClick={handleNavClick} />
+                <SidebarItem to="/accounting/reports" icon="📉" label="Financial Reports" onClick={handleNavClick} />
+              </>
+            )}
           </nav>
         </div>
 

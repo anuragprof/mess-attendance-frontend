@@ -13,7 +13,14 @@ import Admin from "./Pages/Admin";
 import Billing from "./Pages/Billing";
 import Reports from "./Pages/Reports";
 
+import { ModuleProvider } from "./context/ModuleContext";
+import AccountingDashboard from "./modules/accounting/pages/Dashboard";
+import ExpensesPage from "./modules/accounting/pages/Expenses";
+import CategoriesPage from "./modules/accounting/pages/Categories";
+import AccountingReportsPage from "./modules/accounting/pages/Reports";
+
 import { getVendorMe } from "./features/auth/api";
+
 
 export default function App() {
   const [me, setMe] = useState(null);
@@ -31,37 +38,47 @@ export default function App() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-zinc-50 text-zinc-900">
+    <ModuleProvider>
+      <div className="min-h-screen bg-zinc-50 text-zinc-900">
 
-      {/* ✅ ADD TOASTER HERE */}
-      <Toaster position="top-center" richColors    toastOptions={{ className: "mx-auto" }}  />
+        {/* ✅ ADD TOASTER HERE */}
+        <Toaster position="top-center" richColors    toastOptions={{ className: "mx-auto" }}  />
 
-      {/* The Dashboard layout will only wrap specific routes using the layout pattern */}
-      <Routes>
-        <Route path="/" element={<Navigate to="/login" />} />
-        
-        <Route
-          path="/login"
-          element={
-            me ? (
-              <Navigate to="/admin" replace />
-            ) : (
-              <Login setMe={setMe} />
-            )
-          }
-        />
+        {/* The Dashboard layout will only wrap specific routes using the layout pattern */}
+        <Routes>
+          <Route path="/" element={<Navigate to="/login" />} />
+          
+          <Route
+            path="/login"
+            element={
+              me ? (
+                <Navigate to="/admin" replace />
+              ) : (
+                <Login setMe={setMe} />
+              )
+            }
+          />
 
-        {/* Layout completely hidden on scan */}
-        <Route path="/scan" element={<Scan />} />
+          {/* Layout completely hidden on scan */}
+          <Route path="/scan" element={<Scan />} />
 
-        {/* Routes protected by DashboardLayout */}
-        <Route element={<DashboardLayout me={me} setMe={setMe} />}>
-          <Route path="/billing" element={<Billing />} />
-          <Route path="/register" element={<CustomerRegistration />} />
-          <Route path="/admin" element={<Admin />} />
-          <Route path="/reports" element={<Reports />} />
-        </Route>
-      </Routes>
-    </div>
+          {/* Routes protected by DashboardLayout */}
+          <Route element={<DashboardLayout me={me} setMe={setMe} />}>
+            {/* Attendance Module Routes */}
+            <Route path="/billing" element={<Billing />} />
+            <Route path="/register" element={<CustomerRegistration />} />
+            <Route path="/admin" element={<Admin />} />
+            <Route path="/reports" element={<Reports />} />
+
+            {/* Accounting Module Routes */}
+            <Route path="/accounting/dashboard" element={<AccountingDashboard />} />
+            <Route path="/accounting/expenses" element={<ExpensesPage />} />
+            <Route path="/accounting/categories" element={<CategoriesPage />} />
+            <Route path="/accounting/reports" element={<AccountingReportsPage />} />
+          </Route>
+        </Routes>
+      </div>
+    </ModuleProvider>
   );
 }
+
