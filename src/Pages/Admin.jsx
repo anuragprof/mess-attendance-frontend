@@ -257,6 +257,7 @@ window.open(whatsappUrl, "_blank");
             <th className="p-1 text-left">Photo</th>
             <th className="p-1 text-left min-w-[150px]">Name</th>
             <th className="p-1 text-left">Phone</th>
+            <th className="p-1 text-left">Meal Plan</th>
             {/* <th className="p-1 text-left">Email</th> */}
             <th className="p-1 text-left">QR</th>
             <th className="p-1 text-left">Expiry</th>
@@ -303,7 +304,11 @@ window.open(whatsappUrl, "_blank");
                 </div>
               </td>
 
-              {/* <td className="p-1">{customer.email}</td> */}
+              <td className="p-1">
+                <span className="text-sm font-medium text-zinc-700">
+                  {customer.meal_plan || "N/A"}
+                </span>
+              </td>
 
               <td className="p-1">
                 <img
@@ -390,7 +395,7 @@ window.open(whatsappUrl, "_blank");
 
           {filteredCustomers.length === 0 && (
             <tr>
-              <td colSpan="6" className="p-4 text-center text-zinc-500">
+              <td colSpan="7" className="p-4 text-center text-zinc-500">
                 No customers found
               </td>
             </tr>
