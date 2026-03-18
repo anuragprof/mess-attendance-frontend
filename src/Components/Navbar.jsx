@@ -53,10 +53,10 @@ export default function Navbar({ me, setMe }) {
 
           <nav className="flex gap-2">
             <Tab to="/scan">Scan</Tab>
-            <Tab to="/admin">Admin</Tab>
+            <Tab to="/dashboard">Dashboard</Tab>
 
             {/* Billing Button Added */}
-            <Tab to="/billing">Billing</Tab>
+            <Tab to="/renew-plan">Renew Plan</Tab>
 
             {!me ? (
               <Tab to="/login">Login</Tab>

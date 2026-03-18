@@ -3,8 +3,8 @@ import { ScanLine, Users, CreditCard, UserPlus, BarChart3 } from "lucide-react";
 
 const navItems = [
   { to: "/scan", icon: ScanLine, label: "Scan" },
-  { to: "/admin", icon: Users, label: "Users" },
-  { to: "/billing", icon: CreditCard, label: "Billing" },
+  { to: "/dashboard", icon: Users, label: "Dashboard" },
+  { to: "/renew-plan", icon: CreditCard, label: "Renew Plan" },
   { to: "/reports", icon: BarChart3, label: "Reports" },
 ];
 

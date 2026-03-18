@@ -13,12 +13,12 @@ export default function DashboardLayout({ me, setMe }) {
   let pageSubtitle = "";
 
   switch (location.pathname) {
-    case "/admin":
-      pageTitle = "Manage Customers";
+    case "/dashboard":
+      pageTitle = "Attendance Dashboard";
       pageSubtitle = "View, search, edit, and renew your customers.";
       break;
-    case "/billing":
-      pageTitle = "Billing & Payments";
+    case "/renew-plan":
+      pageTitle = "Renew Plan & Payments";
       pageSubtitle = "Manage transactions, records, and revenue tracking.";
       break;
     case "/register":

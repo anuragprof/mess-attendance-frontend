@@ -52,7 +52,7 @@ export default function App() {
             path="/login"
             element={
               me ? (
-                <Navigate to="/admin" replace />
+                <Navigate to="/dashboard" replace />
               ) : (
                 <Login setMe={setMe} />
               )
@@ -65,9 +65,9 @@ export default function App() {
           {/* Routes protected by DashboardLayout */}
           <Route element={<DashboardLayout me={me} setMe={setMe} />}>
             {/* Attendance Module Routes */}
-            <Route path="/billing" element={<Billing />} />
+            <Route path="/renew-plan" element={<Billing />} />
             <Route path="/register" element={<CustomerRegistration />} />
-            <Route path="/admin" element={<Admin />} />
+            <Route path="/dashboard" element={<Admin />} />
             <Route path="/reports" element={<Reports />} />
 
             {/* Accounting Module Routes */}

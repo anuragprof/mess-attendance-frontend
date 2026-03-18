@@ -6,7 +6,7 @@ const MODULE_CONFIG = {
   [MODULES.ATTENDANCE]: {
     label: "Mess Attendance",
     icon: "🍽️",
-    route: "/admin",
+    route: "/dashboard",
     description: "Manage customers and billing"
   },
   [MODULES.ACCOUNTING]: {
