@@ -17,9 +17,13 @@ export default function DashboardLayout({ me, setMe }) {
       pageTitle = "Attendance Dashboard";
       pageSubtitle = "View, search, edit, and renew your customers.";
       break;
+    case "/billing":
+      pageTitle = "Collections & Billing";
+      pageSubtitle = "Record daily payments and track collections.";
+      break;
     case "/renew-plan":
-      pageTitle = "Renew Plan & Payments";
-      pageSubtitle = "Manage transactions, records, and revenue tracking.";
+      pageTitle = "Plan Renewal";
+      pageSubtitle = "Extend customer subscriptions and plans.";
       break;
     case "/register":
       pageTitle = "Customer Registration";

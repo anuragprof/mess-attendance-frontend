@@ -14,6 +14,7 @@ import Billing from "./Pages/Billing";
 import Reports from "./Pages/Reports";
 
 import { ModuleProvider } from "./context/ModuleContext";
+import BillingPage from "./modules/billing/pages/Billing";
 import AccountingDashboard from "./modules/accounting/pages/Dashboard";
 import ExpensesPage from "./modules/accounting/pages/Expenses";
 import CategoriesPage from "./modules/accounting/pages/Categories";
@@ -65,6 +66,7 @@ export default function App() {
           {/* Routes protected by DashboardLayout */}
           <Route element={<DashboardLayout me={me} setMe={setMe} />}>
             {/* Attendance Module Routes */}
+            <Route path="/billing" element={<BillingPage />} />
             <Route path="/renew-plan" element={<Billing />} />
             <Route path="/register" element={<CustomerRegistration />} />
             <Route path="/dashboard" element={<Admin />} />

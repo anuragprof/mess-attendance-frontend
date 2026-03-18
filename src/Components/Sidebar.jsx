@@ -85,7 +85,8 @@ export default function Sidebar({ me, setMe, isOpen, onClose }) {
             {activeModule === MODULES.ATTENDANCE ? (
               <>
                 <SidebarItem to="/dashboard" icon="👥" label="Dashboard" onClick={handleNavClick} />
-                <SidebarItem to="/renew-plan" icon="💳" label="Renew Plan" onClick={handleNavClick} />
+                <SidebarItem to="/billing" icon="💳" label="Billing" onClick={handleNavClick} />
+                <SidebarItem to="/renew-plan" icon="🔄" label="Renew Plan" onClick={handleNavClick} />
                 <SidebarItem to="/reports" icon="📊" label="Attendance Reports" onClick={handleNavClick} />
                 <SidebarItem to="/scan" icon="📷" label="Scan QR" onClick={handleNavClick} />
               </>

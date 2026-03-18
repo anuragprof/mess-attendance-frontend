@@ -4,8 +4,8 @@ import { ScanLine, Users, CreditCard, UserPlus, BarChart3 } from "lucide-react";
 const navItems = [
   { to: "/scan", icon: ScanLine, label: "Scan" },
   { to: "/dashboard", icon: Users, label: "Dashboard" },
-  { to: "/renew-plan", icon: CreditCard, label: "Renew Plan" },
-  { to: "/reports", icon: BarChart3, label: "Reports" },
+  { to: "/billing", icon: CreditCard, label: "Billing" },
+  { to: "/renew-plan", icon: CreditCard, label: "Renew" },
 ];
 
 export default function MobileBottomNav() {

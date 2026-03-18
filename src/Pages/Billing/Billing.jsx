@@ -1,15 +1,12 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import RecentPayments from "./components/RecentPayments";
-import RecordPayment from "./components/RecordPayment";
 import RenewPlan from "./components/RenewPlan";
 import { fetchRecentTransactions } from "@/api/billing";
 
 export default function Billing() {
-  const [billingTab, setBillingTab] = useState("renew");
   const [payments, setPayments] = useState([]);
 
-  // Fetch recent payments on mount
+  // Fetch recent payments on mount for the sidebar summary
   useEffect(() => {
     const load = async () => {
       try {
@@ -22,7 +19,6 @@ export default function Billing() {
     load();
   }, []);
 
-  // Refresh payments when tab switches (catches new payments from Record tab)
   const refreshPayments = async () => {
     try {
       const data = await fetchRecentTransactions();
@@ -33,43 +29,27 @@ export default function Billing() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto p-6 space-y-4">
+    <div className="max-w-7xl mx-auto space-y-4">
       <div className="grid lg:grid-cols-3 gap-8 items-start">
-      <RecentPayments payments={payments} />
-
-      {/* ===== Billing Card ===== */}
-      <div className="lg:col-span-2 gradient-card p-8 space-y-6">
-
-        {/* TOP TABS */}
-        <div className="flex bg-gray-200 rounded-full p-1 w-fit">
-          <button
-            onClick={() => { setBillingTab("renew"); refreshPayments(); }}
-            className={`px-8 py-2 rounded-full text-sm font-medium ${
-              billingTab === "renew"
-                ? "bg-blue-600 text-white shadow"
-                : "text-gray-500"
-            }`}
-          >
-            Renew Plan
-          </button>
-
-          <button
-            onClick={() => { setBillingTab("payment"); refreshPayments(); }}
-            className={`px-8 py-2 rounded-full text-sm font-medium ${
-              billingTab === "payment"
-                ? "bg-blue-600 text-white shadow"
-                : "text-gray-500"
-            }`}
-          >
-            Record Payment
-          </button>
+        {/* Sidebar Summary */}
+        <div className="lg:col-span-1">
+          <RecentPayments payments={payments} />
         </div>
 
-        {/* TAB CONTENT */}
-        {billingTab === "payment" && <RecordPayment onPaymentRecorded={refreshPayments} />}
-        {billingTab === "renew" && <RenewPlan onRenewalComplete={refreshPayments} />}
-
-      </div>
+        {/* Main Content: Explicitly ONLY for Renewals */}
+        <div className="lg:col-span-2 gradient-card p-8 space-y-6">
+          <div className="flex items-center justify-between mb-2">
+            <div>
+               <h2 className="text-2xl font-black text-zinc-900 tracking-tight">Renew Plan</h2>
+               <p className="text-xs font-bold text-zinc-400 uppercase tracking-widest">Extend customer mess subscriptions</p>
+            </div>
+            <div className="bg-blue-600 px-4 py-1.5 rounded-full text-[10px] font-black uppercase text-white tracking-widest">
+                Renewal Only
+            </div>
+          </div>
+          
+          <RenewPlan onRenewalComplete={refreshPayments} />
+        </div>
       </div>
     </div>
   );
