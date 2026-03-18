@@ -259,6 +259,7 @@ window.open(whatsappUrl, "_blank");
             <th className="p-1 text-left">Phone</th>
             {/* <th className="p-1 text-left">Email</th> */}
             <th className="p-1 text-left">QR</th>
+            <th className="p-1 text-left">Meal Plan</th>
             <th className="p-1 text-left">Expiry</th>
             <th className="p-1 text-left">Actions</th>
           </tr>
@@ -312,6 +313,12 @@ window.open(whatsappUrl, "_blank");
                   onClick={() => setPreviewCustomer(customer)}
                   className="w-10 h-10 border rounded-md cursor-pointer hover:scale-105 transition"
                 />
+              </td>
+
+              <td className="p-1">
+                <span className="text-sm font-medium text-emerald-700 bg-emerald-50 px-2 py-1 rounded-lg border border-emerald-100 italic">
+                  {customer.meal_plan || "N/A"}
+                </span>
               </td>
 
               <td className="p-1">
@@ -390,7 +397,7 @@ window.open(whatsappUrl, "_blank");
 
           {filteredCustomers.length === 0 && (
             <tr>
-              <td colSpan="6" className="p-4 text-center text-zinc-500">
+              <td colSpan="7" className="p-4 text-center text-zinc-500">
                 No customers found
               </td>
             </tr>
