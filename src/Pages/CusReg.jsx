@@ -40,6 +40,7 @@ const CustomerRegistrationForm = () => {
 
   const [whatsappLink, setWhatsappLink] = useState(null);
   const [qrCode, setQrCode] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   /* ---------------- AUTO SET TODAY DATE ---------------- */
 
@@ -130,6 +131,7 @@ const CustomerRegistrationForm = () => {
     e.preventDefault();
     setWhatsappLink(null);
     setQrCode(null);
+    setShowModal(false);
 
     if (
       !formData.fullName ||
@@ -187,7 +189,8 @@ const CustomerRegistrationForm = () => {
       setStartYear("");
 
       setWhatsappLink(res.whatsapp_link);
-      setQrCode(res.qr_url);
+      setQrCode(res.qr_code_url || res.qr_url);
+      setShowModal(true);
 
     } catch (err) {
       console.error(err);
@@ -390,39 +393,65 @@ const CustomerRegistrationForm = () => {
           </div>
         )}
 
-        <Button
-          type="submit"
-          disabled={loading}
-          className="w-full py-6 text-lg font-semibold"
-        >
-          {loading ? "Registering..." : "Register Customer"}
-        </Button>
-
-        {whatsappLink && (
-          <Button
-            type="button"
-            onClick={() => window.open(whatsappLink, "_blank")}
-            className="w-full py-6 text-lg font-semibold bg-green-600 hover:bg-green-700 mt-4"
-          >
-            ✅ Send WhatsApp Message
-          </Button>
-        )}
-
-        {qrCode && (
-          <div className="flex flex-col items-center justify-center p-6 bg-white rounded-2xl border-2 border-dashed border-emerald-200 mt-6 shadow-sm">
-            <h3 className="text-sm font-bold text-emerald-800 mb-4 tracking-tight uppercase">Customer QR Code</h3>
-            <img 
-              src={qrCode} 
-              alt="Customer QR" 
-              className="w-48 h-48 rounded-xl border-4 border-white shadow-xl hover:scale-105 transition-transform duration-300" 
-            />
-            <p className="mt-4 text-[10px] font-medium text-emerald-600/60 uppercase tracking-widest">Scan to mark attendance</p>
-          </div>
-        )}
-      </form>
-    </div>
-  );
-};
+         <Button
+           type="submit"
+           disabled={loading}
+           className="w-full py-6 text-lg font-semibold"
+         >
+           {loading ? "Registering..." : "Register Customer"}
+         </Button>
+       </form>
+ 
+       {/* SUCCESS MODAL */}
+       {showModal && (
+         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300">
+           <div className="bg-white rounded-3xl w-full max-w-sm overflow-hidden shadow-2xl border border-zinc-200 animate-in zoom-in-95 duration-300">
+             <div className="p-8 text-center space-y-6">
+               <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                 <span className="text-3xl">✅</span>
+               </div>
+               
+               <div>
+                 <h2 className="text-2xl font-bold text-zinc-800">Registration Success</h2>
+                 <p className="text-zinc-500 text-sm mt-1">Customer has been registered successfully</p>
+               </div>
+ 
+               {qrCode && (
+                 <div className="bg-zinc-50 p-4 rounded-2xl border border-zinc-100 inline-block shadow-inner">
+                   <img 
+                     src={qrCode} 
+                     alt="Customer QR" 
+                     className="w-48 h-48 mx-auto rounded-xl"
+                   />
+                 </div>
+               )}
+ 
+               <div className="space-y-3">
+                 <Button
+                   type="button"
+                   disabled={!whatsappLink}
+                   onClick={() => window.open(whatsappLink, "_blank")}
+                   className="w-full py-6 bg-green-600 hover:bg-green-700 text-white font-bold"
+                 >
+                   Send WhatsApp Message
+                 </Button>
+ 
+                 <Button
+                   type="button"
+                   variant="outline"
+                   onClick={() => setShowModal(false)}
+                   className="w-full py-6 text-zinc-600 font-bold border-zinc-200"
+                 >
+                   Close
+                 </Button>
+               </div>
+             </div>
+           </div>
+         </div>
+       )}
+     </div>
+   );
+ };
 
 export default CustomerRegistrationForm;
 
