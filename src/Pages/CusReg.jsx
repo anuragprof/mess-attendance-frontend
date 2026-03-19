@@ -39,6 +39,7 @@ const CustomerRegistrationForm = () => {
   });
 
   const [whatsappLink, setWhatsappLink] = useState(null);
+  const [qrCode, setQrCode] = useState(null);
 
   /* ---------------- AUTO SET TODAY DATE ---------------- */
 
@@ -128,6 +129,7 @@ const CustomerRegistrationForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setWhatsappLink(null);
+    setQrCode(null);
 
     if (
       !formData.fullName ||
@@ -169,8 +171,6 @@ const CustomerRegistrationForm = () => {
       toast.success("Customer registered successfully ✅");
       console.log("QR VALUE:", res.qr_value);
 
-      const link = generateWhatsAppLink(formData.phoneNumber);
-
       setFormData({
         fullName: "",
         phoneNumber: "",
@@ -186,7 +186,8 @@ const CustomerRegistrationForm = () => {
       setStartDay("");
       setStartYear("");
 
-      setWhatsappLink(link);
+      setWhatsappLink(res.whatsapp_link);
+      setQrCode(res.qr_url);
 
     } catch (err) {
       console.error(err);
@@ -405,6 +406,18 @@ const CustomerRegistrationForm = () => {
           >
             ✅ Send WhatsApp Message
           </Button>
+        )}
+
+        {qrCode && (
+          <div className="flex flex-col items-center justify-center p-6 bg-white rounded-2xl border-2 border-dashed border-emerald-200 mt-6 shadow-sm">
+            <h3 className="text-sm font-bold text-emerald-800 mb-4 tracking-tight uppercase">Customer QR Code</h3>
+            <img 
+              src={qrCode} 
+              alt="Customer QR" 
+              className="w-48 h-48 rounded-xl border-4 border-white shadow-xl hover:scale-105 transition-transform duration-300" 
+            />
+            <p className="mt-4 text-[10px] font-medium text-emerald-600/60 uppercase tracking-widest">Scan to mark attendance</p>
+          </div>
         )}
       </form>
     </div>
