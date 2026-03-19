@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "@/Lib/axios";
 import { toast } from "sonner";
 import { Calendar, Download, AlertCircle } from "lucide-react";
+import { formatTimeIST } from "@/Lib/utils";
 import DailyTrendChart from "@/Components/DailyTrendChart";
 import MealDistributionChart from "@/Components/MealDistributionChart";
 import RevenueBarChart from "@/Components/RevenueBarChart";
@@ -217,7 +218,7 @@ export default function Reports() {
               <tr>
                 <th className="p-3 text-left font-medium">Customer Name</th>
                 <th className="p-3 text-left font-medium">Meal Type</th>
-                <th className="p-3 text-left font-medium">Time (24h)</th>
+                <th className="p-3 text-left font-medium">Time</th>
                 <th className="p-3 text-left font-medium">Status</th>
               </tr>
             </thead>
@@ -236,7 +237,7 @@ export default function Reports() {
                   <tr key={i} className="hover:bg-zinc-50/50 transition-colors">
                     <td className="p-3 font-medium text-gray-900">{record.customer_name}</td>
                     <td className="p-3 text-zinc-600">{record.meal_type}</td>
-                    <td className="p-3 text-zinc-600">{record.time}</td>
+                    <td className="p-3 text-zinc-600 font-medium">{formatTimeIST(record.time)}</td>
                     <td className="p-3">
                       <span className={`inline-flex px-2 py-0.5 rounded-full text-[10px] font-semibold ${
                         record.status === "Present" ? "bg-green-100 text-green-700" : "bg-zinc-100 text-zinc-600"
