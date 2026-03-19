@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Card from "../Components/Card";
 import { toast } from "sonner";
 import axios from "@/Lib/axios";
+import { generateWhatsAppLink } from "@/Lib/whatsapp";
 import {
   Select,
   SelectContent,
@@ -223,17 +224,8 @@ year: "numeric",
 
 // WHATSAPP FUNCTION
 const sendWhatsAppMessage = (phone) => {
-const message = `
-Hello 👋
-
-Your Mess Registration is successful.
-
-Please visit the mess counter to scan your QR and mark attendance.
-
-Thank you.
-`;
-    const whatsappUrl = `https://wa.me/91${phone}?text=${encodeURIComponent(message)}`;
-window.open(whatsappUrl, "_blank");
+    const link = generateWhatsAppLink(phone);
+    if (link) window.open(link, "_blank");
 };
 
   return (

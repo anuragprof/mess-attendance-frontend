@@ -13,6 +13,7 @@ import {
 import { toast } from "sonner";
 import { registerCustomer } from "@/api/customer";
 import api from "@/Lib/axios";
+import { generateWhatsAppLink } from "@/Lib/whatsapp";
 
 const CustomerRegistrationForm = () => {
   const videoRef = useRef(null);
@@ -36,6 +37,8 @@ const CustomerRegistrationForm = () => {
     planId: "",
     photo: null,
   });
+
+  const [whatsappLink, setWhatsappLink] = useState(null);
 
   /* ---------------- AUTO SET TODAY DATE ---------------- */
 
@@ -124,6 +127,7 @@ const CustomerRegistrationForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setWhatsappLink(null);
 
     if (
       !formData.fullName ||
@@ -165,6 +169,8 @@ const CustomerRegistrationForm = () => {
       toast.success("Customer registered successfully ✅");
       console.log("QR VALUE:", res.qr_value);
 
+      const link = generateWhatsAppLink(formData.phoneNumber);
+
       setFormData({
         fullName: "",
         phoneNumber: "",
@@ -179,6 +185,8 @@ const CustomerRegistrationForm = () => {
       setStartMonth("");
       setStartDay("");
       setStartYear("");
+
+      setWhatsappLink(link);
 
     } catch (err) {
       console.error(err);
@@ -389,6 +397,15 @@ const CustomerRegistrationForm = () => {
           {loading ? "Registering..." : "Register Customer"}
         </Button>
 
+        {whatsappLink && (
+          <Button
+            type="button"
+            onClick={() => window.open(whatsappLink, "_blank")}
+            className="w-full py-6 text-lg font-semibold bg-green-600 hover:bg-green-700 mt-4"
+          >
+            ✅ Send WhatsApp Message
+          </Button>
+        )}
       </form>
     </div>
   );
