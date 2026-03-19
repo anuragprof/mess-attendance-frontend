@@ -173,6 +173,8 @@ const CustomerRegistrationForm = () => {
       toast.success("Customer registered successfully ✅");
       console.log("QR VALUE:", res.qr_value);
 
+      const phoneNumberSent = formData.phoneNumber;
+      
       setFormData({
         fullName: "",
         phoneNumber: "",
@@ -188,7 +190,7 @@ const CustomerRegistrationForm = () => {
       setStartDay("");
       setStartYear("");
 
-      setWhatsappLink(res.whatsapp_link);
+      setWhatsappLink(res.whatsapp_link || generateWhatsAppLink(phoneNumberSent));
       setQrCode(res.qr_code_url || res.qr_url);
       setShowModal(true);
 
@@ -430,7 +432,10 @@ const CustomerRegistrationForm = () => {
                  <Button
                    type="button"
                    disabled={!whatsappLink}
-                   onClick={() => window.open(whatsappLink, "_blank")}
+                   onClick={() => {
+                     console.log("WhatsApp Link:", whatsappLink);
+                     window.open(whatsappLink, "_blank");
+                   }}
                    className="w-full py-6 bg-green-600 hover:bg-green-700 text-white font-bold"
                  >
                    Send WhatsApp Message
