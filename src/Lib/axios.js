@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE = import.meta.env.VITE_API_BASE;
+const API_BASE = import.meta.env.VITE_API_URL;
 const CSRF_COOKIE = import.meta.env.VITE_CSRF_COOKIE || "csrf_token";
 const CSRF_HEADER = import.meta.env.VITE_CSRF_HEADER || "X-CSRF-Token";
 
