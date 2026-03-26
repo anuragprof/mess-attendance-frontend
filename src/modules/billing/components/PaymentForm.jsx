@@ -5,13 +5,6 @@ import { Button } from "@/Pages/ui/button";
 import { Input } from "@/Pages/ui/input";
 import { Label } from "@/Pages/ui/label";
 import { Textarea } from "@/Pages/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/Pages/ui/select";
 import { Banknote, Smartphone, Loader2, Save } from "lucide-react";
 
 import CustomerSearch from "./CustomerSearch";
@@ -19,9 +12,7 @@ import PaymentHistoryModal from "./PaymentHistoryModal";
 import { recordPayment } from "../api/payments";
 
 export default function PaymentForm({ onPaymentRecorded }) {
-  const [plans, setPlans] = useState([]);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
-  const [selectedPlanId, setSelectedPlanId] = useState("");
   const [amountPaid, setAmountPaid] = useState("");
   const [paymentMode, setPaymentMode] = useState("cash");
   const [notes, setNotes] = useState("");
@@ -31,20 +22,6 @@ export default function PaymentForm({ onPaymentRecorded }) {
 
   const [planDetails, setPlanDetails] = useState(null);
   const [loadingDetails, setLoadingDetails] = useState(false);
-
-  const selectedPlan = plans.find((p) => p.id.toString() === selectedPlanId);
-
-  useEffect(() => {
-    const fetchPlans = async () => {
-      try {
-        const res = await api.get("/plans/");
-        setPlans(res.data);
-      } catch (err) {
-        console.error("Failed to fetch plans:", err);
-      }
-    };
-    fetchPlans();
-  }, []);
 
   useEffect(() => {
     const fetchPlanDetails = async () => {
@@ -56,6 +33,11 @@ export default function PaymentForm({ onPaymentRecorded }) {
         setLoadingDetails(true);
         const res = await api.get(`/customers/${selectedCustomer.id}/current-plan`);
         setPlanDetails(res.data);
+        
+        // Auto-fill amount paid with remaining balance if available
+        if (res.data && res.data.remaining > 0) {
+            setAmountPaid(res.data.remaining.toString());
+        }
       } catch (err) {
         console.error("Failed to fetch plan details:", err);
       } finally {
@@ -65,15 +47,8 @@ export default function PaymentForm({ onPaymentRecorded }) {
     fetchPlanDetails();
   }, [selectedCustomer]);
 
-  useEffect(() => {
-    if (selectedPlan) {
-      setAmountPaid(selectedPlan.price_cents);
-    }
-  }, [selectedPlanId]);
-
   const handleClearCustomer = () => {
     setSelectedCustomer(null);
-    setSelectedPlanId("");
     setAmountPaid("");
     setNotes("");
     setPlanDetails(null);
@@ -197,22 +172,6 @@ export default function PaymentForm({ onPaymentRecorded }) {
           )}
 
           <div className="grid md:grid-cols-2 gap-8">
-            <div className="space-y-2">
-              <Label className="text-sm font-semibold text-zinc-700">Mess Plan *</Label>
-              <Select value={selectedPlanId} onValueChange={setSelectedPlanId}>
-                <SelectTrigger className="h-12 rounded-2xl bg-zinc-50 border-zinc-100 font-medium tracking-tight">
-                  <SelectValue placeholder="Select plan" />
-                </SelectTrigger>
-                <SelectContent className="rounded-xl border-zinc-200 shadow-xl font-bold">
-                  {plans.map((plan) => (
-                    <SelectItem key={plan.id} value={plan.id.toString()}>
-                      {plan.name} — ₹{plan.price_cents}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
             <div className="space-y-2">
               <Label className="text-sm font-semibold text-zinc-700">Amount Paid *</Label>
               <Input
