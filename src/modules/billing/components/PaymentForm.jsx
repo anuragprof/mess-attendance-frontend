@@ -29,6 +29,9 @@ export default function PaymentForm({ onPaymentRecorded }) {
   const [showHistory, setShowHistory] = useState(false);
   const [history, setHistory] = useState([]);
 
+  const [planDetails, setPlanDetails] = useState(null);
+  const [loadingDetails, setLoadingDetails] = useState(false);
+
   const selectedPlan = plans.find((p) => p.id.toString() === selectedPlanId);
 
   useEffect(() => {
@@ -44,6 +47,25 @@ export default function PaymentForm({ onPaymentRecorded }) {
   }, []);
 
   useEffect(() => {
+    const fetchPlanDetails = async () => {
+      if (!selectedCustomer) {
+        setPlanDetails(null);
+        return;
+      }
+      try {
+        setLoadingDetails(true);
+        const res = await api.get(`/customers/${selectedCustomer.id}/current-plan`);
+        setPlanDetails(res.data);
+      } catch (err) {
+        console.error("Failed to fetch plan details:", err);
+      } finally {
+        setLoadingDetails(false);
+      }
+    };
+    fetchPlanDetails();
+  }, [selectedCustomer]);
+
+  useEffect(() => {
     if (selectedPlan) {
       setAmountPaid(selectedPlan.price_cents);
     }
@@ -54,6 +76,7 @@ export default function PaymentForm({ onPaymentRecorded }) {
     setSelectedPlanId("");
     setAmountPaid("");
     setNotes("");
+    setPlanDetails(null);
   };
 
   const handleSubmit = async () => {
@@ -72,8 +95,6 @@ export default function PaymentForm({ onPaymentRecorded }) {
         notes: notes || ""
       };
 
-      // We maintain the existing endpoint logic but use the modular structure.
-      // Based on user route request: /payments/
       await recordPayment(payload);
 
       toast.success("Payment recorded successfully");
@@ -107,12 +128,14 @@ export default function PaymentForm({ onPaymentRecorded }) {
              <p className="text-xs font-bold text-zinc-400 uppercase tracking-widest">Collect fee from customer</p>
           </div>
           {selectedCustomer && (
-            <button 
-                onClick={openHistory}
-                className="text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1.5 rounded-xl border border-blue-100/50 hover:bg-blue-100 transition-colors"
-            >
-                View History
-            </button>
+            <div className="flex gap-2">
+                <button 
+                    onClick={openHistory}
+                    className="text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1.5 rounded-xl border border-blue-100/50 hover:bg-blue-100 transition-colors"
+                >
+                    View History
+                </button>
+            </div>
           )}
         </div>
 
@@ -125,6 +148,53 @@ export default function PaymentForm({ onPaymentRecorded }) {
             }}
             onHistoryClick={openHistory}
           />
+
+          {/* Current Plan Details Card */}
+          {selectedCustomer && (
+            <div className="bg-zinc-50 border border-zinc-100 rounded-[32px] p-6 space-y-4 animate-in fade-in slide-in-from-top-4 duration-500">
+              <div className="flex items-center justify-between">
+                <h4 className="text-xs font-black uppercase text-zinc-400 tracking-widest">Current Plan Details</h4>
+                {loadingDetails && <Loader2 className="h-4 w-4 animate-spin text-zinc-300" />}
+              </div>
+
+              {planDetails ? (
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+                  <div className="space-y-1">
+                    <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-tighter">Plan Name</p>
+                    <p className="text-sm font-black text-zinc-900">{planDetails.plan_name || "No Active Plan"}</p>
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-tighter">Expiry Date</p>
+                    <p className="text-sm font-black text-zinc-900">
+                        {planDetails.end_date ? new Date(planDetails.end_date).toLocaleDateString() : "—"}
+                    </p>
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-tighter">Days Left</p>
+                    <p className={`text-sm font-black ${planDetails.days_left <= 3 ? 'text-rose-600' : 'text-emerald-600'}`}>
+                        {planDetails.has_active_plan ? `${planDetails.days_left} Days` : "Expired"}
+                    </p>
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-tighter">Plan Price</p>
+                    <p className="text-sm font-black text-zinc-900">₹{planDetails.total_amount || 0}</p>
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-tighter">Amount Paid</p>
+                    <p className="text-sm font-black text-zinc-900">₹{planDetails.paid_amount || 0}</p>
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-tighter">Remaining</p>
+                    <p className="text-sm font-black text-blue-600 bg-blue-50 px-2 py-0.5 rounded-lg inline-block">
+                        ₹{planDetails.remaining || 0}
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                !loadingDetails && <p className="text-sm font-bold text-zinc-400 italic">No active subscription found.</p>
+              )}
+            </div>
+          )}
 
           <div className="grid md:grid-cols-2 gap-8">
             <div className="space-y-2">
