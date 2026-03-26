@@ -21,30 +21,31 @@ export default function RecentPayments({ payments }) {
         {recentPayments.map((p, idx) => (
           <div 
             key={p.id || idx} 
-            className="group relative flex items-center justify-between p-4 rounded-2xl border border-black/10 hover:border-black/30 bg-white hover:shadow-lg hover:shadow-zinc-200/50 transition-all duration-300 animate-in slide-in-from-bottom-2"
+            className="group relative flex flex-col p-5 rounded-2xl border border-black/10 hover:border-black/30 bg-white hover:shadow-lg hover:shadow-zinc-200/50 transition-all duration-300 animate-in slide-in-from-bottom-2"
             style={{animationDelay: `${idx * 100}ms`}}
           >
-            <div className="flex items-center gap-4">
-               <div className={`p-2.5 rounded-xl ${p.payment_mode === 'upi' ? 'bg-indigo-50 text-indigo-600' : 'bg-emerald-50 text-emerald-600'}`}>
-                  {p.payment_mode === 'upi' ? <Smartphone size={16} /> : <Banknote size={16} />}
-               </div>
-               <div>
-                  <p className="font-bold text-zinc-900 leading-tight">{p.customer_name}</p>
-                  <div className="flex flex-col gap-0.5 mt-0.5">
-                    {p.plan_name && (
-                      <p className="text-[10px] font-medium text-zinc-500 tracking-tight">
-                        {p.plan_name} {p.meals_per_day ? `| ${p.meals_per_day} Time` : ''} {p.duration_days ? `| ${p.duration_days} Days` : ''}
-                      </p>
-                    )}
-                    <p className="text-[10px] font-black uppercase text-zinc-400 tracking-wider transition-colors group-hover:text-zinc-600">
-                      via {p.payment_mode}
-                    </p>
+            <div className="flex items-center justify-between mb-2">
+               <div className="flex items-center gap-3">
+                  <div className={`p-2 rounded-xl border border-black/[0.03] ${p.payment_mode === 'upi' ? 'bg-indigo-50 text-indigo-600' : 'bg-emerald-50 text-emerald-600'}`}>
+                     {p.payment_mode === 'upi' ? <Smartphone size={14} /> : <Banknote size={14} />}
                   </div>
+                  <p className="font-black text-zinc-900 text-sm tracking-tight">{p.customer_name}</p>
                </div>
+               <p className="text-sm font-black text-zinc-900 tracking-tight">₹{p.amount?.toLocaleString()}</p>
             </div>
-            <div className="text-right">
-               <p className="text-base font-black text-zinc-900">₹{p.amount}</p>
-               <p className="text-[10px] text-zinc-400 font-medium">Recorded Just Now</p>
+
+            {p.plan_name && (
+              <div className="pl-10 mb-2">
+                <p className="text-[10px] font-bold text-zinc-500 tracking-tight flex items-center gap-1.5 grayscale group-hover:grayscale-0 transition-all">
+                  <span className="w-1 h-1 bg-zinc-300 rounded-full" />
+                  {p.plan_name} {p.meals_per_day ? `| ${p.meals_per_day} Time/Day` : ''} {p.duration_days ? `| ${p.duration_days} Days` : ''}
+                </p>
+              </div>
+            )}
+
+            <div className="pl-10 flex items-center justify-between opacity-60 group-hover:opacity-100 transition-opacity">
+               <p className="text-[9px] font-black uppercase text-zinc-400 tracking-[0.1em]">{p.payment_mode}</p>
+               <p className="text-[9px] text-zinc-400 font-bold uppercase tracking-widest italic">Recorded Just Now</p>
             </div>
           </div>
         ))}
