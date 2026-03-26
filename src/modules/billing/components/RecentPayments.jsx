@@ -30,7 +30,16 @@ export default function RecentPayments({ payments }) {
                </div>
                <div>
                   <p className="font-bold text-zinc-900 leading-tight">{p.customer_name}</p>
-                  <p className="text-[10px] font-black uppercase text-zinc-400 mt-0.5 tracking-wider">{p.payment_mode}</p>
+                  <div className="flex flex-col gap-0.5 mt-0.5">
+                    {p.plan_name && (
+                      <p className="text-[10px] font-medium text-zinc-500 tracking-tight">
+                        {p.plan_name} {p.meals_per_day ? `| ${p.meals_per_day} Time` : ''} {p.duration_days ? `| ${p.duration_days} Days` : ''}
+                      </p>
+                    )}
+                    <p className="text-[10px] font-black uppercase text-zinc-400 tracking-wider transition-colors group-hover:text-zinc-600">
+                      via {p.payment_mode}
+                    </p>
+                  </div>
                </div>
             </div>
             <div className="text-right">
