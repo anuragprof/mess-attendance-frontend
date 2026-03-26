@@ -1,6 +1,16 @@
 import axios from "axios";
 
 const API_BASE = import.meta.env.VITE_API_URL;
+
+// Debugging for environment variables
+if (process.env.NODE_ENV === "development" || !API_BASE) {
+  console.log("🛠️ Frontend API BASE URL:", API_BASE);
+}
+
+if (!API_BASE) {
+  console.warn("⚠️ VITE_API_URL is undefined. Requests will fail. Ensure environment variables are set in .env or Vercel Settings.");
+}
+
 const CSRF_COOKIE = import.meta.env.VITE_CSRF_COOKIE || "csrf_token";
 const CSRF_HEADER = import.meta.env.VITE_CSRF_HEADER || "X-CSRF-Token";
 
