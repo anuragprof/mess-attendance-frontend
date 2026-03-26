@@ -95,7 +95,7 @@ export default function PaymentForm({ onPaymentRecorded }) {
   };
 
   return (
-    <div className="gradient-card p-10 space-y-8 h-full flex flex-col justify-between">
+    <div className="gradient-card p-10 space-y-8 h-full flex flex-col justify-between border border-black/15 shadow-sm">
       <div className="space-y-8">
         <div className="flex items-center justify-between">
           <div className="space-y-1">
@@ -106,7 +106,7 @@ export default function PaymentForm({ onPaymentRecorded }) {
             <div className="flex gap-2">
                 <button 
                     onClick={openHistory}
-                    className="text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1.5 rounded-xl border border-blue-100/50 hover:bg-blue-100 transition-colors"
+                    className="text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1.5 rounded-xl border border-black/10 hover:border-black/30 hover:bg-blue-100 transition-colors"
                 >
                     View History
                 </button>
@@ -126,7 +126,7 @@ export default function PaymentForm({ onPaymentRecorded }) {
 
           {/* Current Plan Details Card */}
           {selectedCustomer && (
-            <div className="bg-zinc-50 border border-zinc-100 rounded-[32px] p-6 space-y-4 animate-in fade-in slide-in-from-top-4 duration-500">
+            <div className="bg-zinc-50 border border-black/15 rounded-[32px] p-6 space-y-4 animate-in fade-in slide-in-from-top-4 duration-500">
               <div className="flex items-center justify-between">
                 <h4 className="text-xs font-black uppercase text-zinc-400 tracking-widest">Current Plan Details</h4>
                 {loadingDetails && <Loader2 className="h-4 w-4 animate-spin text-zinc-300" />}
@@ -160,7 +160,7 @@ export default function PaymentForm({ onPaymentRecorded }) {
                   </div>
                   <div className="space-y-1">
                     <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-tighter">Remaining</p>
-                    <p className="text-sm font-black text-blue-600 bg-blue-50 px-2 py-0.5 rounded-lg inline-block">
+                    <p className="text-sm font-black text-blue-600 bg-blue-50 px-2 py-0.5 rounded-lg inline-block border border-blue-200">
                         ₹{planDetails.remaining || 0}
                     </p>
                   </div>
@@ -176,7 +176,7 @@ export default function PaymentForm({ onPaymentRecorded }) {
               <Label className="text-sm font-semibold text-zinc-700">Amount Paid *</Label>
               <Input
                 type="number"
-                className="h-12 rounded-2xl bg-zinc-50 border-zinc-100 font-black text-lg focus:bg-white transition-all text-blue-600"
+                className="h-12 rounded-2xl bg-zinc-50 border-black/15 font-black text-lg focus:bg-white focus:border-black transition-all text-blue-600"
                 placeholder="0.00"
                 value={amountPaid}
                 onChange={(e) => setAmountPaid(e.target.value)}
@@ -192,8 +192,8 @@ export default function PaymentForm({ onPaymentRecorded }) {
                   onClick={() => setPaymentMode("cash")}
                   className={`flex flex-col items-center justify-center gap-2 p-4 rounded-2xl border-2 transition-all duration-300 ${
                     paymentMode === "cash" 
-                      ? "border-emerald-500 bg-emerald-50 text-emerald-700 shadow-md shadow-emerald-500/10" 
-                      : "border-zinc-100 bg-zinc-50 text-zinc-400 hover:border-zinc-200"
+                      ? "border-black bg-emerald-50 text-emerald-700 shadow-md shadow-emerald-500/10" 
+                      : "border-black/10 bg-zinc-50 text-zinc-400 hover:border-black/30"
                   }`}
                 >
                   <Banknote className={`${paymentMode === 'cash' ? 'animate-bounce' : ''}`} />
@@ -205,8 +205,8 @@ export default function PaymentForm({ onPaymentRecorded }) {
                   onClick={() => setPaymentMode("upi")}
                   className={`flex flex-col items-center justify-center gap-2 p-4 rounded-2xl border-2 transition-all duration-300 ${
                     paymentMode === "upi" 
-                      ? "border-indigo-500 bg-indigo-50 text-indigo-700 shadow-md shadow-indigo-500/10" 
-                      : "border-zinc-100 bg-zinc-50 text-zinc-400 hover:border-zinc-200"
+                      ? "border-black bg-indigo-50 text-indigo-700 shadow-md shadow-indigo-500/10" 
+                      : "border-black/10 bg-zinc-50 text-zinc-400 hover:border-black/30"
                   }`}
                 >
                   <Smartphone className={`${paymentMode === 'upi' ? 'animate-pulse' : ''}`} />
@@ -218,7 +218,7 @@ export default function PaymentForm({ onPaymentRecorded }) {
           <div className="space-y-2">
             <Label className="text-sm font-semibold text-zinc-700">Internal Notes</Label>
             <Textarea
-              className="rounded-2xl bg-zinc-50 border-zinc-100 focus:bg-white transition-all font-medium placeholder:text-zinc-400 min-h-[100px]"
+              className="rounded-2xl bg-zinc-50 border-black/15 focus:bg-white focus:border-black transition-all font-medium placeholder:text-zinc-400 min-h-[100px]"
               placeholder="e.g. Received by someone else, partial payment details..."
               value={notes}
               onChange={(e) => setNotes(e.target.value)}

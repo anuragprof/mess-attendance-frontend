@@ -6,7 +6,7 @@ export default function RecentPayments({ payments }) {
     .slice(0, 10);
 
   return (
-    <div className="gradient-card p-8 h-full flex flex-col border-none">
+    <div className="gradient-card p-8 h-full flex flex-col border border-black/15 shadow-sm">
       <div className="flex items-center justify-between mb-8">
          <div className="space-y-1">
             <h2 className="text-xl font-black text-zinc-900 tracking-tight">Recent Activity</h2>
@@ -21,7 +21,7 @@ export default function RecentPayments({ payments }) {
         {recentPayments.map((p, idx) => (
           <div 
             key={p.id || idx} 
-            className="group relative flex items-center justify-between p-4 rounded-2xl border border-zinc-50 hover:border-zinc-200 bg-white hover:shadow-lg hover:shadow-zinc-200/50 transition-all duration-300 animate-in slide-in-from-bottom-2"
+            className="group relative flex items-center justify-between p-4 rounded-2xl border border-black/10 hover:border-black/30 bg-white hover:shadow-lg hover:shadow-zinc-200/50 transition-all duration-300 animate-in slide-in-from-bottom-2"
             style={{animationDelay: `${idx * 100}ms`}}
           >
             <div className="flex items-center gap-4">

@@ -48,7 +48,7 @@ export default function CustomerSearch({ selectedCustomer, setSelectedCustomer, 
       <Label className="text-sm font-semibold text-zinc-700">Select Customer *</Label>
 
       {selectedCustomer ? (
-        <div className="flex justify-between items-center border border-zinc-200 p-4 rounded-2xl bg-white shadow-sm transition-all hover:shadow-md animate-in slide-in-from-top-1">
+        <div className="flex justify-between items-center border border-black/15 p-4 rounded-2xl bg-white shadow-sm transition-all hover:border-black/30 hover:shadow-md animate-in slide-in-from-top-1">
           <div className="flex items-center gap-4">
             <img
               src={selectedCustomer.photo_url || "/avatar.png"}
@@ -66,7 +66,7 @@ export default function CustomerSearch({ selectedCustomer, setSelectedCustomer, 
           <div className="flex gap-2">
             {onHistoryClick && (
               <button
-                className="text-xs font-bold bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-2 hover:bg-zinc-100 transition-colors"
+                className="text-xs font-bold bg-zinc-50 border border-black/10 rounded-xl px-4 py-2 hover:bg-zinc-100 hover:border-black/30 transition-all"
                 onClick={onHistoryClick}
               >
                 Payment History
@@ -82,21 +82,21 @@ export default function CustomerSearch({ selectedCustomer, setSelectedCustomer, 
         </div>
       ) : (
         <div className="relative group">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400 group-focus-within:text-blue-500 transition-colors" />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400 group-focus-within:text-zinc-900 transition-colors" />
           <Input
-            className="pl-11 h-12 rounded-2xl border-zinc-200 bg-white/50 focus:bg-white focus:ring-4 focus:ring-blue-100/50 transition-all font-medium placeholder:text-zinc-400"
+            className="pl-11 h-12 rounded-2xl border-black/15 bg-white/50 focus:bg-white focus:border-black focus:ring-0 transition-all font-medium placeholder:text-zinc-400"
             placeholder="Search by name, phone, or ID..."
             value={searchQuery}
             onChange={(e) => handleSearchChange(e.target.value)}
           />
 
           {customers.length > 0 && (
-            <div className="absolute w-full bg-white border border-zinc-200 rounded-2xl mt-2 z-50 shadow-2xl overflow-hidden py-1 animate-in fade-in slide-in-from-top-2 duration-200">
+            <div className="absolute w-full bg-white border border-black/15 rounded-2xl mt-2 z-50 shadow-2xl overflow-hidden py-1 animate-in fade-in slide-in-from-top-2 duration-200">
               {customers.map((c) => (
                 <button
                   key={c.id}
                   onMouseDown={() => handleSelectCustomer(c)}
-                  className="flex items-center gap-4 w-full text-left px-4 py-3 hover:bg-blue-50/50 group/item transition-colors"
+                  className="flex items-center gap-4 w-full text-left px-4 py-3 hover:bg-zinc-50 group/item transition-colors border-b border-black/[0.03] last:border-none"
                 >
                   <img
                     src={c.photo_url || "/avatar.png"}
