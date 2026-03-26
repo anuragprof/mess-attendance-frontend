@@ -12,14 +12,14 @@ const SidebarItem = ({ to, icon, label, onClick }) => {
     <Link
       to={to}
       onClick={onClick}
-      className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 border-transparent border ${
+      className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
         active
-          ? "bg-green-600/10 text-green-800 font-bold border-green-600/30 shadow-sm"
-          : "text-zinc-500 hover:bg-green-600/[0.08] hover:text-green-800"
+          ? "bg-blue-600 text-white font-medium shadow-md shadow-blue-600/20"
+          : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900"
       }`}
     >
       <span className="text-lg">{icon}</span>
-      <span className="text-sm tracking-tight">{label}</span>
+      <span>{label}</span>
     </Link>
   );
 };
