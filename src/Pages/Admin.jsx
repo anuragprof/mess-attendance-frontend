@@ -399,50 +399,60 @@ const sendWhatsAppMessage = (phone) => {
 {/* Analytics & Operational Metrics Section */}
 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-6">
   
-  {/* Left: Active Users Card */}
-  <div className="h-[240px]">
-    <div className="gradient-card p-8 h-full border-l-4 border-l-blue-500 flex flex-col justify-center hover:shadow-md transition-all">
+  {/* Left: Active Users Card (Full Height) */}
+  <div className="h-[320px]">
+    <div className="gradient-card p-10 h-full border-l-4 border-l-blue-500 flex flex-col justify-center hover:shadow-md transition-all">
        <div className="flex items-start justify-between">
-          <div className="space-y-2">
+          <div className="space-y-3">
              <p className="text-xs font-bold text-zinc-500 uppercase tracking-widest">Active Users</p>
-             <h4 className="text-5xl font-black text-zinc-900 tracking-tighter">
+             <h4 className="text-6xl font-black text-zinc-900 tracking-tighter">
                {dashboardStats.active_one_time_users + dashboardStats.active_two_time_users}
              </h4>
              <p className="text-sm text-zinc-400 font-medium">
                 1 Meal: {dashboardStats.active_one_time_users} | 2 Meal: {dashboardStats.active_two_time_users}
              </p>
           </div>
-          <div className="p-4 bg-blue-50 rounded-2xl text-blue-500">
-             <Users size={32} />
+          <div className="p-5 bg-blue-50 rounded-3xl text-blue-500">
+             <Users size={40} />
           </div>
        </div>
     </div>
   </div>
 
-  {/* Right: Pending Today Card */}
-  <div className="h-[240px]">
-    <div className="gradient-card p-8 h-full border-l-4 border-l-rose-500 flex flex-col justify-center bg-rose-50/30 hover:shadow-md transition-all">
-       <div className="flex items-start justify-between">
-          <div className="space-y-2">
-             <p className="text-xs font-bold text-rose-600 uppercase tracking-widest flex items-center gap-1.5">
-                Pending Today
-                <span className="flex h-2 w-2 rounded-full bg-rose-500 animate-pulse"></span>
-             </p>
-             <h4 className="text-6xl font-black text-rose-700 tracking-tighter">
-               {dashboardStats.pending_meals_today}
-             </h4>
-             <div className="flex gap-6 mt-2">
-                <span className="text-sm font-bold text-zinc-700">
-                   🍱 {dashboardStats.pending_lunch} <span className="text-[10px] font-bold text-zinc-400 ml-1">LUNCH</span>
-                </span>
-                <span className="text-sm font-bold text-zinc-700">
-                   🌙 {dashboardStats.pending_dinner} <span className="text-[10px] font-bold text-zinc-400 ml-1">DINNER</span>
-                </span>
-             </div>
-          </div>
-          <div className="p-4 bg-rose-100 rounded-2xl text-rose-600">
-             <Utensils size={36} />
-          </div>
+  {/* Right Side: Vertical Stack (Previously Daily Trend area) */}
+  <div className="h-[320px] flex flex-col gap-4">
+    {/* TOP: Pending Today Card */}
+    <div className="flex-1">
+      <div className="gradient-card p-6 h-full border-l-4 border-l-rose-500 flex flex-col justify-center bg-rose-50/30 hover:shadow-md transition-all">
+         <div className="flex items-start justify-between">
+            <div className="space-y-1">
+               <p className="text-[10px] font-bold text-rose-600 uppercase tracking-widest flex items-center gap-1.5">
+                  Pending Today
+                  <span className="flex h-2 w-2 rounded-full bg-rose-500 animate-pulse"></span>
+               </p>
+               <h4 className="text-4xl font-black text-rose-700 tracking-tighter">
+                 {dashboardStats.pending_meals_today}
+               </h4>
+               <div className="flex gap-4 mt-1">
+                  <span className="text-xs font-bold text-zinc-600">
+                     🍱 {dashboardStats.pending_lunch} <span className="text-[10px] font-medium text-zinc-400 ml-0.5">LUNCH</span>
+                  </span>
+                  <span className="text-xs font-bold text-zinc-600">
+                     🌙 {dashboardStats.pending_dinner} <span className="text-[10px] font-medium text-zinc-400 ml-0.5">DINNER</span>
+                  </span>
+               </div>
+            </div>
+            <div className="p-3 bg-rose-100 rounded-2xl text-rose-600">
+               <Utensils size={28} />
+            </div>
+         </div>
+      </div>
+    </div>
+
+    {/* BOTTOM: Placeholder (Same spacing as old layout) */}
+    <div className="flex-1">
+       <div className="gradient-card h-full border-dashed border-2 border-zinc-200 bg-zinc-50/5 text-zinc-300 flex items-center justify-center opacity-50">
+          <p className="text-[10px] font-black uppercase tracking-[0.2em]">Future Operational Metric</p>
        </div>
     </div>
   </div>
