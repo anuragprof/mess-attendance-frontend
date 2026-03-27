@@ -12,7 +12,12 @@ import {
   SelectValue,
 } from "@/Pages/ui/select";
 import MealDistributionChart from "../Components/MealDistributionChart";
-import DailyTrendChart from "../Components/DailyTrendChart";
+import {
+  Users,
+  Utensils,
+  Clock,
+  Calendar
+} from "lucide-react";
 
 export default function Admin() {
 const [customers, setCustomers] = useState([]);
@@ -27,7 +32,14 @@ const [isUpdating, setIsUpdating] = useState(false);
 
 // Analytics State
 const [mealDistribution, setMealDistribution] = useState(null);
-const [dailyTrend, setDailyTrend] = useState(null);
+const [dashboardStats, setDashboardStats] = useState({
+  active_one_time_users: 0,
+  active_two_time_users: 0,
+  pending_meals_today: 0,
+  pending_lunch: 0,
+  pending_dinner: 0
+});
+const [loadingStats, setLoadingStats] = useState(true);
 
 // Track mount state to suppress errors during logout/unmount
 const mountedRef = useRef(true);
@@ -37,8 +49,15 @@ useEffect(() => {
   fetchCustomers();
   fetchPlans();
   fetchMealDistribution();
-  fetchDailyTrend();
-  return () => { mountedRef.current = false; };
+  fetchDashboardStats();
+  
+  // Auto-refresh stats every 5 minutes
+  const interval = setInterval(fetchDashboardStats, 5 * 60 * 1000);
+  
+  return () => { 
+    mountedRef.current = false; 
+    clearInterval(interval);
+  };
 }, []);
 
 const fetchCustomers = async () => {
@@ -86,14 +105,17 @@ const fetchMealDistribution = async () => {
   }
 };
 
-const fetchDailyTrend = async () => {
+const fetchDashboardStats = async () => {
   try {
-    const res = await axios.get("/analytics/daily-trend", {
+    setLoadingStats(true);
+    const res = await axios.get("/analytics/stats", {
       withCredentials: true,
     });
-    setDailyTrend(res.data);
+    if (mountedRef.current) setDashboardStats(res.data);
   } catch (error) {
-    console.error("Failed to fetch daily trend:", error);
+    console.error("Failed to fetch dashboard stats:", error);
+  } finally {
+    if (mountedRef.current) setLoadingStats(false);
   }
 };
 
@@ -229,7 +251,56 @@ const sendWhatsAppMessage = (phone) => {
 };
 
   return (
-  <div className="space-y-2">
+  <div className="space-y-6 animate-in fade-in duration-500 pb-10">
+    
+    {/* Top Metrics Section */}
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+       {/* 1 Time Users */}
+       <div className="gradient-card p-5 border-l-4 border-l-blue-500 flex items-start justify-between group hover:shadow-md transition-all">
+          <div className="space-y-1">
+             <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Active (1 Meal)</p>
+             <h4 className="text-2xl font-black text-zinc-900">{dashboardStats.active_one_time_users}</h4>
+             <p className="text-[10px] text-zinc-400 font-medium">Single meal subscribers</p>
+          </div>
+          <div className="p-2.5 bg-blue-50 rounded-xl text-blue-500">
+             <Users size={20} />
+          </div>
+       </div>
+
+       {/* 2 Time Users */}
+       <div className="gradient-card p-5 border-l-4 border-l-indigo-500 flex items-start justify-between group hover:shadow-md transition-all">
+          <div className="space-y-1">
+             <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Active (2 Meals)</p>
+             <h4 className="text-2xl font-black text-zinc-900">{dashboardStats.active_two_time_users}</h4>
+             <p className="text-[10px] text-zinc-400 font-medium">Both meals subscribers</p>
+          </div>
+          <div className="p-2.5 bg-indigo-50 rounded-xl text-indigo-500">
+             <Users size={20} />
+          </div>
+       </div>
+
+       {/* Pending Meals Today */}
+       <div className="gradient-card p-5 border-l-4 border-l-rose-500 flex items-start justify-between group hover:shadow-md transition-all bg-rose-50/30">
+          <div className="space-y-1">
+             <p className="text-[10px] font-bold text-rose-600 uppercase tracking-widest flex items-center gap-1.5">
+                Pending Today
+                <span className="flex h-1.5 w-1.5 rounded-full bg-rose-500 animate-pulse"></span>
+             </p>
+             <h4 className="text-3xl font-black text-rose-700 tracking-tight">{dashboardStats.pending_meals_today}</h4>
+             <div className="flex gap-3 mt-1">
+                <span className="text-[10px] font-bold text-zinc-500">
+                   🍱 <span className="text-zinc-900">{dashboardStats.pending_lunch}</span> Lunch
+                </span>
+                <span className="text-[10px] font-bold text-zinc-500">
+                   🌙 <span className="text-zinc-900">{dashboardStats.pending_dinner}</span> Dinner
+                </span>
+             </div>
+          </div>
+          <div className="p-2.5 bg-rose-100 rounded-xl text-rose-600">
+             <Utensils size={24} />
+          </div>
+       </div>
+    </div>
     
     {/* Floating Card Content */}
     <div className="gradient-card mt-1">
@@ -401,35 +472,21 @@ const sendWhatsAppMessage = (phone) => {
 </div>
 
 {/* Analytics Section */}
-<div className="mt-2 text-zinc-800">
-  <div className="mb-1 flex items-center justify-between">
+<div className="mt-6 text-zinc-800">
+  <div className="mb-3 flex items-center justify-between">
     <div>
-      <h2 className="text-lg font-bold tracking-tight">Analytics</h2>
-      <p className="text-[10px] text-zinc-500">Meal distribution and daily scan trend</p>
+      <h2 className="text-lg font-bold tracking-tight">Today's Consumption</h2>
+      <p className="text-[10px] text-zinc-500">Meal session distribution overview</p>
     </div>
   </div>
   
-  <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-    <div className="h-[240px]">
+  <div className="grid grid-cols-1 gap-4">
+    <div className="h-[280px]">
       {mealDistribution ? (
         <MealDistributionChart data={mealDistribution} />
       ) : (
         <div className="h-full w-full flex items-center justify-center bg-white rounded-2xl shadow-sm border border-zinc-100">
           <p className="text-zinc-500 animate-pulse">Loading meal distribution...</p>
-        </div>
-      )}
-    </div>
-    
-    <div className="h-[240px]">
-      {dailyTrend ? (
-        <DailyTrendChart 
-          data={dailyTrend.trend} 
-          todayTotal={dailyTrend.today_total} 
-          yesterdayTotal={dailyTrend.yesterday_total} 
-        />
-      ) : (
-        <div className="h-full w-full flex items-center justify-center bg-white rounded-2xl shadow-sm border border-zinc-100">
-          <p className="text-zinc-500 animate-pulse">Loading daily trend...</p>
         </div>
       )}
     </div>
