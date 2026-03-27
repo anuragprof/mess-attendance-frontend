@@ -253,55 +253,6 @@ const sendWhatsAppMessage = (phone) => {
   return (
   <div className="space-y-6 animate-in fade-in duration-500 pb-10">
     
-    {/* Top Metrics Section */}
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-       {/* 1 Time Users */}
-       <div className="gradient-card p-5 border-l-4 border-l-blue-500 flex items-start justify-between group hover:shadow-md transition-all">
-          <div className="space-y-1">
-             <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Active (1 Meal)</p>
-             <h4 className="text-2xl font-black text-zinc-900">{dashboardStats.active_one_time_users}</h4>
-             <p className="text-[10px] text-zinc-400 font-medium">Single meal subscribers</p>
-          </div>
-          <div className="p-2.5 bg-blue-50 rounded-xl text-blue-500">
-             <Users size={20} />
-          </div>
-       </div>
-
-       {/* 2 Time Users */}
-       <div className="gradient-card p-5 border-l-4 border-l-indigo-500 flex items-start justify-between group hover:shadow-md transition-all">
-          <div className="space-y-1">
-             <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Active (2 Meals)</p>
-             <h4 className="text-2xl font-black text-zinc-900">{dashboardStats.active_two_time_users}</h4>
-             <p className="text-[10px] text-zinc-400 font-medium">Both meals subscribers</p>
-          </div>
-          <div className="p-2.5 bg-indigo-50 rounded-xl text-indigo-500">
-             <Users size={20} />
-          </div>
-       </div>
-
-       {/* Pending Meals Today */}
-       <div className="gradient-card p-5 border-l-4 border-l-rose-500 flex items-start justify-between group hover:shadow-md transition-all bg-rose-50/30">
-          <div className="space-y-1">
-             <p className="text-[10px] font-bold text-rose-600 uppercase tracking-widest flex items-center gap-1.5">
-                Pending Today
-                <span className="flex h-1.5 w-1.5 rounded-full bg-rose-500 animate-pulse"></span>
-             </p>
-             <h4 className="text-3xl font-black text-rose-700 tracking-tight">{dashboardStats.pending_meals_today}</h4>
-             <div className="flex gap-3 mt-1">
-                <span className="text-[10px] font-bold text-zinc-500">
-                   🍱 <span className="text-zinc-900">{dashboardStats.pending_lunch}</span> Lunch
-                </span>
-                <span className="text-[10px] font-bold text-zinc-500">
-                   🌙 <span className="text-zinc-900">{dashboardStats.pending_dinner}</span> Dinner
-                </span>
-             </div>
-          </div>
-          <div className="p-2.5 bg-rose-100 rounded-xl text-rose-600">
-             <Utensils size={24} />
-          </div>
-       </div>
-    </div>
-    
     {/* Floating Card Content */}
     <div className="gradient-card mt-1">
       <div className="p-3">
@@ -471,24 +422,69 @@ const sendWhatsAppMessage = (phone) => {
   </div>
 </div>
 
-{/* Analytics Section */}
-<div className="mt-6 text-zinc-800">
-  <div className="mb-3 flex items-center justify-between">
-    <div>
-      <h2 className="text-lg font-bold tracking-tight">Today's Consumption</h2>
-      <p className="text-[10px] text-zinc-500">Meal session distribution overview</p>
+{/* Analytics & Operational Metrics Section */}
+<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+  
+  {/* Left: Consumption Distribution */}
+  <div className="lg:col-span-2">
+    <div className="gradient-card p-6 h-full">
+      <div className="mb-4">
+        <h2 className="text-lg font-bold tracking-tight text-zinc-800">Today's Consumption</h2>
+        <p className="text-[10px] text-zinc-500">Meal session distribution overview</p>
+      </div>
+      
+      <div className="h-[280px]">
+        {mealDistribution ? (
+          <MealDistributionChart data={mealDistribution} />
+        ) : (
+          <div className="h-full w-full flex items-center justify-center">
+            <p className="text-zinc-500 animate-pulse">Loading consumption data...</p>
+          </div>
+        )}
+      </div>
     </div>
   </div>
-  
-  <div className="grid grid-cols-1 gap-4">
-    <div className="h-[280px]">
-      {mealDistribution ? (
-        <MealDistributionChart data={mealDistribution} />
-      ) : (
-        <div className="h-full w-full flex items-center justify-center bg-white rounded-2xl shadow-sm border border-zinc-100">
-          <p className="text-zinc-500 animate-pulse">Loading meal distribution...</p>
-        </div>
-      )}
+
+  {/* Right: Key Operational Cards */}
+  <div className="space-y-4">
+    {/* Combined Active Users Card */}
+    <div className="gradient-card p-6 border-l-4 border-l-blue-500 flex items-start justify-between hover:shadow-md transition-all">
+       <div className="space-y-1">
+          <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Active Users</p>
+          <h4 className="text-3xl font-black text-zinc-900 tracking-tighter">
+            {dashboardStats.active_one_time_users + dashboardStats.active_two_time_users}
+          </h4>
+          <p className="text-[10px] text-zinc-400 font-medium">
+            1 Meal: {dashboardStats.active_one_time_users} | 2 Meal: {dashboardStats.active_two_time_users}
+          </p>
+       </div>
+       <div className="p-3 bg-blue-50 rounded-2xl text-blue-500">
+          <Users size={24} />
+       </div>
+    </div>
+
+    {/* Pending Meals Card */}
+    <div className="gradient-card p-6 border-l-4 border-l-rose-500 flex items-start justify-between bg-rose-50/30 hover:shadow-md transition-all">
+       <div className="space-y-1">
+          <p className="text-[10px] font-bold text-rose-600 uppercase tracking-widest flex items-center gap-1.5">
+             Pending Today
+             <span className="flex h-2 w-2 rounded-full bg-rose-500 animate-pulse"></span>
+          </p>
+          <h4 className="text-4xl font-black text-rose-700 tracking-tighter">
+            {dashboardStats.pending_meals_today}
+          </h4>
+          <div className="flex gap-4 mt-2">
+             <span className="text-xs font-bold text-zinc-600">
+                🍱 {dashboardStats.pending_lunch} <span className="text-[10px] text-zinc-400 font-medium ml-0.5">LUNCH</span>
+             </span>
+             <span className="text-xs font-bold text-zinc-600">
+                🌙 {dashboardStats.pending_dinner} <span className="text-[10px] text-zinc-400 font-medium ml-0.5">DINNER</span>
+             </span>
+          </div>
+       </div>
+       <div className="p-3 bg-rose-100 rounded-2xl text-rose-600">
+          <Utensils size={28} />
+       </div>
     </div>
   </div>
 </div>
