@@ -11,6 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/Pages/ui/select";
+import MealDistributionChart from "../Components/MealDistributionChart";
 import {
   Users,
   Utensils,
@@ -30,6 +31,7 @@ const [isUpdating, setIsUpdating] = useState(false);
 
 
 // Analytics State
+const [mealDistribution, setMealDistribution] = useState(null);
 const [dashboardStats, setDashboardStats] = useState({
   active_one_time_users: 0,
   active_two_time_users: 0,
@@ -46,6 +48,7 @@ useEffect(() => {
   mountedRef.current = true;
   fetchCustomers();
   fetchPlans();
+  fetchMealDistribution();
   fetchDashboardStats();
   
   // Auto-refresh stats every 5 minutes
@@ -77,6 +80,29 @@ if (mountedRef.current) setPlans(res.data);
 } catch {
 if (mountedRef.current) toast.error("Failed to load plans");
 }
+};
+
+const fetchMealDistribution = async () => {
+  try {
+    const res = await axios.get("/analytics/meal-distribution", {
+      withCredentials: true,
+    });
+    // Format for Recharts PieChart expected structure
+    const formattedData = [
+      { name: "Breakfast", value: res.data.breakfast },
+      { name: "Lunch", value: res.data.lunch },
+      { name: "Dinner", value: res.data.dinner },
+    ].filter(item => item.value > 0); // Only pass segments with values to render cleaner
+
+    // If all are zero, provide a default so chart renders an empty placeholder loop
+    if (formattedData.length === 0) {
+      formattedData.push({ name: "No Data", value: 1, fill: "#f4f4f5" }); 
+    }
+    
+    setMealDistribution(formattedData);
+  } catch (error) {
+    console.error("Failed to fetch meal distribution:", error);
+  }
 };
 
 const fetchDashboardStats = async () => {
@@ -399,28 +425,28 @@ const sendWhatsAppMessage = (phone) => {
 {/* Analytics & Operational Metrics Section */}
 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-6">
   
-  {/* Left: Active Users Card (Full Height) */}
-  <div className="h-[320px]">
-    <div className="gradient-card p-10 h-full border-l-4 border-l-blue-500 flex flex-col justify-center hover:shadow-md transition-all">
-       <div className="flex items-start justify-between">
-          <div className="space-y-3">
-             <p className="text-xs font-bold text-zinc-500 uppercase tracking-widest">Active Users</p>
-             <h4 className="text-6xl font-black text-zinc-900 tracking-tighter">
-               {dashboardStats.active_one_time_users + dashboardStats.active_two_time_users}
-             </h4>
-             <p className="text-sm text-zinc-400 font-medium">
-                1 Meal: {dashboardStats.active_one_time_users} | 2 Meal: {dashboardStats.active_two_time_users}
-             </p>
+  {/* LEFT: Consumption Distribution (Pie Chart) - Original Layout */}
+  <div className="h-[340px]">
+    <div className="gradient-card p-6 h-full flex flex-col">
+      <div className="mb-4">
+        <h2 className="text-lg font-bold tracking-tight text-zinc-800">Today's Consumption</h2>
+        <p className="text-[10px] text-zinc-500">Meal session distribution overview</p>
+      </div>
+      
+      <div className="flex-1">
+        {mealDistribution ? (
+          <MealDistributionChart data={mealDistribution} />
+        ) : (
+          <div className="h-full w-full flex items-center justify-center">
+            <p className="text-zinc-500 animate-pulse text-xs">Loading analytics...</p>
           </div>
-          <div className="p-5 bg-blue-50 rounded-3xl text-blue-500">
-             <Users size={40} />
-          </div>
-       </div>
+        )}
+      </div>
     </div>
   </div>
 
-  {/* Right Side: Vertical Stack (Previously Daily Trend area) */}
-  <div className="h-[320px] flex flex-col gap-4">
+  {/* RIGHT: Stacked Metrics (Replacing Daily Trend) */}
+  <div className="h-[340px] flex flex-col gap-4">
     {/* TOP: Pending Today Card */}
     <div className="flex-1">
       <div className="gradient-card p-6 h-full border-l-4 border-l-rose-500 flex flex-col justify-center bg-rose-50/30 hover:shadow-md transition-all">
@@ -435,10 +461,10 @@ const sendWhatsAppMessage = (phone) => {
                </h4>
                <div className="flex gap-4 mt-1">
                   <span className="text-xs font-bold text-zinc-600">
-                     🍱 {dashboardStats.pending_lunch} <span className="text-[10px] font-medium text-zinc-400 ml-0.5">LUNCH</span>
+                     🍱 {dashboardStats.pending_lunch} <span className="text-[10px] font-medium text-zinc-400 ml-0.5 uppercase">Lunch</span>
                   </span>
                   <span className="text-xs font-bold text-zinc-600">
-                     🌙 {dashboardStats.pending_dinner} <span className="text-[10px] font-medium text-zinc-400 ml-0.5">DINNER</span>
+                     🌙 {dashboardStats.pending_dinner} <span className="text-[10px] font-medium text-zinc-400 ml-0.5 uppercase">Dinner</span>
                   </span>
                </div>
             </div>
@@ -449,11 +475,24 @@ const sendWhatsAppMessage = (phone) => {
       </div>
     </div>
 
-    {/* BOTTOM: Placeholder (Same spacing as old layout) */}
+    {/* BOTTOM: Active Users Card */}
     <div className="flex-1">
-       <div className="gradient-card h-full border-dashed border-2 border-zinc-200 bg-zinc-50/5 text-zinc-300 flex items-center justify-center opacity-50">
-          <p className="text-[10px] font-black uppercase tracking-[0.2em]">Future Operational Metric</p>
-       </div>
+      <div className="gradient-card p-6 h-full border-l-4 border-l-blue-500 flex flex-col justify-center hover:shadow-md transition-all">
+         <div className="flex items-start justify-between">
+            <div className="space-y-1">
+               <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Active Users</p>
+               <h4 className="text-4xl font-black text-zinc-900 tracking-tighter">
+                 {dashboardStats.active_one_time_users + dashboardStats.active_two_time_users}
+               </h4>
+               <p className="text-[10px] text-zinc-400 font-medium">
+                  1 Meal: {dashboardStats.active_one_time_users} | 2 Meal: {dashboardStats.active_two_time_users}
+               </p>
+            </div>
+            <div className="p-3 bg-blue-50 rounded-2xl text-blue-500">
+               <Users size={28} />
+            </div>
+         </div>
+      </div>
     </div>
   </div>
 </div>
