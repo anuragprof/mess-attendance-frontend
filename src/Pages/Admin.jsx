@@ -11,7 +11,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/Pages/ui/select";
-import MealDistributionChart from "../Components/MealDistributionChart";
 import {
   Users,
   Utensils,
@@ -31,7 +30,6 @@ const [isUpdating, setIsUpdating] = useState(false);
 
 
 // Analytics State
-const [mealDistribution, setMealDistribution] = useState(null);
 const [dashboardStats, setDashboardStats] = useState({
   active_one_time_users: 0,
   active_two_time_users: 0,
@@ -48,7 +46,6 @@ useEffect(() => {
   mountedRef.current = true;
   fetchCustomers();
   fetchPlans();
-  fetchMealDistribution();
   fetchDashboardStats();
   
   // Auto-refresh stats every 5 minutes
@@ -80,29 +77,6 @@ if (mountedRef.current) setPlans(res.data);
 } catch {
 if (mountedRef.current) toast.error("Failed to load plans");
 }
-};
-
-const fetchMealDistribution = async () => {
-  try {
-    const res = await axios.get("/analytics/meal-distribution", {
-      withCredentials: true,
-    });
-    // Format for Recharts PieChart expected structure
-    const formattedData = [
-      { name: "Breakfast", value: res.data.breakfast },
-      { name: "Lunch", value: res.data.lunch },
-      { name: "Dinner", value: res.data.dinner },
-    ].filter(item => item.value > 0); // Only pass segments with values to render cleaner
-
-    // If all are zero, provide a default so chart renders an empty placeholder loop
-    if (formattedData.length === 0) {
-      formattedData.push({ name: "No Data", value: 1, fill: "#f4f4f5" }); 
-    }
-    
-    setMealDistribution(formattedData);
-  } catch (error) {
-    console.error("Failed to fetch meal distribution:", error);
-  }
 };
 
 const fetchDashboardStats = async () => {
@@ -423,67 +397,52 @@ const sendWhatsAppMessage = (phone) => {
 </div>
 
 {/* Analytics & Operational Metrics Section */}
-<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-6">
   
-  {/* Left: Consumption Distribution */}
-  <div className="lg:col-span-2">
-    <div className="gradient-card p-6 h-full">
-      <div className="mb-4">
-        <h2 className="text-lg font-bold tracking-tight text-zinc-800">Today's Consumption</h2>
-        <p className="text-[10px] text-zinc-500">Meal session distribution overview</p>
-      </div>
-      
-      <div className="h-[280px]">
-        {mealDistribution ? (
-          <MealDistributionChart data={mealDistribution} />
-        ) : (
-          <div className="h-full w-full flex items-center justify-center">
-            <p className="text-zinc-500 animate-pulse">Loading consumption data...</p>
+  {/* Left: Active Users Card */}
+  <div className="h-[240px]">
+    <div className="gradient-card p-8 h-full border-l-4 border-l-blue-500 flex flex-col justify-center hover:shadow-md transition-all">
+       <div className="flex items-start justify-between">
+          <div className="space-y-2">
+             <p className="text-xs font-bold text-zinc-500 uppercase tracking-widest">Active Users</p>
+             <h4 className="text-5xl font-black text-zinc-900 tracking-tighter">
+               {dashboardStats.active_one_time_users + dashboardStats.active_two_time_users}
+             </h4>
+             <p className="text-sm text-zinc-400 font-medium">
+                1 Meal: {dashboardStats.active_one_time_users} | 2 Meal: {dashboardStats.active_two_time_users}
+             </p>
           </div>
-        )}
-      </div>
+          <div className="p-4 bg-blue-50 rounded-2xl text-blue-500">
+             <Users size={32} />
+          </div>
+       </div>
     </div>
   </div>
 
-  {/* Right: Key Operational Cards */}
-  <div className="space-y-4">
-    {/* Combined Active Users Card */}
-    <div className="gradient-card p-6 border-l-4 border-l-blue-500 flex items-start justify-between hover:shadow-md transition-all">
-       <div className="space-y-1">
-          <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Active Users</p>
-          <h4 className="text-3xl font-black text-zinc-900 tracking-tighter">
-            {dashboardStats.active_one_time_users + dashboardStats.active_two_time_users}
-          </h4>
-          <p className="text-[10px] text-zinc-400 font-medium">
-            1 Meal: {dashboardStats.active_one_time_users} | 2 Meal: {dashboardStats.active_two_time_users}
-          </p>
-       </div>
-       <div className="p-3 bg-blue-50 rounded-2xl text-blue-500">
-          <Users size={24} />
-       </div>
-    </div>
-
-    {/* Pending Meals Card */}
-    <div className="gradient-card p-6 border-l-4 border-l-rose-500 flex items-start justify-between bg-rose-50/30 hover:shadow-md transition-all">
-       <div className="space-y-1">
-          <p className="text-[10px] font-bold text-rose-600 uppercase tracking-widest flex items-center gap-1.5">
-             Pending Today
-             <span className="flex h-2 w-2 rounded-full bg-rose-500 animate-pulse"></span>
-          </p>
-          <h4 className="text-4xl font-black text-rose-700 tracking-tighter">
-            {dashboardStats.pending_meals_today}
-          </h4>
-          <div className="flex gap-4 mt-2">
-             <span className="text-xs font-bold text-zinc-600">
-                🍱 {dashboardStats.pending_lunch} <span className="text-[10px] text-zinc-400 font-medium ml-0.5">LUNCH</span>
-             </span>
-             <span className="text-xs font-bold text-zinc-600">
-                🌙 {dashboardStats.pending_dinner} <span className="text-[10px] text-zinc-400 font-medium ml-0.5">DINNER</span>
-             </span>
+  {/* Right: Pending Today Card */}
+  <div className="h-[240px]">
+    <div className="gradient-card p-8 h-full border-l-4 border-l-rose-500 flex flex-col justify-center bg-rose-50/30 hover:shadow-md transition-all">
+       <div className="flex items-start justify-between">
+          <div className="space-y-2">
+             <p className="text-xs font-bold text-rose-600 uppercase tracking-widest flex items-center gap-1.5">
+                Pending Today
+                <span className="flex h-2 w-2 rounded-full bg-rose-500 animate-pulse"></span>
+             </p>
+             <h4 className="text-6xl font-black text-rose-700 tracking-tighter">
+               {dashboardStats.pending_meals_today}
+             </h4>
+             <div className="flex gap-6 mt-2">
+                <span className="text-sm font-bold text-zinc-700">
+                   🍱 {dashboardStats.pending_lunch} <span className="text-[10px] font-bold text-zinc-400 ml-1">LUNCH</span>
+                </span>
+                <span className="text-sm font-bold text-zinc-700">
+                   🌙 {dashboardStats.pending_dinner} <span className="text-[10px] font-bold text-zinc-400 ml-1">DINNER</span>
+                </span>
+             </div>
           </div>
-       </div>
-       <div className="p-3 bg-rose-100 rounded-2xl text-rose-600">
-          <Utensils size={28} />
+          <div className="p-4 bg-rose-100 rounded-2xl text-rose-600">
+             <Utensils size={36} />
+          </div>
        </div>
     </div>
   </div>
