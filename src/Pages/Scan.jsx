@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react"
+import { Users, Clock, Utensils } from "lucide-react"
 import ScanQR from "../Components/ScanQR"
 import Card from "../Components/Card"
 import api from "../Lib/axios"
