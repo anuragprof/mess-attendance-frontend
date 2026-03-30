@@ -25,6 +25,7 @@ const CustomerRegistrationForm = () => {
 
   const [planAmount, setPlanAmount] = useState(0);
   const [rate, setRate] = useState("");
+  const [amountPaid, setAmountPaid] = useState("");
 
   const [startMonth, setStartMonth] = useState("");
   const [startDay, setStartDay] = useState("");
@@ -166,7 +167,7 @@ const CustomerRegistrationForm = () => {
 
       data.append("start_date", formattedStartDate);
       data.append("total_amount", rate);
-      data.append("total_amount_paid", rate);
+      data.append("total_amount_paid", amountPaid || 0);
 
       const res = await registerCustomer(data);
 
@@ -185,6 +186,7 @@ const CustomerRegistrationForm = () => {
 
       setPlanAmount(0);
       setRate("");
+      setAmountPaid("");
 
       setStartMonth("");
       setStartDay("");
@@ -348,6 +350,7 @@ const CustomerRegistrationForm = () => {
                 const basePrice = selectedPlan.price_cents || 0;
                 setPlanAmount(basePrice);
                 setRate(basePrice.toString());
+                setAmountPaid(basePrice.toString());
               }
             }}
           >
@@ -371,35 +374,48 @@ const CustomerRegistrationForm = () => {
               <div className="w-8 h-8 rounded-full bg-emerald-600/10 flex items-center justify-center text-emerald-700">
                 💰
               </div>
-              <Label className="text-sm font-black uppercase tracking-widest text-emerald-900">Pricing & Rate</Label>
+              <Label className="text-sm font-black uppercase tracking-widest text-emerald-900">Pricing & Payment</Label>
             </div>
             
             <div className="grid gap-6 md:grid-cols-2">
               <div className="space-y-2">
-                <p className="text-xs font-bold text-emerald-600 uppercase">Standard Plan Price</p>
-                <div className="text-2xl font-black text-emerald-950/30">₹{planAmount}</div>
-              </div>
-
-              <div className="space-y-2">
-                <Label className="text-xs font-bold text-emerald-700 uppercase">Negotiated Monthly Rate</Label>
+                <Label className="text-xs font-bold text-emerald-700 uppercase">Monthly Rate / Charge</Label>
                 <div className="relative">
                   <span className="absolute left-4 top-1/2 -translate-y-1/2 font-black text-emerald-600">₹</span>
                   <Input
                     type="number"
                     value={rate}
-                    onChange={(e) => setRate(e.target.value)}
+                    onChange={(e) => {
+                      setRate(e.target.value);
+                      setAmountPaid(e.target.value); // Sync for fast entry
+                    }}
                     className="pl-8 h-12 rounded-2xl border-2 border-emerald-200 focus:ring-emerald-500 font-bold bg-white"
-                    placeholder="Enter rate"
+                    placeholder="Monthly price"
                     required
-                    min="1"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label className="text-xs font-bold text-blue-700 uppercase">Initial Amount Paid Today</Label>
+                <div className="relative">
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 font-black text-blue-600">₹</span>
+                  <Input
+                    type="number"
+                    value={amountPaid}
+                    onChange={(e) => setAmountPaid(e.target.value)}
+                    className="pl-8 h-12 rounded-2xl border-2 border-blue-200 focus:ring-blue-500 font-bold bg-white text-blue-700"
+                    placeholder="Paid amount"
                   />
                 </div>
               </div>
             </div>
             
-            <p className="text-[10px] text-emerald-600 font-medium italic">
-              * By default, the rate is set to the plan price. You can adjust it for this specific customer.
-            </p>
+            {(parseFloat(rate) - (parseFloat(amountPaid) || 0)) > 0 && (
+              <p className="text-[10px] text-rose-600 font-bold uppercase tracking-widest">
+                ⚠️ Balance Due: ₹{parseFloat(rate) - (parseFloat(amountPaid) || 0)}
+              </p>
+            )}
           </div>
         )}
 
