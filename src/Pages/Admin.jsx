@@ -660,12 +660,25 @@ const sendWhatsAppMessage = (phone) => {
           </div>
 
           <div className="flex flex-col items-center">
-            <p className="font-medium mb-2">QR Code</p>
-            <img
-              src={previewCustomer.qr_url}
-              alt="qr"
-              className="w-64 h-64 border rounded-xl shadow-lg"
-            />
+            <p className="font-medium mb-2 opacity-50 text-xs uppercase tracking-widest text-zinc-500">Identity QR</p>
+            <div className="bg-white p-6 rounded-[2rem] border-2 border-zinc-100 shadow-2xl flex flex-col items-center gap-4 min-w-[280px] hover:shadow-emerald-500/5 transition-all">
+               <div className="text-xl font-black text-zinc-900 tracking-tight">Happy Foods</div>
+               
+               <div className="bg-white p-3 rounded-2xl border-2 border-zinc-50 shadow-inner">
+                 <img
+                   src={previewCustomer.qr_url}
+                   alt="qr"
+                   className="w-48 h-48 object-contain"
+                 />
+               </div>
+               
+               <div className="text-center space-y-1">
+                 <div className="text-base font-bold text-zinc-800 tracking-tight">{previewCustomer.full_name}</div>
+                 <div className="text-xs font-mono text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full inline-block font-bold">
+                   CUST-{previewCustomer.id}
+                 </div>
+               </div>
+            </div>
           </div>
         </div>
 
