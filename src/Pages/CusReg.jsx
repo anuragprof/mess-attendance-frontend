@@ -24,7 +24,6 @@ const CustomerRegistrationForm = () => {
   const [plans, setPlans] = useState([]);
 
   const [planAmount, setPlanAmount] = useState(0);
-  const [rate, setRate] = useState("");
   const [amountPaid, setAmountPaid] = useState("");
   const [paymentMode, setPaymentMode] = useState("cash");
 
@@ -167,7 +166,7 @@ const CustomerRegistrationForm = () => {
       data.append("photo", formData.photo);
 
       data.append("start_date", formattedStartDate);
-      data.append("total_amount", rate);
+      data.append("total_amount", planAmount);
       data.append("total_amount_paid", amountPaid || 0);
       data.append("payment_mode", paymentMode);
 
@@ -187,7 +186,7 @@ const CustomerRegistrationForm = () => {
       });
 
       setPlanAmount(0);
-      setRate("");
+      setPlanAmount(0);
       setAmountPaid("");
       setPaymentMode("cash");
 
@@ -352,7 +351,6 @@ const CustomerRegistrationForm = () => {
               if (selectedPlan) {
                 const basePrice = selectedPlan.price_cents || 0;
                 setPlanAmount(basePrice);
-                setRate(basePrice.toString());
                 setAmountPaid(basePrice.toString());
               }
             }}
@@ -372,90 +370,71 @@ const CustomerRegistrationForm = () => {
 
         {/* Payment */}
         {formData.planId && (
-          <div className="space-y-4 rounded-3xl border-2 border-emerald-100 bg-emerald-100/10 p-6 shadow-sm">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-2xl bg-emerald-600 flex items-center justify-center text-white shadow-lg shadow-emerald-500/20">
+          <div className="space-y-6 rounded-3xl border-2 border-emerald-100 bg-emerald-100/10 p-8 shadow-sm">
+            <div className="flex flex-col items-center text-center gap-2 mb-2">
+              <div className="w-12 h-12 rounded-2xl bg-emerald-600 flex items-center justify-center text-white shadow-lg shadow-emerald-500/20 mb-2">
                 💰
               </div>
-              <div>
-                <Label className="text-sm font-black uppercase tracking-widest text-emerald-900 block">Pricing & Payment</Label>
-                <p className="text-[10px] font-bold text-emerald-600 uppercase tracking-tighter">Collect initial fee</p>
-              </div>
+              <Label className="text-sm font-black uppercase tracking-[0.2em] text-emerald-900">Payment Collection</Label>
+              <p className="text-[10px] font-bold text-emerald-600 uppercase tracking-tighter">Plan Price: ₹{planAmount}</p>
             </div>
             
-            <div className="grid gap-8 md:grid-cols-2">
-              {/* LEFT: Master Rate */}
+            <div className="max-w-md mx-auto w-full space-y-6">
+              {/* Amount Input */}
+              <div className="space-y-2">
+                 <Label className="text-xs font-black text-zinc-500 uppercase tracking-widest pl-1">Amount Paid Today *</Label>
+                 <div className="relative">
+                   <span className="absolute left-5 top-1/2 -translate-y-1/2 font-black text-blue-600 text-lg">₹</span>
+                   <Input
+                     type="number"
+                     value={amountPaid}
+                     onChange={(e) => setAmountPaid(e.target.value)}
+                     className="pl-10 h-14 rounded-2xl border-2 border-zinc-100 focus:border-emerald-500 focus:ring-emerald-500 font-black bg-white text-blue-700 text-xl shadow-inner text-center"
+                     placeholder="0"
+                     required
+                   />
+                 </div>
+              </div>
+
+              {/* Payment Method Toggle */}
               <div className="space-y-3">
-                <Label className="text-xs font-black text-emerald-700 uppercase tracking-widest flex items-center gap-2">
-                   Monthly Rate / Charge
-                </Label>
-                <div className="relative">
-                  <span className="absolute left-4 top-1/2 -translate-y-1/2 font-black text-zinc-400">₹</span>
-                  <Input
-                    type="number"
-                    value={rate}
-                    onChange={(e) => {
-                      setRate(e.target.value);
-                      setAmountPaid(e.target.value);
-                    }}
-                    className="pl-8 h-12 rounded-2xl border-zinc-200 focus:ring-emerald-500 font-bold bg-white text-lg"
-                    placeholder="2500"
-                    required
-                  />
-                </div>
+                 <Label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest text-center block">Select Payment Method</Label>
+                 <div className="flex gap-3 p-1.5 bg-zinc-100/50 rounded-[1.25rem] border border-zinc-200">
+                    <button
+                      type="button"
+                      onClick={() => setPaymentMode("cash")}
+                      className={`flex-1 py-3.5 rounded-2xl text-xs font-black uppercase tracking-widest transition-all duration-300 ${
+                        paymentMode === "cash"
+                          ? "bg-gradient-to-r from-emerald-600 to-teal-500 text-white shadow-lg shadow-emerald-500/30 -translate-y-0.5"
+                          : "text-zinc-400 hover:text-zinc-600"
+                      }`}
+                    >
+                      Cash
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setPaymentMode("upi")}
+                      className={`flex-1 py-3.5 rounded-2xl text-xs font-black uppercase tracking-widest transition-all duration-300 ${
+                        paymentMode === "upi"
+                          ? "bg-gradient-to-r from-blue-600 to-indigo-500 text-white shadow-lg shadow-blue-500/30 -translate-y-0.5"
+                          : "text-zinc-400 hover:text-zinc-600"
+                      }`}
+                    >
+                      UPI
+                    </button>
+                 </div>
               </div>
 
-              {/* RIGHT: Payment Details */}
-              <div className="space-y-4">
-                <div className="space-y-2">
-                   <Label className="text-xs font-black text-blue-700 uppercase tracking-widest">Initial Amount Paid *</Label>
-                   <div className="relative">
-                     <span className="absolute left-4 top-1/2 -translate-y-1/2 font-black text-blue-600">₹</span>
-                     <Input
-                       type="number"
-                       value={amountPaid}
-                       onChange={(e) => setAmountPaid(e.target.value)}
-                       className="pl-8 h-12 rounded-2xl border-blue-100 focus:ring-blue-500 font-bold bg-white text-blue-700 text-lg shadow-inner"
-                       placeholder="Amount"
-                     />
+              {/* Balance Check */}
+              {parseFloat(amountPaid) < planAmount && (
+                <div className="bg-rose-50 px-4 py-3 rounded-2xl border border-rose-100 flex items-center justify-between animate-in fade-in zoom-in-95 duration-300">
+                   <div className="flex flex-col">
+                      <span className="text-[10px] font-black text-rose-600 uppercase tracking-widest leading-none">Unpaid Balance</span>
+                      <span className="text-xs font-bold text-rose-400 mt-1 italic">To be collected later</span>
                    </div>
+                   <span className="text-lg font-black text-rose-700 tracking-tighter">₹{planAmount - (parseFloat(amountPaid) || 0)}</span>
                 </div>
-
-                <div className="space-y-2">
-                   <Label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">Payment Method</Label>
-                   <div className="flex gap-2 p-1 bg-zinc-100 rounded-2xl border border-zinc-200">
-                      <button
-                        type="button"
-                        onClick={() => setPaymentMode("cash")}
-                        className={`flex-1 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all duration-300 ${
-                          paymentMode === "cash"
-                            ? "bg-gradient-to-r from-emerald-600 to-teal-500 text-white shadow-md shadow-emerald-500/30"
-                            : "text-zinc-400 hover:text-zinc-600"
-                        }`}
-                      >
-                        Cash
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setPaymentMode("upi")}
-                        className={`flex-1 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all duration-300 ${
-                          paymentMode === "upi"
-                            ? "bg-gradient-to-r from-blue-600 to-indigo-500 text-white shadow-md shadow-blue-500/30"
-                            : "text-zinc-400 hover:text-zinc-600"
-                        }`}
-                      >
-                        UPI
-                      </button>
-                   </div>
-                </div>
-
-                {(parseFloat(rate) - (parseFloat(amountPaid) || 0)) > 0 && (
-                  <div className="bg-rose-50 p-2.5 rounded-xl border border-rose-100 flex items-center justify-between">
-                     <span className="text-[10px] font-black text-rose-600 uppercase tracking-widest">Outstanding</span>
-                     <span className="text-sm font-black text-rose-700">₹{parseFloat(rate) - (parseFloat(amountPaid) || 0)}</span>
-                  </div>
-                )}
-              </div>
+              )}
             </div>
           </div>
         )}
