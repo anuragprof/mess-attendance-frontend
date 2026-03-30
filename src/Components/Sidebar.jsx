@@ -24,7 +24,7 @@ const SidebarItem = ({ to, icon, label, onClick }) => {
   );
 };
 
-export default function Sidebar({ me, setMe, isOpen, onClose }) {
+export default function Sidebar({ me, setMe, isOpen, onClose, onScanOpen }) {
   const navigate = useNavigate();
   const { activeModule } = useModule();
 
@@ -88,7 +88,16 @@ export default function Sidebar({ me, setMe, isOpen, onClose }) {
                 <SidebarItem to="/billing" icon="💳" label="Billing" onClick={handleNavClick} />
                 <SidebarItem to="/renew-plan" icon="🔄" label="Renew Plan" onClick={handleNavClick} />
                 <SidebarItem to="/reports" icon="📊" label="Attendance Reports" onClick={handleNavClick} />
-                <SidebarItem to="/scan" icon="📷" label="Scan QR" onClick={handleNavClick} />
+                <button 
+                  onClick={() => {
+                    handleNavClick();
+                    onScanOpen();
+                  }}
+                  className="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 w-full"
+                >
+                  <span className="text-lg">📷</span>
+                  <span>Scan QR</span>
+                </button>
               </>
             ) : (
               <>

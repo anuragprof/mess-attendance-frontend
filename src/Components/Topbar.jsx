@@ -1,7 +1,6 @@
-import { Link } from "react-router-dom";
-import { Menu } from "lucide-react";
+import { Menu, ScanLine } from "lucide-react";
 
-export default function Topbar({ title, subtitle, onMenuToggle }) {
+export default function Topbar({ title, subtitle, onMenuToggle, onScanOpen }) {
   return (
     <header className="h-16 bg-white/80 backdrop-blur-md border-b border-zinc-200 sticky top-0 z-10 flex items-center justify-between px-4 lg:px-8 shadow-sm">
       
@@ -24,6 +23,16 @@ export default function Topbar({ title, subtitle, onMenuToggle }) {
 
       {/* Right side: Actions */}
       <div className="flex items-center gap-2 lg:gap-4">
+        
+        <button 
+          onClick={onScanOpen}
+          className="flex items-center gap-2 px-3 py-2 bg-zinc-900 text-white rounded-lg text-sm font-bold shadow-lg shadow-zinc-900/10 hover:bg-zinc-800 transition-all transform hover:scale-[1.02] active:scale-95"
+        >
+          <ScanLine size={18} />
+          <span className="hidden sm:inline">Scan QR</span>
+        </button>
+
+        <div className="h-6 w-px bg-zinc-200 mx-1 hidden sm:block"></div>
         
         <button className="relative p-2 text-zinc-500 hover:bg-zinc-100 rounded-full transition-colors">
           🔔

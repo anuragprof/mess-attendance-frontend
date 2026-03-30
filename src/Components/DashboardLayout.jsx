@@ -3,10 +3,15 @@ import { useState } from "react";
 import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
 import MobileBottomNav from "./MobileBottomNav";
+import ScannerModal from "./ScannerModal";
 
 export default function DashboardLayout({ me, setMe }) {
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [scannerOpen, setScannerOpen] = useState(false);
+
+  const openScanner = () => setScannerOpen(true);
+  const closeScanner = () => setScannerOpen(false);
 
   // Map routes to dynamic titles and subtitles for the Topbar
   let pageTitle = "";
@@ -49,6 +54,7 @@ export default function DashboardLayout({ me, setMe }) {
         setMe={setMe}
         isOpen={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
+        onScanOpen={openScanner}
       />
 
       {/* Main Content Area — full width on mobile, offset on desktop */}
@@ -58,6 +64,7 @@ export default function DashboardLayout({ me, setMe }) {
           title={pageTitle}
           subtitle={pageSubtitle}
           onMenuToggle={() => setSidebarOpen(true)}
+          onScanOpen={openScanner}
         />
 
         {/* Page Content Slot — extra bottom padding on mobile for bottom nav */}
@@ -70,7 +77,17 @@ export default function DashboardLayout({ me, setMe }) {
       </div>
 
       {/* Mobile Bottom Navigation */}
-      <MobileBottomNav />
+      <MobileBottomNav onScanOpen={openScanner} />
+
+      {/* Global Scanner Modal */}
+      <ScannerModal 
+        isOpen={scannerOpen} 
+        onClose={closeScanner} 
+        onScanSuccess={() => {
+            // Optional: refresh data on any specific page
+            if (location.pathname === "/dashboard") window.location.reload();
+        }}
+      />
     </div>
   );
 }
