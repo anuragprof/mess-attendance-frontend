@@ -60,8 +60,8 @@ export default function App() {
             }
           />
 
-          {/* Layout completely hidden on scan - Still useful for full-screen dedicated scanning tablets */}
-          <Route path="/scan" element={me ? <Scan /> : <Navigate to="/login" replace />} />
+          {/* Layout completely hidden on scan */}
+          <Route path="/scan" element={<Scan />} />
 
           {/* Routes protected by DashboardLayout */}
           <Route element={<DashboardLayout me={me} setMe={setMe} />}>

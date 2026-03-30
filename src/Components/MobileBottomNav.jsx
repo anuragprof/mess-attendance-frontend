@@ -8,29 +8,14 @@ const navItems = [
   { to: "/renew-plan", icon: CreditCard, label: "Renew" },
 ];
 
-export default function MobileBottomNav({ onScanOpen }) {
+export default function MobileBottomNav() {
   const { pathname } = useLocation();
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-[60] bg-white/95 backdrop-blur-md border-t border-zinc-200 shadow-[0_-2px_10px_rgba(0,0,0,0.06)] lg:hidden">
+    <nav className="fixed bottom-0 left-0 right-0 z-30 bg-white/95 backdrop-blur-md border-t border-zinc-200 shadow-[0_-2px_10px_rgba(0,0,0,0.06)] lg:hidden">
       <div className="flex items-center justify-around h-16 px-2">
         {navItems.map(({ to, icon: Icon, label }) => {
           const active = pathname === to;
-          const isScan = label === "Scan";
-
-          if (isScan) {
-             return (
-               <button
-                 key={label}
-                 onClick={onScanOpen}
-                 className={`flex flex-col items-center justify-center gap-0.5 flex-1 py-1.5 rounded-xl transition-all duration-200 text-zinc-400 hover:text-zinc-600`}
-               >
-                 <Icon size={22} strokeWidth={2} />
-                 <span className="text-[10px] leading-none font-medium text-zinc-500">{label}</span>
-               </button>
-             );
-          }
-
           return (
             <Link
               key={to}
