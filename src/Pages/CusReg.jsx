@@ -26,6 +26,7 @@ const CustomerRegistrationForm = () => {
   const [planAmount, setPlanAmount] = useState(0);
   const [rate, setRate] = useState("");
   const [amountPaid, setAmountPaid] = useState("");
+  const [paymentMode, setPaymentMode] = useState("cash");
 
   const [startMonth, setStartMonth] = useState("");
   const [startDay, setStartDay] = useState("");
@@ -168,6 +169,7 @@ const CustomerRegistrationForm = () => {
       data.append("start_date", formattedStartDate);
       data.append("total_amount", rate);
       data.append("total_amount_paid", amountPaid || 0);
+      data.append("payment_mode", paymentMode);
 
       const res = await registerCustomer(data);
 
@@ -187,6 +189,7 @@ const CustomerRegistrationForm = () => {
       setPlanAmount(0);
       setRate("");
       setAmountPaid("");
+      setPaymentMode("cash");
 
       setStartMonth("");
       setStartDay("");
@@ -369,53 +372,91 @@ const CustomerRegistrationForm = () => {
 
         {/* Payment */}
         {formData.planId && (
-          <div className="space-y-4 rounded-3xl border-2 border-emerald-100 bg-emerald-50/50 p-6">
-            <div className="flex items-center gap-3 mb-2">
-              <div className="w-8 h-8 rounded-full bg-emerald-600/10 flex items-center justify-center text-emerald-700">
+          <div className="space-y-4 rounded-3xl border-2 border-emerald-100 bg-emerald-100/10 p-6 shadow-sm">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-2xl bg-emerald-600 flex items-center justify-center text-white shadow-lg shadow-emerald-500/20">
                 💰
               </div>
-              <Label className="text-sm font-black uppercase tracking-widest text-emerald-900">Pricing & Payment</Label>
+              <div>
+                <Label className="text-sm font-black uppercase tracking-widest text-emerald-900 block">Pricing & Payment</Label>
+                <p className="text-[10px] font-bold text-emerald-600 uppercase tracking-tighter">Collect initial fee</p>
+              </div>
             </div>
             
-            <div className="grid gap-6 md:grid-cols-2">
-              <div className="space-y-2">
-                <Label className="text-xs font-bold text-emerald-700 uppercase">Monthly Rate / Charge</Label>
+            <div className="grid gap-8 md:grid-cols-2">
+              {/* LEFT: Master Rate */}
+              <div className="space-y-3">
+                <Label className="text-xs font-black text-emerald-700 uppercase tracking-widest flex items-center gap-2">
+                   Monthly Rate / Charge
+                </Label>
                 <div className="relative">
-                  <span className="absolute left-4 top-1/2 -translate-y-1/2 font-black text-emerald-600">₹</span>
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 font-black text-zinc-400">₹</span>
                   <Input
                     type="number"
                     value={rate}
                     onChange={(e) => {
                       setRate(e.target.value);
-                      setAmountPaid(e.target.value); // Sync for fast entry
+                      setAmountPaid(e.target.value);
                     }}
-                    className="pl-8 h-12 rounded-2xl border-2 border-emerald-200 focus:ring-emerald-500 font-bold bg-white"
-                    placeholder="Monthly price"
+                    className="pl-8 h-12 rounded-2xl border-zinc-200 focus:ring-emerald-500 font-bold bg-white text-lg"
+                    placeholder="2500"
                     required
                   />
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <Label className="text-xs font-bold text-blue-700 uppercase">Initial Amount Paid Today</Label>
-                <div className="relative">
-                  <span className="absolute left-4 top-1/2 -translate-y-1/2 font-black text-blue-600">₹</span>
-                  <Input
-                    type="number"
-                    value={amountPaid}
-                    onChange={(e) => setAmountPaid(e.target.value)}
-                    className="pl-8 h-12 rounded-2xl border-2 border-blue-200 focus:ring-blue-500 font-bold bg-white text-blue-700"
-                    placeholder="Paid amount"
-                  />
+              {/* RIGHT: Payment Details */}
+              <div className="space-y-4">
+                <div className="space-y-2">
+                   <Label className="text-xs font-black text-blue-700 uppercase tracking-widest">Initial Amount Paid *</Label>
+                   <div className="relative">
+                     <span className="absolute left-4 top-1/2 -translate-y-1/2 font-black text-blue-600">₹</span>
+                     <Input
+                       type="number"
+                       value={amountPaid}
+                       onChange={(e) => setAmountPaid(e.target.value)}
+                       className="pl-8 h-12 rounded-2xl border-blue-100 focus:ring-blue-500 font-bold bg-white text-blue-700 text-lg shadow-inner"
+                       placeholder="Amount"
+                     />
+                   </div>
                 </div>
+
+                <div className="space-y-2">
+                   <Label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">Payment Method</Label>
+                   <div className="flex gap-2 p-1 bg-zinc-100 rounded-2xl border border-zinc-200">
+                      <button
+                        type="button"
+                        onClick={() => setPaymentMode("cash")}
+                        className={`flex-1 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all duration-300 ${
+                          paymentMode === "cash"
+                            ? "bg-gradient-to-r from-emerald-600 to-teal-500 text-white shadow-md shadow-emerald-500/30"
+                            : "text-zinc-400 hover:text-zinc-600"
+                        }`}
+                      >
+                        Cash
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setPaymentMode("upi")}
+                        className={`flex-1 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all duration-300 ${
+                          paymentMode === "upi"
+                            ? "bg-gradient-to-r from-blue-600 to-indigo-500 text-white shadow-md shadow-blue-500/30"
+                            : "text-zinc-400 hover:text-zinc-600"
+                        }`}
+                      >
+                        UPI
+                      </button>
+                   </div>
+                </div>
+
+                {(parseFloat(rate) - (parseFloat(amountPaid) || 0)) > 0 && (
+                  <div className="bg-rose-50 p-2.5 rounded-xl border border-rose-100 flex items-center justify-between">
+                     <span className="text-[10px] font-black text-rose-600 uppercase tracking-widest">Outstanding</span>
+                     <span className="text-sm font-black text-rose-700">₹{parseFloat(rate) - (parseFloat(amountPaid) || 0)}</span>
+                  </div>
+                )}
               </div>
             </div>
-            
-            {(parseFloat(rate) - (parseFloat(amountPaid) || 0)) > 0 && (
-              <p className="text-[10px] text-rose-600 font-bold uppercase tracking-widest">
-                ⚠️ Balance Due: ₹{parseFloat(rate) - (parseFloat(amountPaid) || 0)}
-              </p>
-            )}
           </div>
         )}
 
