@@ -1,6 +1,5 @@
 import { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
-import Card from "../Components/Card";
 import { toast } from "sonner";
 import axios from "@/Lib/axios";
 import { generateWhatsAppLink } from "@/Lib/whatsapp";
@@ -682,10 +681,6 @@ const sendWhatsAppMessage = (phone) => {
     </div>
   )}
 
-  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-    <Card title="Issue QR / Student">Coming soon…</Card>
-    <Card title="Meals & Slots">Coming soon…</Card>
-  </div>
 </div>
 
 
