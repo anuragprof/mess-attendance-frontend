@@ -24,7 +24,7 @@ const CustomerRegistrationForm = () => {
   const [plans, setPlans] = useState([]);
 
   const [planAmount, setPlanAmount] = useState(0);
-  const [amountPaid, setAmountPaid] = useState("");
+  const [rate, setRate] = useState("");
 
   const [startMonth, setStartMonth] = useState("");
   const [startDay, setStartDay] = useState("");
@@ -165,8 +165,8 @@ const CustomerRegistrationForm = () => {
       data.append("photo", formData.photo);
 
       data.append("start_date", formattedStartDate);
-      data.append("total_amount", planAmount);
-      data.append("total_amount_paid", amountPaid || 0);
+      data.append("total_amount", rate);
+      data.append("total_amount_paid", rate);
 
       const res = await registerCustomer(data);
 
@@ -184,7 +184,7 @@ const CustomerRegistrationForm = () => {
       });
 
       setPlanAmount(0);
-      setAmountPaid("");
+      setRate("");
 
       setStartMonth("");
       setStartDay("");
@@ -345,7 +345,9 @@ const CustomerRegistrationForm = () => {
               setFormData({ ...formData, planId: v });
 
               if (selectedPlan) {
-                setPlanAmount(selectedPlan.price_cents || 0);
+                const basePrice = selectedPlan.price_cents || 0;
+                setPlanAmount(basePrice);
+                setRate(basePrice.toString());
               }
             }}
           >
@@ -364,34 +366,40 @@ const CustomerRegistrationForm = () => {
 
         {/* Payment */}
         {formData.planId && (
-          <div className="space-y-3 rounded-xl border border-blue-200 bg-blue-50/60 p-4">
-            <Label>Payment</Label>
-
-            <div className="grid gap-4 md:grid-cols-2">
+          <div className="space-y-4 rounded-3xl border-2 border-emerald-100 bg-emerald-50/50 p-6">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="w-8 h-8 rounded-full bg-emerald-600/10 flex items-center justify-center text-emerald-700">
+                💰
+              </div>
+              <Label className="text-sm font-black uppercase tracking-widest text-emerald-900">Pricing & Rate</Label>
+            </div>
+            
+            <div className="grid gap-6 md:grid-cols-2">
               <div className="space-y-2">
-                <Label>Plan Amount</Label>
-                <Input value={planAmount} disabled />
+                <p className="text-xs font-bold text-emerald-600 uppercase">Standard Plan Price</p>
+                <div className="text-2xl font-black text-emerald-950/30">₹{planAmount}</div>
               </div>
 
               <div className="space-y-2">
-                <Label>Amount Paid</Label>
-                <Input
-                  type="number"
-                  value={amountPaid}
-                  onChange={(e) => setAmountPaid(e.target.value)}
-                  placeholder="Leave blank if unpaid"
-                />
+                <Label className="text-xs font-bold text-emerald-700 uppercase">Negotiated Monthly Rate</Label>
+                <div className="relative">
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 font-black text-emerald-600">₹</span>
+                  <Input
+                    type="number"
+                    value={rate}
+                    onChange={(e) => setRate(e.target.value)}
+                    className="pl-8 h-12 rounded-2xl border-2 border-emerald-200 focus:ring-emerald-500 font-bold bg-white"
+                    placeholder="Enter rate"
+                    required
+                    min="1"
+                  />
+                </div>
               </div>
             </div>
-
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => setAmountPaid(planAmount)}
-              className="w-full"
-            >
-              Pay Full Amount
-            </Button>
+            
+            <p className="text-[10px] text-emerald-600 font-medium italic">
+              * By default, the rate is set to the plan price. You can adjust it for this specific customer.
+            </p>
           </div>
         )}
 
