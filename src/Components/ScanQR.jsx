@@ -19,7 +19,7 @@ export default function ScanQR({ onDetected }) {
       </div>
 
       {/* Scanner Box Container */}
-      <div className="relative w-full max-w-[650px] aspect-square group">
+      <div className="relative w-full max-w-[620px] xl:max-w-[680px] aspect-square group">
         
         {/* Neon Corner Brackets */}
         <div className="absolute -inset-2 z-20 pointer-events-none">
