@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react"
 import ScanQR from "../Components/ScanQR"
 import Card from "../Components/Card"
 import api from "../Lib/axios"
+import { Clock, Users, Utensils } from "lucide-react"
 
 export default function Scan() {
   const [status, setStatus] = useState(null)
