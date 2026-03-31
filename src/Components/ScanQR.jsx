@@ -19,25 +19,25 @@ export default function ScanQR({ onDetected }) {
       </div>
 
       {/* Scanner Box Container */}
-      <div className="relative w-full max-w-[420px] aspect-square group">
+      <div className="relative w-full max-w-[650px] aspect-square group">
         
         {/* Neon Corner Brackets */}
-        <div className="absolute -inset-1 z-20 pointer-events-none">
+        <div className="absolute -inset-2 z-20 pointer-events-none">
            {/* Top Left */}
-           <div className="absolute top-0 left-0 w-10 h-10 border-t-[6px] border-l-[6px] border-emerald-400 rounded-tl-2xl shadow-[0_0_15px_rgba(52,211,153,0.4)]"></div>
+           <div className="absolute top-0 left-0 w-14 h-14 border-t-[8px] border-l-[8px] border-emerald-400 rounded-tl-3xl shadow-[0_0_20px_rgba(52,211,153,0.5)]"></div>
            {/* Top Right */}
-           <div className="absolute top-0 right-0 w-10 h-10 border-t-[6px] border-r-[6px] border-emerald-400 rounded-tr-2xl shadow-[0_0_15px_rgba(52,211,153,0.4)]"></div>
+           <div className="absolute top-0 right-0 w-14 h-14 border-t-[8px] border-r-[8px] border-emerald-400 rounded-tr-3xl shadow-[0_0_20px_rgba(52,211,153,0.5)]"></div>
            {/* Bottom Left */}
-           <div className="absolute bottom-0 left-0 w-10 h-10 border-b-[6px] border-l-[6px] border-emerald-400 rounded-bl-2xl shadow-[0_0_15px_rgba(52,211,153,0.4)]"></div>
+           <div className="absolute bottom-0 left-0 w-14 h-14 border-b-[8px] border-l-[8px] border-emerald-400 rounded-bl-3xl shadow-[0_0_20px_rgba(52,211,153,0.5)]"></div>
            {/* Bottom Right */}
-           <div className="absolute bottom-0 right-0 w-10 h-10 border-b-[6px] border-r-[6px] border-emerald-400 rounded-br-2xl shadow-[0_0_15px_rgba(52,211,153,0.4)]"></div>
+           <div className="absolute bottom-0 right-0 w-14 h-14 border-b-[8px] border-r-[8px] border-emerald-400 rounded-br-3xl shadow-[0_0_20px_rgba(52,211,153,0.5)]"></div>
            
            {/* Animated Laser Line */}
-           <div className="absolute left-4 right-4 h-0.5 bg-emerald-400 shadow-[0_0_20px_#10b981] opacity-70 animate-scan-line-full z-30"></div>
+           <div className="absolute left-6 right-6 h-1 bg-emerald-400 shadow-[0_0_30px_#10b981] opacity-70 animate-scan-line-full z-30"></div>
         </div>
 
         {/* Camera Preview Render */}
-        <div className="relative h-full w-full rounded-[2rem] overflow-hidden border-4 border-white/5 bg-black/40 ring-1 ring-white/10">
+        <div className="relative h-full w-full rounded-[3rem] overflow-hidden border-8 border-white/5 bg-black/40 ring-1 ring-white/10 shadow-2xl">
           <Scanner
             onScan={(result) => {
               if (result?.[0]?.rawValue) onDetected(result[0].rawValue)
