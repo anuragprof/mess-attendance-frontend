@@ -59,13 +59,10 @@ export default function App() {
               )
             }
           />
-
-          {/* Layout completely hidden on scan */}
-          <Route path="/scan" element={<Scan />} />
-
           {/* Routes protected by DashboardLayout */}
           <Route element={<DashboardLayout me={me} setMe={setMe} />}>
             {/* Attendance Module Routes */}
+            <Route path="/scan" element={<Scan />} />
             <Route path="/billing" element={<BillingPage />} />
             <Route path="/renew-plan" element={<Billing />} />
             <Route path="/register" element={<CustomerRegistration />} />

@@ -1,8 +1,8 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import Card from "../Components/Card";
 import { toast } from "sonner";
 import axios from "@/Lib/axios";
-import { generateWhatsAppLink } from "@/Lib/whatsapp";
 import {
   Select,
   SelectContent,
@@ -11,12 +11,7 @@ import {
   SelectValue,
 } from "@/Pages/ui/select";
 import MealDistributionChart from "../Components/MealDistributionChart";
-import {
-  Users,
-  Utensils,
-  Clock,
-  Calendar
-} from "lucide-react";
+import DailyTrendChart from "../Components/DailyTrendChart";
 
 export default function Admin() {
 const [customers, setCustomers] = useState([]);
@@ -26,37 +21,16 @@ const [editingCustomer, setEditingCustomer] = useState(null);
 const [renewCustomer, setRenewCustomer] = useState(null);
 const [openDropdown, setOpenDropdown] = useState(null);
 const [previewCustomer, setPreviewCustomer] = useState(null);
-const [isUpdating, setIsUpdating] = useState(false);
-
 
 // Analytics State
 const [mealDistribution, setMealDistribution] = useState(null);
-const [dashboardStats, setDashboardStats] = useState({
-  active_one_time_users: 0,
-  active_two_time_users: 0,
-  pending_meals_today: 0,
-  pending_lunch: 0,
-  pending_dinner: 0
-});
-const [loadingStats, setLoadingStats] = useState(true);
-
-// Track mount state to suppress errors during logout/unmount
-const mountedRef = useRef(true);
+const [dailyTrend, setDailyTrend] = useState(null);
 
 useEffect(() => {
-  mountedRef.current = true;
   fetchCustomers();
   fetchPlans();
   fetchMealDistribution();
-  fetchDashboardStats();
-  
-  // Auto-refresh stats every 5 minutes
-  const interval = setInterval(fetchDashboardStats, 5 * 60 * 1000);
-  
-  return () => { 
-    mountedRef.current = false; 
-    clearInterval(interval);
-  };
+  fetchDailyTrend();
 }, []);
 
 const fetchCustomers = async () => {
@@ -64,9 +38,9 @@ try {
 const res = await axios.get("/customers/", {
 withCredentials: true,
 });
-if (mountedRef.current) setCustomers(res.data);
+setCustomers(res.data);
 } catch {
-if (mountedRef.current) toast.error("Failed to load customers");
+toast.error("Failed to load customers");
 }
 };
 
@@ -75,9 +49,9 @@ try {
 const res = await axios.get("/plans/", {
 withCredentials: true,
 });
-if (mountedRef.current) setPlans(res.data);
+setPlans(res.data);
 } catch {
-if (mountedRef.current) toast.error("Failed to load plans");
+toast.error("Failed to load plans");
 }
 };
 
@@ -104,17 +78,14 @@ const fetchMealDistribution = async () => {
   }
 };
 
-const fetchDashboardStats = async () => {
+const fetchDailyTrend = async () => {
   try {
-    setLoadingStats(true);
-    const res = await axios.get("/analytics/stats", {
+    const res = await axios.get("/analytics/daily-trend", {
       withCredentials: true,
     });
-    if (mountedRef.current) setDashboardStats(res.data);
+    setDailyTrend(res.data);
   } catch (error) {
-    console.error("Failed to fetch dashboard stats:", error);
-  } finally {
-    if (mountedRef.current) setLoadingStats(false);
+    console.error("Failed to fetch daily trend:", error);
   }
 };
 
@@ -131,36 +102,22 @@ toast.error("Delete failed");
 };
 
 const handleUpdate = async () => {
-    if (!editingCustomer) return;
-    
-    setIsUpdating(true);
-    try {
-        const original = customers.find(c => c.id === editingCustomer.id);
-        const payload = {};
-        
-        if (editingCustomer.full_name !== original.full_name) payload.full_name = editingCustomer.full_name;
-        if (editingCustomer.phone_number !== original.phone_number) payload.phone_number = editingCustomer.phone_number;
-        if (editingCustomer.email !== original.email) payload.email = editingCustomer.email;
+const data = new FormData();
+data.append("full_name", editingCustomer.full_name);
+data.append("phone_number", editingCustomer.phone_number);
+data.append("email", editingCustomer.email);
+data.append("plan_id", editingCustomer.plan_id);
 
-        // If nothing changed, just close
-        if (Object.keys(payload).length === 0) {
-            setEditingCustomer(null);
-            return;
-        }
 
-        await axios.patch(`/customers/${editingCustomer.id}`, payload, {
-            withCredentials: true,
-        });
+await axios.put(`/customers/${editingCustomer.id}`, data, {
+  withCredentials: true,
+});
 
-        toast.success("Customer updated successfully");
-        setEditingCustomer(null);
-        fetchCustomers();
-    } catch (error) {
-        console.error("Update failed:", error);
-        toast.error(error.response?.data?.detail || "Update failed");
-    } finally {
-        setIsUpdating(false);
-    }
+toast.success("Customer updated");
+setEditingCustomer(null);
+fetchCustomers();
+
+
 };
 
 const handleRenew = async () => {
@@ -245,12 +202,21 @@ year: "numeric",
 
 // WHATSAPP FUNCTION
 const sendWhatsAppMessage = (phone) => {
-    const link = generateWhatsAppLink(phone);
-    if (link) window.open(link, "_blank");
+const message = `
+Hello 👋
+
+Your Mess Registration is successful.
+
+Please visit the mess counter to scan your QR and mark attendance.
+
+Thank you.
+`;
+    const whatsappUrl = `https://wa.me/91${phone}?text=${encodeURIComponent(message)}`;
+window.open(whatsappUrl, "_blank");
 };
 
   return (
-  <div className="space-y-6 animate-in fade-in duration-500 pb-10">
+  <div className="space-y-2">
     
     {/* Floating Card Content */}
     <div className="gradient-card mt-1">
@@ -263,7 +229,7 @@ const sendWhatsAppMessage = (phone) => {
           onChange={(e) => setSearch(e.target.value)}
         />
 
-        <div className="overflow-x-auto overflow-y-auto max-h-[60vh] lg:max-h-[240px]">
+        <div className="overflow-x-auto overflow-y-auto max-h-[240px]">
           <table className="w-full">
             <thead className="bg-zinc-50 border-y border-zinc-200 text-xs uppercase text-zinc-500 tracking-wider">
           <tr>
@@ -272,7 +238,6 @@ const sendWhatsAppMessage = (phone) => {
             <th className="p-1 text-left">Phone</th>
             {/* <th className="p-1 text-left">Email</th> */}
             <th className="p-1 text-left">QR</th>
-            <th className="p-1 text-left">Meal Plan</th>
             <th className="p-1 text-left">Expiry</th>
             <th className="p-1 text-left">Actions</th>
           </tr>
@@ -326,12 +291,6 @@ const sendWhatsAppMessage = (phone) => {
                   onClick={() => setPreviewCustomer(customer)}
                   className="w-10 h-10 border rounded-md cursor-pointer hover:scale-105 transition"
                 />
-              </td>
-
-              <td className="p-1">
-                <span className="text-sm font-medium text-emerald-700 bg-emerald-50 px-2 py-1 rounded-lg border border-emerald-100 italic">
-                  {customer.meal_plan || "N/A"}
-                </span>
               </td>
 
               <td className="p-1">
@@ -410,7 +369,7 @@ const sendWhatsAppMessage = (phone) => {
 
           {filteredCustomers.length === 0 && (
             <tr>
-              <td colSpan="7" className="p-4 text-center text-zinc-500">
+              <td colSpan="6" className="p-4 text-center text-zinc-500">
                 No customers found
               </td>
             </tr>
@@ -421,159 +380,114 @@ const sendWhatsAppMessage = (phone) => {
   </div>
 </div>
 
-{/* Analytics & Operational Metrics Section */}
-<div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-6">
-  
-  {/* LEFT: Consumption Distribution (Pie Chart) - Original Layout */}
-  <div className="h-[340px]">
-    <div className="gradient-card p-6 h-full flex flex-col">
-      <div className="mb-4">
-        <h2 className="text-lg font-bold tracking-tight text-zinc-800">Today's Consumption</h2>
-        <p className="text-[10px] text-zinc-500">Meal session distribution overview</p>
-      </div>
-      
-      <div className="flex-1">
-        {mealDistribution ? (
-          <MealDistributionChart data={mealDistribution} />
-        ) : (
-          <div className="h-full w-full flex items-center justify-center">
-            <p className="text-zinc-500 animate-pulse text-xs">Loading analytics...</p>
-          </div>
-        )}
-      </div>
+{/* Analytics Section */}
+<div className="mt-2 text-zinc-800">
+  <div className="mb-1 flex items-center justify-between">
+    <div>
+      <h2 className="text-lg font-bold tracking-tight">Analytics</h2>
+      <p className="text-[10px] text-zinc-500">Meal distribution and daily scan trend</p>
     </div>
   </div>
-
-  {/* RIGHT: Stacked Metrics (Replacing Daily Trend) */}
-  <div className="h-[340px] flex flex-col gap-4">
-    {/* TOP: Pending Today Card */}
-    <div className="flex-1">
-      <div className="gradient-card p-6 h-full border-l-4 border-l-rose-500 flex flex-col justify-center bg-rose-50/30 hover:shadow-md transition-all">
-         <div className="flex items-start justify-between">
-            <div className="space-y-1">
-               <p className="text-[10px] font-bold text-rose-600 uppercase tracking-widest flex items-center gap-1.5">
-                  Pending Today
-                  <span className="flex h-2 w-2 rounded-full bg-rose-500 animate-pulse"></span>
-               </p>
-               <h4 className="text-4xl font-black text-rose-700 tracking-tighter">
-                 {dashboardStats.pending_meals_today}
-               </h4>
-               <div className="flex gap-4 mt-1">
-                  <span className="text-xs font-bold text-zinc-600">
-                     🍱 {dashboardStats.pending_lunch} <span className="text-[10px] font-medium text-zinc-400 ml-0.5 uppercase">Lunch</span>
-                  </span>
-                  <span className="text-xs font-bold text-zinc-600">
-                     🌙 {dashboardStats.pending_dinner} <span className="text-[10px] font-medium text-zinc-400 ml-0.5 uppercase">Dinner</span>
-                  </span>
-               </div>
-            </div>
-            <div className="p-3 bg-rose-100 rounded-2xl text-rose-600">
-               <Utensils size={28} />
-            </div>
-         </div>
-      </div>
+  
+  <div className="grid md:grid-cols-2 gap-3">
+    <div className="h-[240px]">
+      {mealDistribution ? (
+        <MealDistributionChart data={mealDistribution} />
+      ) : (
+        <div className="h-full w-full flex items-center justify-center bg-white rounded-2xl shadow-sm border border-zinc-100">
+          <p className="text-zinc-500 animate-pulse">Loading meal distribution...</p>
+        </div>
+      )}
     </div>
-
-    {/* BOTTOM: Active Users Card */}
-    <div className="flex-1">
-      <div className="gradient-card p-6 h-full border-l-4 border-l-blue-500 flex flex-col justify-center hover:shadow-md transition-all">
-         <div className="flex items-start justify-between">
-            <div className="space-y-1">
-               <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Active Users</p>
-               <h4 className="text-4xl font-black text-zinc-900 tracking-tighter">
-                 {dashboardStats.active_one_time_users + dashboardStats.active_two_time_users}
-               </h4>
-               <p className="text-[10px] text-zinc-400 font-medium">
-                  1 Meal: {dashboardStats.active_one_time_users} | 2 Meal: {dashboardStats.active_two_time_users}
-               </p>
-            </div>
-            <div className="p-3 bg-blue-50 rounded-2xl text-blue-500">
-               <Users size={28} />
-            </div>
-         </div>
-      </div>
+    
+    <div className="h-[240px]">
+      {dailyTrend ? (
+        <DailyTrendChart 
+          data={dailyTrend.trend} 
+          todayTotal={dailyTrend.today_total} 
+          yesterdayTotal={dailyTrend.yesterday_total} 
+        />
+      ) : (
+        <div className="h-full w-full flex items-center justify-center bg-white rounded-2xl shadow-sm border border-zinc-100">
+          <p className="text-zinc-500 animate-pulse">Loading daily trend...</p>
+        </div>
+      )}
     </div>
   </div>
 </div>
 
 {/* EDIT MODAL */}
   {editingCustomer && (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-40 p-4">
-      <div className="bg-white p-6 rounded-2xl w-full max-w-md shadow-2xl space-y-4 border border-zinc-200">
-        <div className="flex justify-between items-center mb-2">
-          <h3 className="text-xl font-bold text-zinc-800">Edit Information</h3>
-          <span className="text-xs font-mono text-zinc-400">ID: {editingCustomer.id}</span>
-        </div>
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-40">
+      <div className="bg-white p-6 rounded-xl w-full max-w-md space-y-4">
+        <h3 className="text-lg font-semibold">Edit Information</h3>
 
-        <div className="space-y-3">
-          <div>
-            <label className="text-[10px] uppercase font-bold text-zinc-500 ml-1">Full Name</label>
-            <input
-              className="w-full bg-zinc-50 border border-zinc-200 p-2.5 rounded-xl focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all"
-              placeholder="Full Name"
-              value={editingCustomer.full_name || ""}
-              onChange={(e) =>
-                setEditingCustomer({
-                  ...editingCustomer,
-                  full_name: e.target.value,
-                })
-              }
-            />
-          </div>
+        <input
+          className="border p-2 w-full rounded"
+          value={editingCustomer.full_name}
+          onChange={(e) =>
+            setEditingCustomer({
+              ...editingCustomer,
+              full_name: e.target.value,
+            })
+          }
+        />
 
-          <div>
-            <label className="text-[10px] uppercase font-bold text-zinc-500 ml-1">Phone Number</label>
-            <input
-              className="w-full bg-zinc-50 border border-zinc-200 p-2.5 rounded-xl focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all"
-              placeholder="Phone Number"
-              value={editingCustomer.phone_number || ""}
-              onChange={(e) =>
-                setEditingCustomer({
-                  ...editingCustomer,
-                  phone_number: e.target.value,
-                })
-              }
-            />
-          </div>
+        <input
+          className="border p-2 w-full rounded"
+          value={editingCustomer.phone_number}
+          onChange={(e) =>
+            setEditingCustomer({
+              ...editingCustomer,
+              phone_number: e.target.value,
+            })
+          }
+        />
 
-          <div>
-            <label className="text-[10px] uppercase font-bold text-zinc-500 ml-1">Email Address</label>
-            <input
-              className="w-full bg-zinc-50 border border-zinc-200 p-2.5 rounded-xl focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all"
-              placeholder="Email"
-              value={editingCustomer.email || ""}
-              onChange={(e) =>
-                setEditingCustomer({
-                  ...editingCustomer,
-                  email: e.target.value,
-                })
-              }
-            />
-          </div>
-        </div>
+        <input
+          className="border p-2 w-full rounded"
+          value={editingCustomer.email}
+          onChange={(e) =>
+            setEditingCustomer({
+              ...editingCustomer,
+              email: e.target.value,
+            })
+          }
+        />
 
-        <div className="flex gap-3 pt-4">
+        <Select
+          value={String(editingCustomer.plan_id || "")}
+          onValueChange={(v) =>
+            setEditingCustomer({
+              ...editingCustomer,
+              plan_id: Number(v),
+            })
+          }
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="Select Plan" />
+          </SelectTrigger>
+
+          <SelectContent>
+            {plans.map((plan) => (
+              <SelectItem key={plan.id} value={String(plan.id)}>
+                {plan.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+
+        <div className="flex gap-3">
           <button
-            className={`flex-1 bg-emerald-600 text-white font-bold py-3 rounded-xl shadow-lg shadow-emerald-600/20 hover:bg-emerald-700 transition-all flex items-center justify-center gap-2 ${
-              isUpdating ? "opacity-70 cursor-not-allowed" : ""
-            }`}
+            className="bg-green-600 text-white px-4 py-2 rounded flex-1"
             onClick={handleUpdate}
-            disabled={isUpdating}
           >
-            {isUpdating ? (
-              <>
-                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                Saving...
-              </>
-            ) : (
-              "Save Changes"
-            )}
+            Save
           </button>
 
           <button
-            className="flex-1 bg-zinc-100 text-zinc-600 font-bold py-3 rounded-xl hover:bg-zinc-200 transition-all"
+            className="bg-gray-400 text-white px-4 py-2 rounded flex-1"
             onClick={() => setEditingCustomer(null)}
-            disabled={isUpdating}
           >
             Cancel
           </button>
@@ -660,15 +574,12 @@ const sendWhatsAppMessage = (phone) => {
           </div>
 
           <div className="flex flex-col items-center">
-            <p className="font-medium mb-3 text-zinc-500 text-xs uppercase tracking-widest">Branded QR Identity</p>
-            <div className="bg-white p-2 rounded-3xl border-2 border-zinc-100 shadow-2xl overflow-hidden hover:shadow-emerald-500/10 transition-all">
-              <img
-                src={previewCustomer.qr_url}
-                alt="Branded QR"
-                className="w-72 h-auto object-contain"
-              />
-            </div>
-            <p className="mt-4 text-[10px] text-zinc-400 font-medium">This image includes auto-baked branding for sharing</p>
+            <p className="font-medium mb-2">QR Code</p>
+            <img
+              src={previewCustomer.qr_url}
+              alt="qr"
+              className="w-64 h-64 border rounded-xl shadow-lg"
+            />
           </div>
         </div>
 
@@ -684,6 +595,10 @@ const sendWhatsAppMessage = (phone) => {
     </div>
   )}
 
+  <div className="grid md:grid-cols-2 gap-4">
+    <Card title="Issue QR / Student">Coming soon…</Card>
+    <Card title="Meals & Slots">Coming soon…</Card>
+  </div>
 </div>
 
 
