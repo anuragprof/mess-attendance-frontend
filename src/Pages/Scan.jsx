@@ -113,6 +113,15 @@ export default function Scan() {
     return "bg-rose-50 border-rose-200 text-rose-700"
   }
 
+  const getCardStatusStyle = () => {
+    if (!status) return ""
+    if (status.type === "success")
+        return "!bg-gradient-to-r !from-emerald-100 !to-emerald-200 !border-emerald-300"
+    if (status.type === "warning")
+        return "!bg-gradient-to-r !from-amber-100 !to-amber-200 !border-amber-300"
+    return "!bg-gradient-to-r !from-rose-100 !to-rose-200 !border-rose-300"
+  }
+
   const formatDate = (dateString) => {
     if (!dateString) return "—"
     return new Date(dateString).toLocaleDateString("en-IN", {
@@ -139,22 +148,14 @@ export default function Scan() {
       {/* Main Grid Area - Viewport Constrained */}
       <div className="flex-1 flex flex-col lg:flex-row gap-8 overflow-hidden">
         
-        {/* LEFT COLUMN: SCANNER - Fluid width */}
+        {/* LEFT COLUMN: SCANNER - Increased size and visually dominant */}
         <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
            <Card title="Scan Student QR">
-              <div className="h-full flex flex-col overflow-hidden">
-                 <div className="flex-1 flex items-center justify-center p-2 min-h-0">
-                    <div className="relative w-full max-w-[450px] aspect-square rounded-[2rem] overflow-hidden border-8 border-zinc-50 shadow-inner bg-zinc-100">
+              <div className="h-full flex flex-col items-center justify-center overflow-hidden">
+                 <div className="flex-1 w-full flex items-center justify-center p-2 min-h-0">
+                    <div className="relative w-full max-w-[550px] aspect-square rounded-[2rem] overflow-hidden border-8 border-zinc-50 shadow-inner bg-zinc-100">
                        <ScanQR onDetected={handleScan} />
                     </div>
-                 </div>
-                 
-                 <div className="flex-shrink-0 mt-4 p-5 bg-zinc-50 rounded-[2rem] border border-dashed border-zinc-200 text-center">
-                    <div className="w-10 h-10 bg-white rounded-xl shadow-sm border border-zinc-100 flex items-center justify-center mx-auto mb-2 text-zinc-400">
-                       <Hash size={18} />
-                    </div>
-                    <p className="text-xs font-black text-zinc-800 tracking-tight">Focus your camera on the QR Code</p>
-                    <p className="text-[9px] font-bold text-zinc-400 uppercase tracking-tighter mt-1">Real-time detection</p>
                  </div>
               </div>
            </Card>
@@ -164,9 +165,9 @@ export default function Scan() {
         <div className="w-full lg:w-[500px] flex flex-col min-h-0 overflow-hidden">
            
            <div className="flex-1 overflow-y-auto pr-2 flex flex-col gap-6 custom-scrollbar">
-              {/* SECTION 1: Recent Scan Result */}
+              {/* SECTION 1: Recent Scan Result with Dynamic Card Style */}
               <div className="flex-shrink-0 animate-in fade-in slide-in-from-right duration-500">
-                 <Card title="Recent Scan Output">
+                 <Card title="Recent Scan Output" className={getCardStatusStyle()}>
                     {loading ? (
                        <div className="py-20 flex flex-col items-center justify-center gap-4">
                           <div className="w-12 h-12 border-4 border-emerald-100 border-t-emerald-600 rounded-full animate-spin"></div>
