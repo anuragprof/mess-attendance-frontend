@@ -6,14 +6,38 @@ export default function ScanQR({ onDetected }) {
   const [error, setError] = useState(null)
 
   return (
-    <div className="w-full h-full flex items-center justify-center p-4">
-      <div className="relative w-full max-w-[min(450px,80vh)] aspect-square group">
+    <div className="w-full h-full bg-gradient-to-br from-slate-900 via-slate-900 to-blue-900 rounded-[2.5rem] p-8 flex flex-col items-center justify-between shadow-2xl relative overflow-hidden">
+      
+      {/* Decorative Background Glows */}
+      <div className="absolute -top-24 -left-24 w-64 h-64 bg-blue-500/10 rounded-full blur-[100px]"></div>
+      <div className="absolute -bottom-24 -right-24 w-64 h-64 bg-emerald-500/10 rounded-full blur-[100px]"></div>
+
+      {/* Top Status Pill */}
+      <div className="flex items-center gap-2 px-5 py-2 bg-white/5 backdrop-blur-md rounded-full border border-white/10 shadow-[0_0_15px_rgba(255,255,255,0.05)] mb-6">
+        <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_#34d399]"></div>
+        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/80">Live Scanner</span>
+      </div>
+
+      {/* Scanner Box Container */}
+      <div className="relative w-full max-w-[420px] aspect-square group">
         
-        {/* Modern Thick Border Container */}
-        <div className="absolute -inset-1 bg-gradient-to-tr from-emerald-600 to-teal-400 rounded-[3rem] blur opacity-20 group-hover:opacity-30 transition duration-500"></div>
-        
-        <div className="relative h-full w-full bg-white rounded-[3rem] border-4 border-white shadow-2xl overflow-hidden ring-4 ring-zinc-50">
-          
+        {/* Neon Corner Brackets */}
+        <div className="absolute -inset-1 z-20 pointer-events-none">
+           {/* Top Left */}
+           <div className="absolute top-0 left-0 w-10 h-10 border-t-[6px] border-l-[6px] border-emerald-400 rounded-tl-2xl shadow-[0_0_15px_rgba(52,211,153,0.4)]"></div>
+           {/* Top Right */}
+           <div className="absolute top-0 right-0 w-10 h-10 border-t-[6px] border-r-[6px] border-emerald-400 rounded-tr-2xl shadow-[0_0_15px_rgba(52,211,153,0.4)]"></div>
+           {/* Bottom Left */}
+           <div className="absolute bottom-0 left-0 w-10 h-10 border-b-[6px] border-l-[6px] border-emerald-400 rounded-bl-2xl shadow-[0_0_15px_rgba(52,211,153,0.4)]"></div>
+           {/* Bottom Right */}
+           <div className="absolute bottom-0 right-0 w-10 h-10 border-b-[6px] border-r-[6px] border-emerald-400 rounded-br-2xl shadow-[0_0_15px_rgba(52,211,153,0.4)]"></div>
+           
+           {/* Animated Laser Line */}
+           <div className="absolute left-4 right-4 h-0.5 bg-emerald-400 shadow-[0_0_20px_#10b981] opacity-70 animate-scan-line-full z-30"></div>
+        </div>
+
+        {/* Camera Preview Render */}
+        <div className="relative h-full w-full rounded-[2rem] overflow-hidden border-4 border-white/5 bg-black/40 ring-1 ring-white/10">
           <Scanner
             onScan={(result) => {
               if (result?.[0]?.rawValue) onDetected(result[0].rawValue)
@@ -21,56 +45,31 @@ export default function ScanQR({ onDetected }) {
             onError={(err) => setError(err?.message || 'Camera error')}
             constraints={{ facingMode: 'environment' }}
             allowMultiple={true}
-            scanDelay={1000}
+            scanDelay={1500}
             styles={{ 
-                container: { width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' },
-                video: { width: '100%', height: '100%', objectFit: 'cover' }
+                container: { width: '100%', height: '100%' },
+                video: { width: '100%', height: '100%', objectFit: 'cover', opacity: 0.85 }
             }}
-            components={{
-              audio: false,
-              torch: false,
-              finder: false // We will draw our own premium finder
-            }}
+            components={{ audio: false, torch: false, finder: false }}
           />
-
-          {/* Premium Brackets & Pulse Overlay */}
-          <div className="absolute inset-0 pointer-events-none flex flex-col items-center justify-center">
-            
-             {/* Pulsing Target Area Brackets */}
-             <div className="w-2/3 aspect-square relative opacity-80 animate-pulse-gentle">
-                {/* TL */}
-                <div className="absolute top-0 left-0 w-8 h-8 border-t-8 border-l-8 border-emerald-500 rounded-tl-xl shadow-[0_0_15px_rgba(16,185,129,0.5)]"></div>
-                {/* TR */}
-                <div className="absolute top-0 right-0 w-8 h-8 border-t-8 border-r-8 border-emerald-500 rounded-tr-xl shadow-[0_0_15px_rgba(16,185,129,0.5)]"></div>
-                {/* BL */}
-                <div className="absolute bottom-0 left-0 w-8 h-8 border-b-8 border-l-8 border-emerald-500 rounded-bl-xl shadow-[0_0_15px_rgba(16,185,129,0.5)]"></div>
-                {/* BR */}
-                <div className="absolute bottom-0 right-0 w-8 h-8 border-b-8 border-r-8 border-emerald-500 rounded-br-xl shadow-[0_0_15px_rgba(16,185,129,0.5)]"></div>
-                
-                {/* Scanning Laser Line (Animated) */}
-                <div className="absolute top-0 left-0 right-0 h-1 bg-emerald-500 shadow-[0_0_20px_#10b981] opacity-60 animate-scan-line"></div>
-             </div>
-
-             {/* Status Badge */}
-             <div className="absolute top-5 left-1/2 -translate-x-1/2 flex items-center gap-2 px-4 py-1.5 bg-black/60 backdrop-blur-md rounded-full border border-white/20">
-                <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_#34d399]"></div>
-                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/90">Live Scanner</span>
-                <Camera size={12} className="text-emerald-400 ml-1" />
-             </div>
-          </div>
-
-          {/* Error Overlay */}
-          {error && (
-            <div className="absolute inset-x-8 bottom-8 flex items-center gap-3 p-4 bg-rose-50 border border-rose-200 rounded-2xl shadow-xl animate-in fade-in slide-in-from-bottom duration-300">
-               <AlertCircle className="text-rose-600 flex-shrink-0" size={20} />
-               <div>
-                  <p className="text-[10px] font-black uppercase tracking-widest text-rose-500 leading-none mb-1">Camera Issue</p>
-                  <p className="text-sm font-bold text-rose-700">{error}</p>
-               </div>
-            </div>
-          )}
         </div>
+
+        {/* Error State */}
+        {error && (
+          <div className="absolute inset-0 z-40 bg-slate-900/90 backdrop-blur-sm flex flex-col items-center justify-center p-8 text-center rounded-[2rem]">
+             <AlertCircle className="text-rose-500 mb-3" size={40} />
+             <p className="text-sm font-black text-white/90 uppercase tracking-widest">{error}</p>
+             <button onClick={() => window.location.reload()} className="mt-4 px-6 py-2 bg-white/10 rounded-full text-[10px] font-black uppercase text-white hover:bg-white/20 transition">Retry Camera</button>
+          </div>
+        )}
       </div>
+
+      {/* Bottom Label */}
+      <div className="mt-8">
+        <h2 className="text-3xl font-black text-white tracking-tight text-center">Scan Student QR</h2>
+        <p className="text-[10px] font-bold text-white/30 uppercase tracking-[0.2em] mt-2">Position card inside frame</p>
+      </div>
+
     </div>
   )
 }
