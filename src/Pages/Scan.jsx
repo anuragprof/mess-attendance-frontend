@@ -123,10 +123,10 @@ export default function Scan() {
   }
 
   return (
-    <div className="h-full flex flex-col p-4 space-y-6 overflow-y-auto">
+    <div className="h-screen flex flex-col p-4 md:-m-4 md:p-8 bg-zinc-50 overflow-hidden">
       
-      {/* Page Header */}
-      <div className="flex items-center justify-between mb-2">
+      {/* Page Header (Fixed Height) */}
+      <div className="flex-shrink-0 flex items-center justify-between mb-6">
          <div className="space-y-1">
             <h1 className="text-3xl font-black text-zinc-900 tracking-tight">Attendance Scanner</h1>
             <p className="text-sm font-bold text-zinc-400 uppercase tracking-widest flex items-center gap-2">
@@ -136,142 +136,134 @@ export default function Scan() {
          </div>
       </div>
 
-      <div className="grid lg:grid-cols-12 gap-8 flex-1">
+      {/* Main Grid Area - Viewport Constrained */}
+      <div className="flex-1 flex flex-col lg:flex-row gap-8 overflow-hidden">
         
-        {/* LEFT COLUMN: SCANNER - 5/12 slots */}
-        <div className="lg:col-span-5 space-y-6">
+        {/* LEFT COLUMN: SCANNER - Fluid width */}
+        <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
            <Card title="Scan Student QR">
-              <div className="p-2">
-                 <div className="relative aspect-square rounded-[2rem] overflow-hidden border-8 border-zinc-50 shadow-inner bg-zinc-100">
-                    <ScanQR onDetected={handleScan} />
+              <div className="h-full flex flex-col overflow-hidden">
+                 <div className="flex-1 flex items-center justify-center p-2 min-h-0">
+                    <div className="relative w-full max-w-[450px] aspect-square rounded-[2rem] overflow-hidden border-8 border-zinc-50 shadow-inner bg-zinc-100">
+                       <ScanQR onDetected={handleScan} />
+                    </div>
                  </div>
                  
-                 <div className="mt-8 p-6 bg-zinc-50 rounded-[2rem] border border-dashed border-zinc-200 text-center">
-                    <div className="w-12 h-12 bg-white rounded-2xl shadow-sm border border-zinc-100 flex items-center justify-center mx-auto mb-3 text-zinc-400">
-                       <Hash size={20} />
+                 <div className="flex-shrink-0 mt-4 p-5 bg-zinc-50 rounded-[2rem] border border-dashed border-zinc-200 text-center">
+                    <div className="w-10 h-10 bg-white rounded-xl shadow-sm border border-zinc-100 flex items-center justify-center mx-auto mb-2 text-zinc-400">
+                       <Hash size={18} />
                     </div>
-                    <p className="text-sm font-black text-zinc-800">Position the QR Code within the frame</p>
-                    <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-tighter mt-1">Automatic detection enabled</p>
+                    <p className="text-xs font-black text-zinc-800 tracking-tight">Focus your camera on the QR Code</p>
+                    <p className="text-[9px] font-bold text-zinc-400 uppercase tracking-tighter mt-1">Real-time detection</p>
                  </div>
               </div>
            </Card>
         </div>
 
-        {/* RIGHT COLUMN: DETAILS & HISTORY - 7/12 slots */}
-        <div className="lg:col-span-7 flex flex-col gap-6 min-w-0">
+        {/* RIGHT COLUMN: DETAILS & HISTORY - Fixed width Desktop, Scrollable */}
+        <div className="w-full lg:w-[500px] flex flex-col min-h-0 overflow-hidden">
            
-           {/* SECTION 1: Recent Scan Result */}
-           <div className="animate-in fade-in slide-in-from-right duration-500">
-              <Card title="Recent Scan Output">
-                 {loading ? (
-                    <div className="py-20 flex flex-col items-center justify-center gap-4">
-                       <div className="w-12 h-12 border-4 border-emerald-100 border-t-emerald-600 rounded-full animate-spin"></div>
-                       <p className="text-xs font-black uppercase tracking-widest text-emerald-700">Verifying Identity...</p>
-                    </div>
-                 ) : status?.customer ? (
-                    <div className="p-2 space-y-6">
-                       {/* Result Message Banner */}
-                       <div className={`p-5 rounded-3xl border-2 flex items-center justify-between gap-4 ${getStatusStyle()}`}>
-                          <div>
-                             <p className="text-[10px] font-black uppercase tracking-[0.2em] opacity-60 mb-0.5 whitespace-nowrap">Scan Status</p>
-                             <h4 className="text-xl font-black tracking-tight">{status.text}</h4>
-                          </div>
-                          <div className={`w-10 h-10 rounded-full flex items-center justify-center bg-white shadow-sm font-bold text-lg`}>
-                             {status.type === "success" ? "✅" : status.type === "warning" ? "⚠️" : "❌"}
-                          </div>
+           <div className="flex-1 overflow-y-auto pr-2 flex flex-col gap-6 custom-scrollbar">
+              {/* SECTION 1: Recent Scan Result */}
+              <div className="flex-shrink-0 animate-in fade-in slide-in-from-right duration-500">
+                 <Card title="Recent Scan Output">
+                    {loading ? (
+                       <div className="py-20 flex flex-col items-center justify-center gap-4">
+                          <div className="w-12 h-12 border-4 border-emerald-100 border-t-emerald-600 rounded-full animate-spin"></div>
+                          <p className="text-xs font-black uppercase tracking-widest text-emerald-700">Verifying Identity...</p>
                        </div>
-
-                       {/* User Identity Details */}
-                       <div className="flex flex-col md:flex-row gap-8 items-start">
-                          <div className="relative group">
-                             <div className="absolute -inset-2 bg-gradient-to-tr from-emerald-600 to-teal-400 rounded-[2.5rem] blur opacity-15 group-hover:opacity-25 transition duration-500"></div>
-                             <img 
-                                src={status.customer.photo_url} 
-                                className="relative w-40 h-40 rounded-[2rem] object-cover border-4 border-white shadow-2xl" 
-                                alt={status.customer.name} 
-                             />
-                          </div>
-
-                          <div className="flex-1 space-y-5 py-1">
-                             <div>
-                                <h3 className="text-3xl font-black text-zinc-900 leading-none">{status.customer.name}</h3>
-                                <div className="mt-2 inline-flex items-center gap-2 px-3 py-1 bg-zinc-900 text-white rounded-full">
-                                   <Hash size={12} className="text-zinc-400" />
-                                   <span className="text-xs font-black tracking-widest">CUST-{status.customer.id}</span>
-                                </div>
-                             </div>
-
-                             <div className="grid grid-cols-2 gap-6">
-                                <div className="space-y-1">
-                                   <p className="text-[10px] font-black text-zinc-400 uppercase tracking-widest flex items-center gap-1.5">
-                                      <Phone size={10} className="text-emerald-500" /> Phone
-                                   </p>
-                                   <p className="text-sm font-black text-zinc-800">{status.customer.phone || "—"}</p>
-                                </div>
-                                <div className="space-y-1">
-                                   <p className="text-[10px] font-black text-zinc-400 uppercase tracking-widest flex items-center gap-1.5">
-                                      <Mail size={10} className="text-blue-500" /> Email
-                                   </p>
-                                   <p className="text-sm font-black text-zinc-800 truncate max-w-[150px]">{status.customer.email || "—"}</p>
-                                </div>
-                             </div>
-
-                             <div className="pt-4 border-t border-zinc-100 grid grid-cols-2 gap-6">
-                                <div className="space-y-1">
-                                   <p className="text-[10px] font-black text-zinc-400 uppercase tracking-widest flex items-center gap-1.5">
-                                      <Calendar size={10} className="text-rose-500" /> Plan Expiry
-                                   </p>
-                                   <p className="text-sm font-black text-zinc-800">{formatDate(status.customer.subscription_expiry)}</p>
-                                </div>
-                                <div className="space-y-1">
-                                   <p className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">Days Remaining</p>
-                                   <p className={`text-xl font-black ${status.customer.days_left <= 3 ? 'text-rose-600' : 'text-emerald-600'}`}>
-                                      {status.customer.days_left} Days
-                                   </p>
-                                </div>
-                             </div>
-                          </div>
-                       </div>
-                    </div>
-                 ) : (
-                    <div className="py-24 border-2 border-dashed border-zinc-100 rounded-[2.5rem] flex flex-col items-center justify-center text-zinc-300">
-                       <div className="w-16 h-16 bg-zinc-50 rounded-[2rem] mb-4 flex items-center justify-center shadow-inner">
-                          <Users size={32} />
-                       </div>
-                       <p className="text-sm font-black uppercase tracking-[0.2em]">Awaiting Identity Scan</p>
-                       <p className="text-[10px] font-bold text-zinc-400 mt-2">Latest student details will appear here</p>
-                    </div>
-                 )}
-              </Card>
-           </div>
-
-           {/* SECTION 2: Last 3 Scans History */}
-           <div className="animate-in fade-in slide-in-from-bottom duration-700">
-              <Card title="Last 3 Scans">
-                 <div className="p-2 space-y-3">
-                    {recentScans.length === 0 ? (
-                       <div className="py-10 text-center text-zinc-300 italic text-sm">No recent activity</div>
-                    ) : (
-                       recentScans.slice(0, 3).map((scan) => (
-                          <div key={scan.id} className="flex items-center gap-5 p-4 bg-zinc-50/50 rounded-3xl border border-zinc-100 group hover:bg-white hover:shadow-md transition-all duration-300">
-                             <img src={scan.photo_url} className="w-14 h-14 rounded-2xl object-cover border-2 border-white shadow-sm" alt="" />
+                    ) : status?.customer ? (
+                       <div className="p-1 space-y-6">
+                          {/* Result Message Banner */}
+                          <div className={`p-5 rounded-3xl border-2 flex items-center justify-between gap-4 ${getStatusStyle()}`}>
                              <div className="flex-1">
-                                <p className="text-base font-black text-zinc-900 tracking-tight">{scan.name}</p>
-                                <div className="flex items-center gap-3 mt-0.5">
-                                   <span className="text-[10px] font-bold text-emerald-600 uppercase bg-emerald-50 px-2 py-0.5 rounded-md">{scan.session}</span>
-                                   <span className="text-[10px] font-medium text-zinc-400 flex items-center gap-1">
-                                      <Clock size={10} /> {new Date(scan.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                   </span>
-                                </div>
+                                <p className="text-[9px] font-black uppercase tracking-[0.2em] opacity-60 mb-0.5 whitespace-nowrap">Scan Status</p>
+                                <h4 className="text-lg font-black tracking-tight">{status.text}</h4>
                              </div>
-                             <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-zinc-200 group-hover:text-emerald-500 transition-colors">
-                                <ArrowRight size={16} />
+                             <div className={`w-10 h-10 flex-shrink-0 rounded-full flex items-center justify-center bg-white shadow-sm font-bold text-lg`}>
+                                {status.type === "success" ? "✅" : status.type === "warning" ? "⚠️" : "❌"}
                              </div>
                           </div>
-                       ))
+
+                          {/* Identity Details */}
+                          <div className="flex gap-6 items-start">
+                             <div className="flex-shrink-0">
+                                <img 
+                                   src={status.customer.photo_url} 
+                                   className="w-32 h-32 rounded-[2rem] object-cover border-4 border-white shadow-2xl" 
+                                   alt={status.customer.name} 
+                                />
+                             </div>
+
+                             <div className="flex-1 space-y-4 pt-1">
+                                <div>
+                                   <h3 className="text-2xl font-black text-zinc-900 leading-none truncate max-w-[200px]">{status.customer.name}</h3>
+                                   <div className="mt-1.5 inline-flex items-center gap-1.5 px-2 py-0.5 bg-zinc-900 text-white rounded-full">
+                                      <span className="text-[9px] font-black tracking-widest">CUST-{status.customer.id}</span>
+                                   </div>
+                                </div>
+
+                                <div className="space-y-4 pt-2">
+                                   <div className="flex items-center gap-2">
+                                      <div className="w-7 h-7 bg-emerald-50 text-emerald-600 rounded-lg flex items-center justify-center"><Phone size={14} /></div>
+                                      <p className="text-sm font-black text-zinc-800">{status.customer.phone || "—"}</p>
+                                   </div>
+                                   <div className="flex items-center gap-2">
+                                      <div className="w-7 h-7 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center"><Mail size={14} /></div>
+                                      <p className="text-xs font-black text-zinc-800 truncate max-w-[150px]">{status.customer.email || "—"}</p>
+                                   </div>
+                                </div>
+                             </div>
+                          </div>
+
+                          <div className="pt-6 border-t border-zinc-100 flex items-center justify-between">
+                             <div className="space-y-1">
+                                <p className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">Expiry</p>
+                                <p className="text-sm font-black text-zinc-800">{formatDate(status.customer.subscription_expiry)}</p>
+                             </div>
+                             <div className="text-right">
+                                <p className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">Remaining</p>
+                                <p className={`text-xl font-black ${status.customer.days_left <= 3 ? 'text-rose-600' : 'text-emerald-600'}`}>
+                                   {status.customer.days_left} Days
+                                </p>
+                             </div>
+                          </div>
+                       </div>
+                    ) : (
+                       <div className="py-24 border-2 border-dashed border-zinc-100 rounded-[2.5rem] flex flex-col items-center justify-center text-zinc-300">
+                          <Users size={32} />
+                          <p className="text-xs font-black uppercase tracking-[0.2em] mt-3">Awaiting Scan</p>
+                       </div>
                     )}
-                 </div>
-              </Card>
+                 </Card>
+              </div>
+
+              {/* SECTION 2: Last 3 Scans History */}
+              <div className="flex-shrink-0 animate-in fade-in slide-in-from-bottom duration-700">
+                 <Card title="Last 3 Scans">
+                    <div className="p-1 space-y-3">
+                       {recentScans.length === 0 ? (
+                          <div className="py-10 text-center text-zinc-300 italic text-sm">No recent activity</div>
+                       ) : (
+                          recentScans.slice(0, 3).map((scan) => (
+                             <div key={scan.id} className="flex items-center gap-4 p-3 bg-zinc-50/50 rounded-2xl border border-zinc-100 group transition-all duration-300">
+                                <img src={scan.photo_url} className="w-12 h-12 rounded-xl object-cover border border-white shadow-sm" alt="" />
+                                <div className="flex-1 min-w-0">
+                                   <p className="text-sm font-black text-zinc-900 truncate tracking-tight">{scan.name}</p>
+                                   <div className="flex items-center gap-2 mt-0.5">
+                                      <span className="text-[9px] font-black text-emerald-600 uppercase bg-emerald-50 px-1.5 py-0.5 rounded">{scan.session}</span>
+                                      <span className="text-[9px] font-bold text-zinc-400 flex items-center gap-1 uppercase">
+                                         <Clock size={8} /> {new Date(scan.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                      </span>
+                                   </div>
+                                </div>
+                                <ArrowRight size={14} className="text-zinc-200" />
+                             </div>
+                          ))
+                       )}
+                    </div>
+                 </Card>
+              </div>
            </div>
 
         </div>
