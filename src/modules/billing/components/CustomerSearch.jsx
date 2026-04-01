@@ -91,7 +91,7 @@ export default function CustomerSearch({ selectedCustomer, setSelectedCustomer, 
           />
 
           {customers.length > 0 && (
-            <div className="absolute w-full bg-white border border-black/15 rounded-2xl mt-2 z-50 shadow-2xl overflow-hidden py-1 animate-in fade-in slide-in-from-top-2 duration-200">
+            <div className="absolute top-full w-full bg-white border border-black/15 rounded-2xl mt-2 z-50 shadow-2xl overflow-hidden py-1 animate-in fade-in slide-in-from-top-2 duration-200">
               {customers.map((c) => (
                 <button
                   key={c.id}
