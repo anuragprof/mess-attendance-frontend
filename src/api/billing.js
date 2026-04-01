@@ -32,6 +32,6 @@ export const renewSubscription = async (customerId, data) => {
  * GET /customers/transactions/recent
  */
 export const fetchRecentTransactions = async () => {
-  const res = await api.get("/customers/transactions/recent");
+  const res = await api.get("/payments/recent");
   return res.data;
 };
