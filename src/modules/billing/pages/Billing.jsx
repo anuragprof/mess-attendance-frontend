@@ -30,8 +30,13 @@ export default function BillingPage() {
     <div className="max-w-7xl mx-auto h-full flex flex-col animate-in fade-in duration-700 mt-4">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch lg:h-full">
         
-        {/* Left Column: Recent Activity (1/3) */}
-        <div className="lg:col-span-1 h-full">
+        {/* Payment Form (order-1 on mobile, order-2 on lg) */}
+        <div className="lg:col-span-2 h-full order-1 lg:order-2">
+           <PaymentForm onPaymentRecorded={fetchPayments} />
+        </div>
+
+        {/* Recent Activity (order-2 on mobile, order-1 on lg) */}
+        <div className="lg:col-span-1 h-full order-2 lg:order-1">
           {loading && payments.length === 0 ? (
             <div className="h-full min-h-[500px] w-full bg-white rounded-[32px] border border-zinc-100 flex items-center justify-center">
                <Loader2 className="h-10 w-10 text-zinc-200 animate-spin" />
@@ -39,11 +44,6 @@ export default function BillingPage() {
           ) : (
             <RecentPayments payments={payments} />
           )}
-        </div>
-
-        {/* Right Column: Payment Form (2/3) */}
-        <div className="lg:col-span-2 h-full">
-           <PaymentForm onPaymentRecorded={fetchPayments} />
         </div>
 
       </div>
