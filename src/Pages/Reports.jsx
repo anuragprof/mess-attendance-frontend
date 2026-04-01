@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "@/Lib/axios";
 import { toast } from "sonner";
-import { Calendar, Download, AlertCircle } from "lucide-react";
+import { Calendar, Download, AlertCircle, Sun, Moon } from "lucide-react";
 import { formatTimeIST } from "@/Lib/utils";
 import MealDistributionChart from "@/Components/MealDistributionChart";
 import RevenueBarChart from "@/Components/RevenueBarChart";
@@ -189,12 +189,13 @@ export default function Reports() {
                
                <div className="flex-1 space-y-4">
                   {[
-                    { name: "Lunch", color: "bg-blue-600" },
-                    { name: "Dinner", color: "bg-emerald-600" }
+                    { name: "Lunch", color: "text-blue-500", dot: "bg-blue-600", Icon: Sun, anim: "animate-[spin_10s_linear_infinite]" },
+                    { name: "Dinner", color: "text-emerald-500", dot: "bg-emerald-600", Icon: Moon, anim: "animate-pulse" }
                   ].map((m) => (
                     <div key={m.name} className="flex items-center justify-between group">
                        <div className="flex items-center gap-3">
-                          <div className={`w-2.5 h-2.5 rounded-full ${m.color} shadow-sm group-hover:scale-125 transition-transform`} />
+                          <div className={`w-2.5 h-2.5 rounded-full ${m.dot} shadow-sm group-hover:scale-125 transition-transform`} />
+                          <m.Icon size={14} className={`${m.color} ${m.anim}`} />
                           <span className="text-sm font-bold text-zinc-600">{m.name}</span>
                        </div>
                        <span className="text-lg font-black text-zinc-900 leading-none">

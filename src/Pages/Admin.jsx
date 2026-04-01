@@ -11,7 +11,7 @@ import {
   SelectValue,
 } from "@/Pages/ui/select";
 import MealDistributionChart from "../Components/MealDistributionChart";
-import { Search, UserPlus, FileText, Trash2, Edit3, RotateCw, MoreVertical, Phone, MessageCircle } from "lucide-react";
+import { Search, UserPlus, FileText, Trash2, Edit3, RotateCw, MoreVertical, Phone, MessageCircle, Sun, Moon } from "lucide-react";
 
 export default function Admin() {
 const [customers, setCustomers] = useState([]);
@@ -417,15 +417,21 @@ window.open(whatsappUrl, "_blank");
           </div>
           
           <div className="border-t border-zinc-100 pt-3 flex items-center justify-between">
-             <div className="text-center flex-1 border-r border-zinc-100">
-                <p className="text-[9px] font-bold text-zinc-400 uppercase tracking-tighter">Lunch</p>
-                <p className="text-base font-black text-blue-600">
+             <div className="text-center flex-1 border-r border-zinc-100 flex flex-col items-center">
+                <div className="flex items-center gap-1.5 mb-1">
+                   <Sun size={12} className="text-blue-500 animate-[spin_10s_linear_infinite]" />
+                   <p className="text-[9px] font-bold text-zinc-400 uppercase tracking-tighter">Lunch</p>
+                </div>
+                <p className="text-xl font-black text-blue-600 leading-none">
                    {mealDistribution?.find(m => m.name === "Lunch")?.value || 0}
                 </p>
              </div>
-             <div className="text-center flex-1">
-                <p className="text-[9px] font-bold text-zinc-400 uppercase tracking-tighter">Dinner</p>
-                <p className="text-base font-black text-emerald-600">
+             <div className="text-center flex-1 flex flex-col items-center">
+                <div className="flex items-center gap-1.5 mb-1">
+                   <Moon size={12} className="text-emerald-500 animate-pulse" />
+                   <p className="text-[9px] font-bold text-zinc-400 uppercase tracking-tighter">Dinner</p>
+                </div>
+                <p className="text-xl font-black text-emerald-600 leading-none">
                    {mealDistribution?.find(m => m.name === "Dinner")?.value || 0}
                 </p>
              </div>
