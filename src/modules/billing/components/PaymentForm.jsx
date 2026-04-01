@@ -109,7 +109,7 @@ export default function PaymentForm({ onPaymentRecorded }) {
 
   return (
     <div className="gradient-card p-6 h-full flex flex-col border border-black/15 shadow-sm overflow-hidden">
-      <div className="flex-1 min-h-0 overflow-y-auto pr-1 custom-scrollbar space-y-4">
+      <div className="flex-1 min-h-0 overflow-y-auto pr-1 custom-scrollbar space-y-4 pb-24 lg:pb-4">
         <div className="flex items-center justify-between pointer-events-none">
           <div className="space-y-0.5">
              <h2 className="text-xl font-black text-zinc-900 tracking-tight">Record Payment</h2>
