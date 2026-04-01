@@ -335,12 +335,12 @@ export default function Scan() {
         {/* RIGHT: OUTPUT & HISTORY (50%) */}
         <div className="h-full flex flex-col gap-6 min-h-0 overflow-hidden">
            {/* Section 1: Result Display */}
-           <div className="flex-[6] min-h-0">
+           <div className="flex-1 min-h-0">
               <ScanResultCard status={status} formatDate={formatDate} />
            </div>
 
            {/* Section 2: Recent Activity */}
-           <div className="flex-[4] min-h-0">
+           <div className="flex-1 min-h-0">
               <LastScansList scans={recentScans} />
            </div>
         </div>
