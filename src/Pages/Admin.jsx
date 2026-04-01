@@ -11,7 +11,7 @@ import {
   SelectValue,
 } from "@/Pages/ui/select";
 import MealDistributionChart from "../Components/MealDistributionChart";
-import { Search, UserPlus, FileText, Trash2, Edit3, RotateCw, MoreVertical, Phone, MessageCircle, Sun, Moon } from "lucide-react";
+import { Search, UserPlus, FileText, Trash2, Edit3, RotateCw, MoreVertical, Phone, MessageCircle, Sun, Moon, Cloud, Sparkles } from "lucide-react";
 
 export default function Admin() {
 const [customers, setCustomers] = useState([]);
@@ -410,16 +410,30 @@ window.open(whatsappUrl, "_blank");
         <div className="gradient-card p-4 h-full flex flex-col justify-between border border-zinc-100 overflow-hidden">
           <h3 className="text-base font-black text-zinc-800 mb-1 lg:mb-2 uppercase tracking-tight">Today's Consumption</h3>
           <div className="flex-1 flex flex-col items-center justify-center -mt-2 relative">
-             {/* Background Context Icon (Sun/Moon based on current time) */}
-             <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none">
-                {new Date().getUTCHours() + 5.5 >= 5 && new Date().getUTCHours() + 5.5 < 16 ? (
-                  <Sun size={120} className="text-blue-600 animate-[spin_20s_linear_infinite]" />
-                ) : (
-                  <Moon size={110} className="text-emerald-600 animate-pulse" />
-                )}
+             {/* Background Scenery (Sun/Cloud or Moon/Stars based on current time) */}
+             <div className="absolute inset-0 flex items-center justify-center opacity-[0.08] pointer-events-none transition-all duration-1000 overflow-hidden">
+                {(() => {
+                  const hour = (new Date().getUTCHours() + 5.5) % 24;
+                  if (hour >= 5 && hour < 16) {
+                    return (
+                      <div className="relative w-full h-full flex items-center justify-center">
+                        <Sun size={140} className="text-blue-600 animate-[spin_20s_linear_infinite] absolute -translate-x-6" />
+                        <Cloud size={60} className="text-blue-400 absolute translate-x-12 translate-y-6 animate-pulse" />
+                      </div>
+                    );
+                  } else {
+                    return (
+                      <div className="relative w-full h-full flex items-center justify-center">
+                        <Moon size={110} className="text-emerald-600 animate-[pulse_3s_ease-in-out_infinite] absolute" />
+                        <Sparkles size={24} className="text-emerald-400 absolute -translate-x-14 -translate-y-10 animate-pulse delay-700" />
+                        <Sparkles size={16} className="text-emerald-300 absolute translate-x-16 translate-y-8 animate-pulse" />
+                      </div>
+                    );
+                  }
+                })()}
              </div>
              
-             <div className="relative z-10 text-6xl font-black text-slate-800 tracking-tighter animate-in fade-in zoom-in-95 duration-700">
+             <div className="relative z-10 text-6xl font-black text-slate-800 tracking-tighter drop-shadow-sm animate-in fade-in zoom-in-95 duration-700">
                 {dailyTrend.today_total}
              </div>
              <p className="relative z-10 text-[10px] font-black text-blue-600 uppercase tracking-[0.2em] mt-1 opacity-80">Total Scans Today</p>
