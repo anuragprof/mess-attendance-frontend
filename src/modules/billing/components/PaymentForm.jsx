@@ -108,8 +108,8 @@ export default function PaymentForm({ onPaymentRecorded }) {
   };
 
   return (
-    <div className="gradient-card p-10 space-y-8 h-full flex flex-col justify-between border border-black/15 shadow-sm">
-      <div className="space-y-8">
+    <div className="gradient-card p-10 h-full flex flex-col border border-black/15 shadow-sm overflow-hidden">
+      <div className="flex-1 min-h-0 overflow-y-auto pr-1 custom-scrollbar space-y-8">
         <div className="flex items-center justify-between">
           <div className="space-y-1">
              <h2 className="text-2xl font-black text-zinc-900 tracking-tight">Record Payment</h2>
@@ -280,7 +280,7 @@ export default function PaymentForm({ onPaymentRecorded }) {
         </div>
       </div>
 
-      <div className="pt-6">
+      <div className="flex-shrink-0 pt-6">
         <Button
           onClick={handleSubmit}
           disabled={loadingPayment || !selectedCustomer || isPaidInFull}

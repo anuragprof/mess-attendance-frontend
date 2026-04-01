@@ -61,8 +61,8 @@ export default function DashboardLayout({ me, setMe }) {
         />
 
         {/* Page Content Slot — extra bottom padding on mobile for bottom nav */}
-        <main className="flex-1 p-4 lg:p-8 pb-20 lg:pb-8">
-          <div className="max-w-6xl mx-auto">
+        <main className="h-[calc(100vh-64px)] overflow-y-auto p-4 lg:p-8 pb-20 lg:pb-8">
+          <div className="max-w-6xl mx-auto h-full">
             <Outlet />
           </div>
         </main>
