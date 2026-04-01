@@ -38,7 +38,8 @@ try {
 const res = await axios.get("/customers/", {
 withCredentials: true,
 });
-setCustomers(res.data);
+// Guard: always store an array — API may return object or paginated shape
+setCustomers(Array.isArray(res.data) ? res.data : (res.data?.items ?? []));
 } catch {
 toast.error("Failed to load customers");
 }
@@ -49,7 +50,8 @@ try {
 const res = await axios.get("/plans/", {
 withCredentials: true,
 });
-setPlans(res.data);
+// Guard: always store an array
+setPlans(Array.isArray(res.data) ? res.data : (res.data?.items ?? []));
 } catch {
 toast.error("Failed to load plans");
 }
