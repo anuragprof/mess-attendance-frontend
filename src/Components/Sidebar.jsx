@@ -1,6 +1,5 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
 import { logoutVendor } from "../features/auth/api";
-import { X } from "lucide-react";
+import { X, LayoutDashboard, CreditCard, RefreshCw, BarChart3, Scan as ScanIcon, Landmark, Receipt, FolderOpen, PieChart as PieChartIcon, LogOut } from "lucide-react";
 import ModuleSwitcher from "./ModuleSwitcher";
 import { useModule, MODULES } from "../context/ModuleContext";
 
@@ -12,14 +11,14 @@ const SidebarItem = ({ to, icon, label, onClick }) => {
     <Link
       to={to}
       onClick={onClick}
-      className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
+      className={`flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all duration-200 ${
         active
           ? "bg-blue-600 text-white font-medium shadow-md shadow-blue-600/20"
-          : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900"
+          : "text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900"
       }`}
     >
-      <span className="text-lg">{icon}</span>
-      <span>{label}</span>
+      <span className={`${active ? 'text-white' : 'text-zinc-400 group-hover:text-zinc-900'}`}>{icon}</span>
+      <span className="text-sm font-medium">{label}</span>
     </Link>
   );
 };
@@ -64,7 +63,7 @@ export default function Sidebar({ me, setMe, isOpen, onClose }) {
       >
         {/* Brand Header */}
         <div className="h-16 flex items-center justify-between px-6 border-b border-zinc-100">
-          <h1 className="text-xl font-bold bg-gradient-to-r from-emerald-600 to-teal-400 bg-clip-text text-transparent tracking-tight">
+          <h1 className="text-xl font-black bg-gradient-to-r from-blue-600 to-indigo-500 bg-clip-text text-transparent tracking-tight">
             Happy Foods
           </h1>
           {/* Close button — mobile only */}
@@ -81,21 +80,21 @@ export default function Sidebar({ me, setMe, isOpen, onClose }) {
           <ModuleSwitcher />
 
           <p className="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">Navigation</p>
-          <nav className="flex flex-col gap-1.5">
+          <nav className="flex flex-col gap-1">
             {activeModule === MODULES.ATTENDANCE ? (
               <>
-                <SidebarItem to="/dashboard" icon="👥" label="Dashboard" onClick={handleNavClick} />
-                <SidebarItem to="/billing" icon="💳" label="Billing" onClick={handleNavClick} />
-                <SidebarItem to="/renew-plan" icon="🔄" label="Renew Plan" onClick={handleNavClick} />
-                <SidebarItem to="/reports" icon="📊" label="Attendance Reports" onClick={handleNavClick} />
-                <SidebarItem to="/scan" icon="📷" label="Scan QR" onClick={handleNavClick} />
+                <SidebarItem to="/dashboard" icon={<LayoutDashboard size={18} />} label="Dashboard" onClick={handleNavClick} />
+                <SidebarItem to="/billing" icon={<CreditCard size={18} />} label="Billing" onClick={handleNavClick} />
+                <SidebarItem to="/renew-plan" icon={<RefreshCw size={18} />} label="Renew Plan" onClick={handleNavClick} />
+                <SidebarItem to="/reports" icon={<BarChart3 size={18} />} label="Attendance Reports" onClick={handleNavClick} />
+                <SidebarItem to="/scan" icon={<ScanIcon size={18} />} label="Scan QR" onClick={handleNavClick} />
               </>
             ) : (
               <>
-                <SidebarItem to="/accounting/dashboard" icon="📈" label="Finance Dashboard" onClick={handleNavClick} />
-                <SidebarItem to="/accounting/expenses" icon="🧾" label="Expenses" onClick={handleNavClick} />
-                <SidebarItem to="/accounting/categories" icon="📁" label="Categories" onClick={handleNavClick} />
-                <SidebarItem to="/accounting/reports" icon="📉" label="Financial Reports" onClick={handleNavClick} />
+                <SidebarItem to="/accounting/dashboard" icon={<Landmark size={18} />} label="Finance Dashboard" onClick={handleNavClick} />
+                <SidebarItem to="/accounting/expenses" icon={<Receipt size={18} />} label="Expenses" onClick={handleNavClick} />
+                <SidebarItem to="/accounting/categories" icon={<FolderOpen size={18} />} label="Categories" onClick={handleNavClick} />
+                <SidebarItem to="/accounting/reports" icon={<PieChartIcon size={18} />} label="Financial Reports" onClick={handleNavClick} />
               </>
             )}
           </nav>
@@ -115,9 +114,9 @@ export default function Sidebar({ me, setMe, isOpen, onClose }) {
 
           <button
             onClick={handleLogout}
-            className="w-full flex items-center gap-3 px-4 py-3 text-red-600 hover:bg-red-50 rounded-xl transition-colors duration-200 text-left font-medium"
+            className="w-full flex items-center gap-3 px-4 py-3 text-red-600 hover:bg-emerald-50/50 rounded-xl transition-all duration-200 text-left font-bold text-sm tracking-tight"
           >
-            <span className="text-lg">🚪</span>
+            <LogOut size={18} />
             Logout
           </button>
         </div>

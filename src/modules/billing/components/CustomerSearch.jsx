@@ -81,10 +81,10 @@ export default function CustomerSearch({ selectedCustomer, setSelectedCustomer, 
           </div>
         </div>
       ) : (
-        <div className="relative group">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400 group-focus-within:text-zinc-900 transition-colors" />
-          <Input
-            className="pl-11 h-12 rounded-2xl border-black/15 bg-white/50 focus:bg-white focus:border-black focus:ring-0 transition-all font-medium placeholder:text-zinc-400"
+        <div className="search-wrapper group">
+          <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400 group-focus-within:text-blue-600 transition-all" />
+          <input
+            className="premium-input w-full pl-12"
             placeholder="Search by name, phone, or ID..."
             value={searchQuery}
             onChange={(e) => handleSearchChange(e.target.value)}

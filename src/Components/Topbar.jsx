@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Menu } from "lucide-react";
+import { Menu, Bell, UserPlus } from "lucide-react";
 
 export default function Topbar({ title, subtitle, onMenuToggle }) {
   return (
@@ -25,18 +25,18 @@ export default function Topbar({ title, subtitle, onMenuToggle }) {
       {/* Right side: Actions */}
       <div className="flex items-center gap-2 lg:gap-4">
         
-        <button className="relative p-2 text-zinc-500 hover:bg-zinc-100 rounded-full transition-colors">
-          🔔
-          <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
+        <button className="relative p-2 text-zinc-400 hover:text-zinc-900 hover:bg-zinc-100 rounded-xl transition-colors">
+          <Bell size={20} />
+          <span className="absolute top-2 right-2 w-2 h-2 bg-rose-500 rounded-full border-2 border-white animate-pulse"></span>
         </button>
 
         <div className="h-6 w-px bg-zinc-200 mx-1 hidden sm:block"></div>
 
         <Link
           to="/register"
-          className="bg-blue-600 hover:bg-blue-700 text-white shadow-sm shadow-blue-600/20 px-3 lg:px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-all transform hover:scale-[1.02] active:scale-95"
+          className="bg-blue-600 hover:bg-blue-700 text-white shadow-md shadow-blue-600/20 px-3 lg:px-4 py-2 rounded-xl text-sm font-bold flex items-center gap-2 transition-all transform hover:-translate-y-0.5 active:scale-95"
         >
-          <span>➕</span>
+          <UserPlus size={18} />
           <span className="hidden sm:inline">Add Customer</span>
         </Link>
       </div>

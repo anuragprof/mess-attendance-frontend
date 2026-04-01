@@ -1,5 +1,5 @@
-/* 1️⃣ Load Tailwind first */
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 @reference "tailwindcss";
 
 /* 2️⃣ Define your theme mapping to CSS vars (this creates utilities like bg-card, border-border, etc.) */
@@ -29,9 +29,11 @@
   --color-ring: hsl(var(--ring));
 
   /* optional radii */
-  --radius-lg: var(--radius);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-sm: calc(var(--radius) - 4px);
+  --radius-lg: 1rem;
+  --radius-md: 0.75rem;
+  --radius-sm: 0.5rem;
+
+  --font-inter: 'Inter', sans-serif;
 }
 
 /* 3️⃣ Now define your actual design tokens (light + dark modes) */
@@ -113,7 +115,15 @@
 
 @layer components {
   .gradient-card {
-    @apply bg-gradient-to-b from-blue-50/50 to-white border border-blue-200 rounded-2xl shadow-sm transition-all hover:shadow-md;
+    @apply bg-gradient-to-b from-blue-50/50 to-white border border-blue-100 rounded-3xl shadow-sm transition-all hover:shadow-md;
+  }
+
+  .premium-input {
+    @apply h-12 px-6 rounded-2xl border border-zinc-200 bg-white/70 backdrop-blur-sm focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-600/5 transition-all outline-none text-zinc-900 placeholder:text-zinc-400 font-medium;
+  }
+
+  .search-wrapper {
+    @apply relative flex items-center w-full shadow-sm shadow-zinc-200/50 rounded-2xl overflow-hidden;
   }
 }
 
@@ -132,11 +142,11 @@
 /* 4️⃣ After all this, you can safely use @apply */
 @layer base {
   * {
-    @apply border-border;
+    @apply border-zinc-200;
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-[#F9FAFB] text-zinc-900 font-inter antialiased;
   }
 }
 

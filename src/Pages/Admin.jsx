@@ -12,6 +12,7 @@ import {
 } from "@/Pages/ui/select";
 import MealDistributionChart from "../Components/MealDistributionChart";
 import DailyTrendChart from "../Components/DailyTrendChart";
+import { Search, UserPlus, FileText, Trash2, Edit3, RotateCw, MoreVertical, Phone, MessageCircle } from "lucide-react";
 
 export default function Admin() {
 const [customers, setCustomers] = useState([]);
@@ -223,13 +224,16 @@ window.open(whatsappUrl, "_blank");
     {/* Floating Card Content */}
     <div className="gradient-card mt-1">
       <div className="p-3">
-        <input
-          type="text"
-          placeholder="Search by ID, name, or email..."
-          className="bg-zinc-50 border border-zinc-200 p-2 mb-2 w-full rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all text-sm placeholder:text-zinc-400"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
+        <div className="search-wrapper mb-3 group">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400 group-focus-within:text-blue-600 transition-all" />
+          <input
+            type="text"
+            placeholder="Search by ID, name, or phone..."
+            className="premium-input w-full pl-11 !h-10 text-sm"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
 
         <div className="overflow-x-auto overflow-y-auto max-h-[240px]">
           <table className="w-full">
@@ -277,9 +281,10 @@ window.open(whatsappUrl, "_blank");
 
                   <button
                     onClick={() => sendWhatsAppMessage(customer.phone_number)}
-                    className="bg-green-500 text-white px-1.5 py-0.5 rounded text-[10px] hover:bg-green-600"
+                    className="p-1.5 bg-emerald-50 text-emerald-600 rounded-lg hover:bg-emerald-100 transition-colors shadow-sm shadow-emerald-500/5 group"
+                    title="Send WhatsApp"
                   >
-                    WhatsApp
+                    <MessageCircle size={14} className="group-hover:scale-110 transition-transform" />
                   </button>
                 </div>
               </td>
@@ -321,46 +326,48 @@ window.open(whatsappUrl, "_blank");
               <td className="p-1 relative">
                 <div className="relative inline-block text-left">
                   <button
-                    className="bg-gray-600 text-white px-2 py-0.5 rounded text-xs"
+                    className="p-1.5 text-zinc-400 hover:text-zinc-900 hover:bg-zinc-100 rounded-lg transition-all"
                     onClick={() =>
                       setOpenDropdown(
                         openDropdown === customer.id ? null : customer.id
                       )
                     }
                   >
-                    ⋮
+                    <MoreVertical size={16} />
                   </button>
 
                   {openDropdown === customer.id && (
-                    <div className="absolute right-0 mt-2 w-44 bg-white border rounded shadow-lg z-20">
+                    <div className="absolute right-0 mt-2 w-48 bg-white border border-zinc-100 rounded-2xl shadow-xl z-20 py-1 overflow-hidden animate-in fade-in zoom-in-95 duration-200">
                       <button
-                        className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                        className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 transition-colors"
                         onClick={() => {
                           setEditingCustomer(customer);
                           setOpenDropdown(null);
                         }}
                       >
-                        ✏️ Edit Information
+                        <Edit3 size={14} /> Edit Customer
                       </button>
 
                       <button
-                        className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                        className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 transition-colors"
                         onClick={() => {
                           setRenewCustomer(customer);
                           setOpenDropdown(null);
                         }}
                       >
-                        🔄 Renew Plan
+                        <RotateCw size={14} /> Renew Plan
                       </button>
 
+                      <div className="h-px bg-zinc-100 my-1" />
+
                       <button
-                        className="block w-full text-left px-4 py-2 text-red-600 hover:bg-red-50"
+                        className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm text-rose-600 hover:bg-rose-50 transition-colors"
                         onClick={() => {
                           deleteCustomer(customer.id);
                           setOpenDropdown(null);
                         }}
                       >
-                        ❌ Delete
+                        <Trash2 size={14} /> Delete
                       </button>
                     </div>
                   )}
