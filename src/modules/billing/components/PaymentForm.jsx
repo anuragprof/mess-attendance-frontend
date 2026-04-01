@@ -5,7 +5,7 @@ import { Button } from "@/Pages/ui/button";
 import { Input } from "@/Pages/ui/input";
 import { Label } from "@/Pages/ui/label";
 import { Textarea } from "@/Pages/ui/textarea";
-import { Banknote, Smartphone, Loader2, Save } from "lucide-react";
+import { Banknote, Smartphone, Loader2, Save, CheckCircle2, Lock } from "lucide-react";
 
 import CustomerSearch from "./CustomerSearch";
 import PaymentHistoryModal from "./PaymentHistoryModal";
@@ -54,9 +54,22 @@ export default function PaymentForm({ onPaymentRecorded }) {
     setPlanDetails(null);
   };
 
+  // Derived: is the plan fully paid?
+  const isPaidInFull = planDetails !== null && (planDetails.remaining ?? 1) <= 0;
+  const remainingBalance = planDetails?.remaining ?? null;
+
   const handleSubmit = async () => {
     if (!selectedCustomer || !amountPaid) {
       toast.error("Please fill required fields (Customer & Amount)");
+      return;
+    }
+    if (isPaidInFull) {
+      toast.error("This plan is already fully paid. No further payments needed.");
+      return;
+    }
+    const amt = parseFloat(amountPaid);
+    if (remainingBalance !== null && amt > remainingBalance) {
+      toast.error(`Amount cannot exceed the remaining balance of ₹${remainingBalance}`);
       return;
     }
 
@@ -160,9 +173,19 @@ export default function PaymentForm({ onPaymentRecorded }) {
                   </div>
                   <div className="space-y-1">
                     <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-tighter">Remaining</p>
-                    <p className="text-sm font-black text-blue-600 bg-blue-50 px-2 py-0.5 rounded-lg inline-block border border-blue-200">
-                        ₹{planDetails.remaining || 0}
-                    </p>
+                    {isPaidInFull ? (
+                      <span className="text-sm font-black text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-lg inline-flex items-center gap-1 border border-emerald-200">
+                        <CheckCircle2 size={12} /> Fully Paid
+                      </span>
+                    ) : (
+                      <p className={`text-sm font-black px-2 py-0.5 rounded-lg inline-block border ${
+                        (planDetails.remaining ?? 0) < 0
+                          ? 'text-rose-600 bg-rose-50 border-rose-200'
+                          : 'text-blue-600 bg-blue-50 border-blue-200'
+                      }`}>
+                        ₹{planDetails.remaining ?? 0}
+                      </p>
+                    )}
                   </div>
                 </div>
               ) : (
@@ -171,49 +194,79 @@ export default function PaymentForm({ onPaymentRecorded }) {
             </div>
           )}
 
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="space-y-2">
-              <Label className="text-sm font-semibold text-zinc-700">Amount Paid *</Label>
-              <Input
-                type="number"
-                className="h-12 rounded-2xl bg-zinc-50 border-black/15 font-black text-lg focus:bg-white focus:border-black transition-all text-blue-600"
-                placeholder="0.00"
-                value={amountPaid}
-                onChange={(e) => setAmountPaid(e.target.value)}
-              />
+          {/* Fully Paid Banner */}
+          {isPaidInFull && (
+            <div className="flex items-center gap-3 p-4 bg-emerald-50 border border-emerald-200 rounded-2xl animate-in fade-in duration-300">
+              <div className="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center flex-shrink-0">
+                <CheckCircle2 className="text-emerald-600" size={20} />
+              </div>
+              <div>
+                <p className="text-sm font-black text-emerald-800">Plan Fully Paid</p>
+                <p className="text-xs text-emerald-600 font-medium">This customer has already paid the full plan amount. No further payment is needed.</p>
+              </div>
+              <Lock size={16} className="text-emerald-400 ml-auto flex-shrink-0" />
             </div>
-          </div>
+          )}
 
-          <div className="space-y-3">
-             <Label className="text-sm font-semibold text-zinc-700">Payment Method *</Label>
-             <div className="grid grid-cols-2 gap-4">
-                <button
-                  type="button"
-                  onClick={() => setPaymentMode("cash")}
-                  className={`flex flex-col items-center justify-center gap-2 p-4 rounded-2xl border-2 transition-all duration-300 ${
-                    paymentMode === "cash" 
-                      ? "border-black bg-emerald-50 text-emerald-700 shadow-md shadow-emerald-500/10" 
-                      : "border-black/10 bg-zinc-50 text-zinc-400 hover:border-black/30"
-                  }`}
-                >
-                  <Banknote className={`${paymentMode === 'cash' ? 'animate-bounce' : ''}`} />
-                  <span className="text-xs font-black uppercase tracking-widest">Cash</span>
-                </button>
+          {!isPaidInFull && (
+            <div className="grid md:grid-cols-2 gap-8">
+              <div className="space-y-2">
+                <Label className="text-sm font-semibold text-zinc-700">Amount Paid *</Label>
+                <Input
+                  type="number"
+                  className="h-12 rounded-2xl bg-zinc-50 border-black/15 font-black text-lg focus:bg-white focus:border-black transition-all text-blue-600"
+                  placeholder="0.00"
+                  min="0"
+                  max={remainingBalance ?? undefined}
+                  value={amountPaid}
+                  onChange={(e) => {
+                    const val = parseFloat(e.target.value);
+                    if (remainingBalance !== null && val > remainingBalance) {
+                      setAmountPaid(remainingBalance.toString());
+                    } else {
+                      setAmountPaid(e.target.value);
+                    }
+                  }}
+                />
+                {remainingBalance !== null && (
+                  <p className="text-xs text-zinc-400 font-medium">Max payable: ₹{remainingBalance}</p>
+                )}
+              </div>
+            </div>
+          )}
 
-                <button
-                  type="button"
-                  onClick={() => setPaymentMode("upi")}
-                  className={`flex flex-col items-center justify-center gap-2 p-4 rounded-2xl border-2 transition-all duration-300 ${
-                    paymentMode === "upi" 
-                      ? "border-black bg-indigo-50 text-indigo-700 shadow-md shadow-indigo-500/10" 
-                      : "border-black/10 bg-zinc-50 text-zinc-400 hover:border-black/30"
-                  }`}
-                >
-                  <Smartphone className={`${paymentMode === 'upi' ? 'animate-pulse' : ''}`} />
-                  <span className="text-xs font-black uppercase tracking-widest">UPI</span>
-                </button>
-             </div>
-          </div>
+          {!isPaidInFull && (
+            <div className="space-y-3">
+               <Label className="text-sm font-semibold text-zinc-700">Payment Method *</Label>
+               <div className="grid grid-cols-2 gap-4">
+                  <button
+                    type="button"
+                    onClick={() => setPaymentMode("cash")}
+                    className={`flex flex-col items-center justify-center gap-2 p-4 rounded-2xl border-2 transition-all duration-300 ${
+                      paymentMode === "cash" 
+                        ? "border-black bg-emerald-50 text-emerald-700 shadow-md shadow-emerald-500/10" 
+                        : "border-black/10 bg-zinc-50 text-zinc-400 hover:border-black/30"
+                    }`}
+                  >
+                    <Banknote className={`${paymentMode === 'cash' ? 'animate-bounce' : ''}`} />
+                    <span className="text-xs font-black uppercase tracking-widest">Cash</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setPaymentMode("upi")}
+                    className={`flex flex-col items-center justify-center gap-2 p-4 rounded-2xl border-2 transition-all duration-300 ${
+                      paymentMode === "upi" 
+                        ? "border-black bg-indigo-50 text-indigo-700 shadow-md shadow-indigo-500/10" 
+                        : "border-black/10 bg-zinc-50 text-zinc-400 hover:border-black/30"
+                    }`}
+                  >
+                    <Smartphone className={`${paymentMode === 'upi' ? 'animate-pulse' : ''}`} />
+                    <span className="text-xs font-black uppercase tracking-widest">UPI</span>
+                  </button>
+               </div>
+            </div>
+          )}
 
           <div className="space-y-2">
             <Label className="text-sm font-semibold text-zinc-700">Internal Notes</Label>
@@ -230,15 +283,22 @@ export default function PaymentForm({ onPaymentRecorded }) {
       <div className="pt-6">
         <Button
           onClick={handleSubmit}
-          disabled={loadingPayment || !selectedCustomer}
+          disabled={loadingPayment || !selectedCustomer || isPaidInFull}
           className={`w-full h-14 rounded-2xl font-black text-lg shadow-xl transition-all duration-500 ${
-              loadingPayment 
-                ? "bg-zinc-100 text-zinc-400" 
-                : "bg-zinc-900 text-white hover:bg-black hover:-translate-y-1 shadow-zinc-900/10 active:scale-95 disabled:bg-zinc-50 disabled:text-zinc-300"
+              isPaidInFull
+                ? "bg-emerald-50 text-emerald-400 border border-emerald-200 cursor-not-allowed"
+                : loadingPayment 
+                  ? "bg-zinc-100 text-zinc-400" 
+                  : "bg-zinc-900 text-white hover:bg-black hover:-translate-y-1 shadow-zinc-900/10 active:scale-95 disabled:bg-zinc-50 disabled:text-zinc-300"
           }`}
         >
           {loadingPayment ? (
             <Loader2 className="h-6 w-6 animate-spin" />
+          ) : isPaidInFull ? (
+            <div className="flex items-center gap-3">
+              <CheckCircle2 size={20} />
+              Plan Already Paid
+            </div>
           ) : (
             <div className="flex items-center gap-3">
               <Save size={20} />
