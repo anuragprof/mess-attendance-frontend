@@ -45,7 +45,6 @@ export default function RecentPayments({ payments }) {
 
             <div className="pl-10 flex items-center justify-between opacity-60 group-hover:opacity-100 transition-opacity">
                <p className="text-[9px] font-black uppercase text-zinc-400 tracking-[0.1em]">{p.payment_mode}</p>
-               <p className="text-[9px] text-zinc-400 font-bold uppercase tracking-widest italic">Recorded Just Now</p>
             </div>
           </div>
         ))}
