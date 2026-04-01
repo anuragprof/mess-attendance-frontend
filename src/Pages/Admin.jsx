@@ -64,7 +64,6 @@ const fetchMealDistribution = async () => {
     });
     // Format for Recharts PieChart expected structure
     const formattedData = [
-      { name: "Breakfast", value: res.data.breakfast },
       { name: "Lunch", value: res.data.lunch },
       { name: "Dinner", value: res.data.dinner },
     ].filter(item => item.value > 0); // Only pass segments with values to render cleaner
@@ -418,12 +417,6 @@ window.open(whatsappUrl, "_blank");
           </div>
           
           <div className="border-t border-zinc-100 pt-3 flex items-center justify-between">
-             <div className="text-center flex-1 border-r border-zinc-100">
-                <p className="text-[9px] font-bold text-zinc-400 uppercase tracking-tighter">Breakfast</p>
-                <p className="text-base font-black text-amber-600">
-                   {mealDistribution?.find(m => m.name === "Breakfast")?.value || 0}
-                </p>
-             </div>
              <div className="text-center flex-1 border-r border-zinc-100">
                 <p className="text-[9px] font-bold text-zinc-400 uppercase tracking-tighter">Lunch</p>
                 <p className="text-base font-black text-blue-600">

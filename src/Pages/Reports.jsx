@@ -189,7 +189,6 @@ export default function Reports() {
                
                <div className="flex-1 space-y-4">
                   {[
-                    { name: "Breakfast", color: "bg-amber-500" },
                     { name: "Lunch", color: "bg-blue-600" },
                     { name: "Dinner", color: "bg-emerald-600" }
                   ].map((m) => (
