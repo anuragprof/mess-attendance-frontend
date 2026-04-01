@@ -38,7 +38,7 @@ export default function RecentPayments({ payments }) {
               <div className="pl-10 mb-2">
                 <p className="text-[10px] font-bold text-zinc-500 tracking-tight flex items-center gap-1.5 grayscale group-hover:grayscale-0 transition-all">
                   <span className="w-1 h-1 bg-zinc-300 rounded-full" />
-                  {p.plan_name} {p.meals_per_day ? `| ${p.meals_per_day} Time/Day` : ''} {p.duration_days ? `| ${p.duration_days} Days` : ''}
+                  {p.plan_name}
                 </p>
               </div>
             )}
