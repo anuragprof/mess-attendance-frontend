@@ -108,8 +108,8 @@ export default function PaymentForm({ onPaymentRecorded }) {
   };
 
   return (
-    <div className="gradient-card p-10 h-full flex flex-col border border-black/15 shadow-sm overflow-hidden">
-      <div className="flex-1 min-h-0 overflow-y-auto pr-1 custom-scrollbar space-y-8">
+    <div className="gradient-card p-6 h-full flex flex-col border border-black/15 shadow-sm overflow-hidden">
+      <div className="flex-1 min-h-0 overflow-y-auto pr-1 custom-scrollbar space-y-4">
         <div className="flex items-center justify-between">
           <div className="space-y-1">
              <h2 className="text-2xl font-black text-zinc-900 tracking-tight">Record Payment</h2>
@@ -117,7 +117,7 @@ export default function PaymentForm({ onPaymentRecorded }) {
           </div>
         </div>
 
-        <div className="space-y-6">
+        <div className="space-y-4">
           <CustomerSearch
             selectedCustomer={selectedCustomer}
             setSelectedCustomer={(c) => {
@@ -129,14 +129,14 @@ export default function PaymentForm({ onPaymentRecorded }) {
 
           {/* Current Plan Details Card */}
           {selectedCustomer && (
-            <div className="bg-zinc-50 border border-black/15 rounded-[32px] p-6 space-y-4 animate-in fade-in slide-in-from-top-4 duration-500">
+            <div className="bg-zinc-50 border border-black/15 rounded-2xl p-4 space-y-3 animate-in fade-in slide-in-from-top-4 duration-500">
               <div className="flex items-center justify-between">
                 <h4 className="text-xs font-black uppercase text-zinc-400 tracking-widest">Current Plan Details</h4>
                 {loadingDetails && <Loader2 className="h-4 w-4 animate-spin text-zinc-300" />}
               </div>
 
               {planDetails ? (
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                   <div className="space-y-1">
                     <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-tighter">Plan Name</p>
                     <p className="text-sm font-black text-zinc-900">{planDetails.plan_name || "No Active Plan"}</p>
@@ -204,7 +204,7 @@ export default function PaymentForm({ onPaymentRecorded }) {
                 <Label className="text-sm font-semibold text-zinc-700">Amount Paid *</Label>
                 <Input
                   type="number"
-                  className="h-12 rounded-2xl bg-zinc-50 border-black/15 font-black text-lg focus:bg-white focus:border-black transition-all text-blue-600"
+                  className="h-10 rounded-xl bg-zinc-50 border-black/15 font-black text-base focus:bg-white focus:border-black transition-all text-blue-600"
                   placeholder="0.00"
                   min="0"
                   max={remainingBalance ?? undefined}
@@ -228,30 +228,30 @@ export default function PaymentForm({ onPaymentRecorded }) {
           {!isPaidInFull && (
             <div className="space-y-3">
                <Label className="text-sm font-semibold text-zinc-700">Payment Method *</Label>
-               <div className="grid grid-cols-2 gap-4">
+               <div className="grid grid-cols-2 gap-3">
                   <button
                     type="button"
                     onClick={() => setPaymentMode("cash")}
-                    className={`flex flex-col items-center justify-center gap-2 p-4 rounded-2xl border-2 transition-all duration-300 ${
+                    className={`flex flex-col items-center justify-center gap-1.5 p-3 rounded-xl border-2 transition-all duration-300 ${
                       paymentMode === "cash" 
                         ? "border-black bg-emerald-50 text-emerald-700 shadow-md shadow-emerald-500/10" 
                         : "border-black/10 bg-zinc-50 text-zinc-400 hover:border-black/30"
                     }`}
                   >
-                    <Banknote className={`${paymentMode === 'cash' ? 'animate-bounce' : ''}`} />
+                    <Banknote size={20} className={`${paymentMode === 'cash' ? 'animate-bounce' : ''}`} />
                     <span className="text-xs font-black uppercase tracking-widest">Cash</span>
                   </button>
 
                   <button
                     type="button"
                     onClick={() => setPaymentMode("upi")}
-                    className={`flex flex-col items-center justify-center gap-2 p-4 rounded-2xl border-2 transition-all duration-300 ${
+                    className={`flex flex-col items-center justify-center gap-1.5 p-3 rounded-xl border-2 transition-all duration-300 ${
                       paymentMode === "upi" 
                         ? "border-black bg-indigo-50 text-indigo-700 shadow-md shadow-indigo-500/10" 
                         : "border-black/10 bg-zinc-50 text-zinc-400 hover:border-black/30"
                     }`}
                   >
-                    <Smartphone className={`${paymentMode === 'upi' ? 'animate-pulse' : ''}`} />
+                    <Smartphone size={20} className={`${paymentMode === 'upi' ? 'animate-pulse' : ''}`} />
                     <span className="text-xs font-black uppercase tracking-widest">UPI</span>
                   </button>
                </div>
@@ -262,7 +262,7 @@ export default function PaymentForm({ onPaymentRecorded }) {
             <Button
               onClick={handleSubmit}
               disabled={loadingPayment || !selectedCustomer || isPaidInFull}
-              className={`w-full h-14 rounded-2xl font-black text-lg shadow-xl outline-none border-none transition-all duration-500 ${
+              className={`w-full h-12 rounded-xl font-black text-base shadow-xl outline-none border-none transition-all duration-500 ${
                   isPaidInFull
                     ? "bg-emerald-50 text-emerald-400 border border-emerald-200 cursor-not-allowed"
                     : loadingPayment 
