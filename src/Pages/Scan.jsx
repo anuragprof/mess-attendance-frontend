@@ -149,14 +149,6 @@ function ScanResultCard({ status, formatDate }) {
          </div>
       </div>
 
-      {/* 3. Balanced Row Footer */}
-      <div className="mt-8 flex justify-between items-center bg-white/20 backdrop-blur-sm p-4 rounded-2xl border border-white/30">
-         <p className="text-[10px] font-black uppercase tracking-widest text-zinc-600">Secure Mess Authentication System</p>
-         <div className="flex items-center gap-2">
-            <div className={`w-2 h-2 rounded-full animate-pulse ${isSuccess ? 'bg-emerald-500' : 'bg-rose-500'}`}></div>
-            <span className="text-[9px] font-black uppercase text-zinc-800">Verified identity</span>
-         </div>
-      </div>
     </div>
   )
 }
