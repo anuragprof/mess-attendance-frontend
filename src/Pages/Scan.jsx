@@ -107,7 +107,7 @@ function ScanResultCard({ status, formatDate }) {
          <div className="flex items-center gap-4 lg:gap-6 w-full lg:w-auto">
             <img 
                src={status.customer.photo_url} 
-               className="w-16 h-16 lg:w-24 lg:h-24 rounded-2xl lg:rounded-3xl object-cover border-2 lg:border-4 border-white shadow-xl" 
+               className="w-16 h-16 lg:w-24 lg:h-24 rounded-full object-cover border-2 lg:border-4 border-white shadow-xl" 
                alt={status.customer.name} 
             />
             <div className="space-y-2 lg:space-y-3 flex-1 min-w-0">
@@ -174,7 +174,7 @@ function LastScansList({ scans }) {
          ) : (
             scans.slice(0, 3).map((scan) => (
                <div key={scan.id} className="flex items-center gap-4 p-3 bg-zinc-50/50 rounded-2xl border border-zinc-100 group">
-                  <img src={scan.photo_url} className="w-10 h-10 rounded-xl object-cover border border-zinc-100 shadow-sm transition group-hover:scale-105" alt="" />
+                  <img src={scan.photo_url} className="w-10 h-10 rounded-full object-cover border border-zinc-100 shadow-sm transition group-hover:scale-105" alt="" />
                   <div className="flex-1 min-w-0">
                      <p className="text-xs font-black text-zinc-800 truncate tracking-tight uppercase">{scan.name}</p>
                      <p className="text-[9px] font-black text-emerald-600 uppercase bg-emerald-50 px-1.5 py-0.5 rounded inline-block mt-0.5">{scan.session}</p>

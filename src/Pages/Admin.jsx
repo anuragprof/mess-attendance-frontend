@@ -261,7 +261,7 @@ window.open(whatsappUrl, "_blank");
                   src={customer.photo_url}
                   alt="customer"
                   onClick={() => setPreviewCustomer(customer)}
-                  className="w-8 h-8 object-cover rounded-xl border shadow-sm cursor-pointer hover:scale-105 transition"
+                  className="w-8 h-8 object-cover rounded-full border border-zinc-100 shadow-sm cursor-pointer hover:scale-105 transition"
                 />
               </td>
 
@@ -643,7 +643,7 @@ window.open(whatsappUrl, "_blank");
             <img
               src={previewCustomer.photo_url}
               alt="customer"
-              className="w-64 h-64 object-cover rounded-xl border shadow-lg"
+              className="w-64 h-64 object-cover rounded-full border shadow-lg"
             />
           </div>
 
