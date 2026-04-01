@@ -313,7 +313,7 @@ export default function Scan() {
   }
 
   return (
-    <div className="h-screen flex flex-col p-4 md:-m-4 md:p-10 bg-[#f8fafc] overflow-hidden">
+    <div className="fixed inset-0 flex flex-col p-4 md:p-10 bg-[#f8fafc] overflow-hidden">
       
       {/* 🚀 Top Header (Fixed Height) */}
       <div className="flex-shrink-0 mb-6 px-2">
