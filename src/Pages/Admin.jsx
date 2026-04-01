@@ -417,23 +417,23 @@ window.open(whatsappUrl, "_blank");
           </div>
           
           <div className="border-t border-zinc-100 pt-3 flex items-center justify-between">
-             <div className="text-center flex-1 border-r border-zinc-100 flex flex-col items-center">
-                <div className="flex items-center gap-1.5 mb-1">
-                   <Sun size={12} className="text-blue-500 animate-[spin_10s_linear_infinite]" />
-                   <p className="text-[9px] font-bold text-zinc-400 uppercase tracking-tighter">Lunch</p>
+             <div className="text-center flex-1 border-r border-zinc-100 flex flex-col items-center justify-center py-1">
+                <p className="text-[9px] font-bold text-zinc-400 uppercase tracking-tighter mb-1">Lunch</p>
+                <div className="flex items-center gap-2">
+                   <Sun size={18} className="text-blue-500 animate-[spin_8s_linear_infinite]" />
+                   <p className="text-2xl font-black text-blue-600 leading-none">
+                      {mealDistribution?.find(m => m.name === "Lunch")?.value || 0}
+                   </p>
                 </div>
-                <p className="text-xl font-black text-blue-600 leading-none">
-                   {mealDistribution?.find(m => m.name === "Lunch")?.value || 0}
-                </p>
              </div>
-             <div className="text-center flex-1 flex flex-col items-center">
-                <div className="flex items-center gap-1.5 mb-1">
-                   <Moon size={12} className="text-emerald-500 animate-pulse" />
-                   <p className="text-[9px] font-bold text-zinc-400 uppercase tracking-tighter">Dinner</p>
+             <div className="text-center flex-1 flex flex-col items-center justify-center py-1">
+                <p className="text-[9px] font-bold text-zinc-400 uppercase tracking-tighter mb-1">Dinner</p>
+                <div className="flex items-center gap-2">
+                   <Moon size={16} className="text-emerald-500 animate-[pulse_2s_ease-in-out_infinite]" />
+                   <p className="text-2xl font-black text-emerald-600 leading-none">
+                      {mealDistribution?.find(m => m.name === "Dinner")?.value || 0}
+                   </p>
                 </div>
-                <p className="text-xl font-black text-emerald-600 leading-none">
-                   {mealDistribution?.find(m => m.name === "Dinner")?.value || 0}
-                </p>
              </div>
           </div>
         </div>
