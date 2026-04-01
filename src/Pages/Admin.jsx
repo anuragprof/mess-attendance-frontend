@@ -281,10 +281,9 @@ window.open(whatsappUrl, "_blank");
 
                   <button
                     onClick={() => sendWhatsAppMessage(customer.phone_number)}
-                    className="p-1.5 bg-emerald-50 text-emerald-600 rounded-lg hover:bg-emerald-100 transition-colors shadow-sm shadow-emerald-500/5 group"
-                    title="Send WhatsApp"
+                    className="px-2 py-0.5 bg-emerald-50 text-emerald-600 rounded-lg hover:bg-emerald-100 transition-all font-black text-[9px] uppercase tracking-widest shadow-sm shadow-emerald-500/5"
                   >
-                    <MessageCircle size={14} className="group-hover:scale-110 transition-transform" />
+                    WhatsApp
                   </button>
                 </div>
               </td>
