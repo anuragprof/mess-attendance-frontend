@@ -123,7 +123,7 @@ export default function RenewPlan({ onRenewalComplete }) {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 lg:space-y-6">
       {/* ── CUSTOMER SEARCH ── */}
       <CustomerSearch
         selectedCustomer={selectedCustomer}
@@ -143,38 +143,38 @@ export default function RenewPlan({ onRenewalComplete }) {
 
       {/* ── CURRENT PLAN SUMMARY ── */}
       {currentPlan && currentPlan.has_active_plan && (
-        <div className="bg-blue-50 border border-blue-200 rounded-3xl p-6 space-y-4 shadow-sm animate-in fade-in slide-in-from-top-4 duration-500">
+        <div className="bg-blue-50 border border-blue-200 rounded-2xl lg:rounded-3xl p-4 lg:p-6 space-y-3 lg:space-y-4 shadow-sm animate-in fade-in slide-in-from-top-4 duration-500">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-2xl bg-blue-100 flex items-center justify-center text-blue-600 border border-blue-200">
-                <History size={20} />
+              <div className="w-8 h-8 lg:w-10 lg:h-10 rounded-xl lg:rounded-2xl bg-blue-100 flex items-center justify-center text-blue-600 border border-blue-200">
+                <History size={16} className="lg:w-5 lg:h-5" />
               </div>
               <div>
-                <p className="text-[10px] font-black text-blue-500 uppercase tracking-widest leading-none mb-1">Active Status</p>
-                <h4 className="text-lg font-black text-zinc-900 tracking-tight leading-none">{currentPlan.plan_name}</h4>
+                <p className="text-[9px] lg:text-[10px] font-black text-blue-500 uppercase tracking-widest leading-none mb-1">Active Status</p>
+                <h4 className="text-md lg:text-lg font-black text-zinc-900 tracking-tight leading-none">{currentPlan.plan_name}</h4>
               </div>
             </div>
-            {loadingPlan && <Loader2 className="h-5 w-5 animate-spin text-blue-400" />}
+            {loadingPlan && <Loader2 className="h-4 w-4 animate-spin text-blue-400" />}
           </div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 pt-2 border-t border-blue-100">
-            <div className="space-y-1">
-              <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-tighter">Expiry Date</span>
-              <p className="text-sm font-black text-zinc-900 tracking-tight">{currentPlan.end_date}</p>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 pt-2 border-t border-blue-100">
+            <div className="space-y-0.5">
+              <span className="text-[9px] lg:text-[10px] font-bold text-zinc-400 uppercase tracking-tighter">Expiry Date</span>
+              <p className="text-xs lg:text-sm font-black text-zinc-900 tracking-tight">{currentPlan.end_date}</p>
             </div>
-            <div className="space-y-1">
-              <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-tighter">Days Left</span>
-              <p className={`text-sm font-black ${currentPlan.days_left <= 3 ? 'text-rose-600' : 'text-emerald-700'}`}>
+            <div className="space-y-0.5">
+              <span className="text-[9px] lg:text-[10px] font-bold text-zinc-400 uppercase tracking-tighter">Days Left</span>
+              <p className={`text-xs lg:text-sm font-black ${currentPlan.days_left <= 3 ? 'text-rose-600' : 'text-emerald-700'}`}>
                 {currentPlan.days_left} Days
               </p>
             </div>
-            <div className="space-y-1">
-              <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-tighter">Plan Price</span>
-              <p className="text-sm font-black text-zinc-900">₹{currentPlan.plan_price}</p>
+            <div className="space-y-0.5">
+              <span className="text-[9px] lg:text-[10px] font-bold text-zinc-400 uppercase tracking-tighter">Plan Price</span>
+              <p className="text-xs lg:text-sm font-black text-zinc-900">₹{currentPlan.plan_price}</p>
             </div>
-            <div className="space-y-1">
-              <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-tighter">Amount Due</span>
-              <p className={`text-sm font-black ${currentPlan.remaining > 0 ? 'text-rose-600' : 'text-emerald-700'}`}>
+            <div className="space-y-0.5">
+              <span className="text-[9px] lg:text-[10px] font-bold text-zinc-400 uppercase tracking-tighter">Amount Due</span>
+              <p className={`text-xs lg:text-sm font-black ${currentPlan.remaining > 0 ? 'text-rose-600' : 'text-emerald-700'}`}>
                 ₹{currentPlan.remaining}
               </p>
             </div>

@@ -29,26 +29,27 @@ export default function Billing() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto space-y-4">
-      <div className="grid lg:grid-cols-3 gap-8 items-start">
-        {/* Sidebar Summary */}
-        <div className="lg:col-span-1">
-          <RecentPayments payments={payments} />
-        </div>
-
-        {/* Main Content: Explicitly ONLY for Renewals */}
-        <div className="lg:col-span-2 gradient-card p-8 space-y-6">
+    <div className="max-w-7xl mx-auto space-y-4 px-2 md:px-0">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 items-start">
+        
+        {/* Main Content: Explicitly ONLY for Renewals (order-1 on mobile, order-2 on lg) */}
+        <div className="lg:col-span-2 order-1 lg:order-2 gradient-card p-6 lg:p-8 space-y-6">
           <div className="flex items-center justify-between mb-2">
             <div>
-               <h2 className="text-2xl font-black text-zinc-900 tracking-tight">Renew Plan</h2>
-               <p className="text-xs font-bold text-zinc-400 uppercase tracking-widest">Extend customer mess subscriptions</p>
+               <h2 className="text-xl lg:text-2xl font-black text-zinc-900 tracking-tight">Renew Plan</h2>
+               <p className="text-[10px] lg:text-xs font-bold text-zinc-400 uppercase tracking-widest">Extend customer mess subscriptions</p>
             </div>
-            <div className="bg-blue-600 px-4 py-1.5 rounded-full text-[10px] font-black uppercase text-white tracking-widest">
+            <div className="bg-blue-600 px-3 py-1 lg:px-4 lg:py-1.5 rounded-full text-[9px] lg:text-[10px] font-black uppercase text-white tracking-widest">
                 Renewal Only
             </div>
           </div>
           
           <RenewPlan onRenewalComplete={refreshPayments} />
+        </div>
+
+        {/* Sidebar Summary (order-2 on mobile, order-1 on lg) */}
+        <div className="lg:col-span-1 order-2 lg:order-1">
+          <RecentPayments payments={payments} />
         </div>
       </div>
     </div>
