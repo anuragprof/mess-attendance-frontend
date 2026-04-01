@@ -410,23 +410,44 @@ window.open(whatsappUrl, "_blank");
         <div className="gradient-card p-4 h-full flex flex-col justify-between border border-zinc-100 overflow-hidden">
           <h3 className="text-base font-black text-zinc-800 mb-1 lg:mb-2 uppercase tracking-tight">Today's Consumption</h3>
           <div className="flex-1 flex flex-col items-center justify-center -mt-2 relative">
-             {/* Background Scenery (Sun/Cloud or Moon/Stars based on current time) */}
-             <div className="absolute inset-0 flex items-center justify-center opacity-[0.08] pointer-events-none transition-all duration-1000 overflow-hidden">
+             {/* Dynamic CSS Scenery Background */}
+             <div className="absolute inset-0 pointer-events-none transition-all duration-1000 overflow-hidden opacity-[0.12]">
                 {(() => {
                   const hour = (new Date().getUTCHours() + 5.5) % 24;
                   if (hour >= 5 && hour < 16) {
                     return (
-                      <div className="relative w-full h-full flex items-center justify-center">
-                        <Sun size={140} className="text-blue-600 animate-[spin_20s_linear_infinite] absolute -translate-x-6" />
-                        <Cloud size={60} className="text-blue-400 absolute translate-x-12 translate-y-6 animate-pulse" />
+                      <div className="w-full h-full bg-gradient-to-b from-blue-100 to-blue-50/0 flex flex-col items-center justify-center">
+                        {/* Sun */}
+                        <div className="w-24 h-24 bg-amber-200 rounded-full blur-xl absolute top-1/2 left-1/2 -translate-x-[110%] -translate-y-1/2 animate-pulse" />
+                        <div className="w-16 h-16 bg-amber-400 rounded-full shadow-[0_0_40px_rgba(245,158,11,0.5)] absolute top-1/2 left-1/2 -translate-x-[110%] -translate-y-1/2" />
+                        
+                        {/* Hills */}
+                        <div className="w-[150%] h-32 bg-emerald-500/20 rounded-[100%] absolute -bottom-16 left-[-25%]" />
+                        <div className="w-[150%] h-24 bg-emerald-600/30 rounded-[100%] absolute -bottom-14 left-[5%]" />
                       </div>
                     );
                   } else {
                     return (
-                      <div className="relative w-full h-full flex items-center justify-center">
-                        <Moon size={110} className="text-emerald-600 animate-[pulse_3s_ease-in-out_infinite] absolute" />
-                        <Sparkles size={24} className="text-emerald-400 absolute -translate-x-14 -translate-y-10 animate-pulse delay-700" />
-                        <Sparkles size={16} className="text-emerald-300 absolute translate-x-16 translate-y-8 animate-pulse" />
+                      <div className="w-full h-full bg-gradient-to-b from-indigo-950 to-indigo-900/0 flex flex-col items-center justify-center">
+                         {/* Moon */}
+                         <div className="w-16 h-16 bg-zinc-100 rounded-full shadow-[0_0_60px_rgba(255,255,255,0.2)] absolute top-1/2 left-1/2 -translate-x-[110%] -translate-y-1/2" />
+                         <div className="w-12 h-12 bg-indigo-950 rounded-full absolute top-1/2 left-1/2 -translate-x-[95%] -translate-y-2/3" />
+                         
+                         {/* Stars */}
+                         {[1,2,3,4,5].map(i => (
+                           <div key={i} 
+                             className={`w-0.5 h-0.5 bg-white rounded-full absolute animate-pulse`} 
+                             style={{ 
+                               top: `${Math.random() * 60}%`, 
+                               left: `${Math.random() * 90}%`,
+                               animationDelay: `${i * 0.5}s`
+                             }} 
+                           />
+                         ))}
+
+                         {/* Night Hills */}
+                         <div className="w-[150%] h-32 bg-zinc-950/40 rounded-[100%] absolute -bottom-16 left-[-25%]" />
+                         <div className="w-[150%] h-24 bg-zinc-950/60 rounded-[100%] absolute -bottom-14 left-[5%]" />
                       </div>
                     );
                   }
