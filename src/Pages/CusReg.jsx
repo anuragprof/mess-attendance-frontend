@@ -63,7 +63,8 @@ const CustomerRegistrationForm = () => {
     async function fetchPlans() {
       try {
         const res = await api.get("/plans/");
-        setPlans(res.data);
+        // Guard: API may return HTML string (wrong base URL) or paginated object
+        setPlans(Array.isArray(res.data) ? res.data : (res.data?.items ?? []));
       } catch (err) {
         toast.error("Failed to load plans");
       }
