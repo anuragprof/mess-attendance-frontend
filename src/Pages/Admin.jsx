@@ -409,11 +409,20 @@ window.open(whatsappUrl, "_blank");
       {dailyTrend ? (
         <div className="gradient-card p-4 h-full flex flex-col justify-between border border-zinc-100 overflow-hidden">
           <h3 className="text-base font-black text-zinc-800 mb-1 lg:mb-2 uppercase tracking-tight">Today's Consumption</h3>
-          <div className="flex-1 flex flex-col items-center justify-center -mt-2">
-             <div className="text-6xl font-black text-slate-800 tracking-tighter animate-in fade-in zoom-in-95 duration-700">
+          <div className="flex-1 flex flex-col items-center justify-center -mt-2 relative">
+             {/* Background Context Icon (Sun/Moon based on current time) */}
+             <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none">
+                {new Date().getUTCHours() + 5.5 >= 5 && new Date().getUTCHours() + 5.5 < 16 ? (
+                  <Sun size={120} className="text-blue-600 animate-[spin_20s_linear_infinite]" />
+                ) : (
+                  <Moon size={110} className="text-emerald-600 animate-pulse" />
+                )}
+             </div>
+             
+             <div className="relative z-10 text-6xl font-black text-slate-800 tracking-tighter animate-in fade-in zoom-in-95 duration-700">
                 {dailyTrend.today_total}
              </div>
-             <p className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em] mt-1 opacity-80">Total Scans Today</p>
+             <p className="relative z-10 text-[10px] font-black text-blue-600 uppercase tracking-[0.2em] mt-1 opacity-80">Total Scans Today</p>
           </div>
           
           <div className="border-t border-zinc-100 pt-3 flex items-center justify-between">
