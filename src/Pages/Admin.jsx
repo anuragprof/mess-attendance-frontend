@@ -237,15 +237,14 @@ window.open(whatsappUrl, "_blank");
 
         <div className="overflow-x-auto overflow-y-auto max-h-[240px]">
           <table className="w-full">
-            <thead className="bg-zinc-50 border-y border-zinc-200 text-xs uppercase text-zinc-500 tracking-wider">
+            <thead className="bg-zinc-50 border-y border-zinc-200 text-[10px] uppercase text-zinc-500 tracking-[0.2em] font-black">
           <tr>
-            <th className="p-1 text-left">Photo</th>
-            <th className="p-1 text-left min-w-[150px]">Name</th>
-            <th className="p-1 text-left">Phone</th>
-            {/* <th className="p-1 text-left">Email</th> */}
-            <th className="p-1 text-left">QR</th>
-            <th className="p-1 text-left">Expiry</th>
-            <th className="p-1 text-left">Actions</th>
+            <th className="p-3 text-left w-[8%] font-black">Photo</th>
+            <th className="p-3 text-left w-[24%] font-black">Client Name</th>
+            <th className="p-3 text-left w-[24%] font-black">Contact / WhatsApp</th>
+            <th className="p-3 text-left w-[12%] font-black uppercase tracking-widest text-center">QR Code</th>
+            <th className="p-3 text-left w-[24%] font-black uppercase tracking-widest">Expiration</th>
+            <th className="p-3 text-center w-[8%] font-black">Actions</th>
           </tr>
         </thead>
 
