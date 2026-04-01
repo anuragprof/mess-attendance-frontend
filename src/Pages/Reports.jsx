@@ -3,7 +3,6 @@ import axios from "@/Lib/axios";
 import { toast } from "sonner";
 import { Calendar, Download, AlertCircle } from "lucide-react";
 import { formatTimeIST } from "@/Lib/utils";
-import DailyTrendChart from "@/Components/DailyTrendChart";
 import MealDistributionChart from "@/Components/MealDistributionChart";
 import RevenueBarChart from "@/Components/RevenueBarChart";
 
@@ -180,20 +179,43 @@ export default function Reports() {
           <p className="text-xs text-zinc-500 mt-2 uppercase">{formatDateLabel()}</p>
         </div>
         
-        {/* Charts */}
+        {/* Meal Breakdown Stats */}
         <div className="h-[300px] w-full lg:col-span-1">
           {loading ? (
             <div className="gradient-card h-full animate-pulse bg-zinc-100 rounded-xl" />
-          ) : attendanceTrend.length > 0 ? (
-            <DailyTrendChart data={attendanceTrend} todayTotal={attendanceData?.total_attendance || 0} />
           ) : (
-            <div className="gradient-card h-full flex flex-col items-center justify-center text-zinc-400">
-               <AlertCircle size={24} className="mb-2 opacity-50" />
-               <p className="text-sm">Not enough data for trend</p>
+            <div className="gradient-card p-6 h-full flex flex-col justify-between border border-zinc-100">
+               <h3 className="text-sm font-black text-zinc-400 lg:text-zinc-500 uppercase tracking-[0.2em] mb-4">Consumption Detail</h3>
+               
+               <div className="flex-1 space-y-4">
+                  {[
+                    { name: "Breakfast", color: "bg-amber-500" },
+                    { name: "Lunch", color: "bg-blue-600" },
+                    { name: "Dinner", color: "bg-emerald-600" }
+                  ].map((m) => (
+                    <div key={m.name} className="flex items-center justify-between group">
+                       <div className="flex items-center gap-3">
+                          <div className={`w-2.5 h-2.5 rounded-full ${m.color} shadow-sm group-hover:scale-125 transition-transform`} />
+                          <span className="text-sm font-bold text-zinc-600">{m.name}</span>
+                       </div>
+                       <span className="text-lg font-black text-zinc-900 leading-none">
+                          {mealDistribution.find(d => d.name === m.name)?.value || 0}
+                       </span>
+                    </div>
+                  ))}
+               </div>
+               
+               <div className="pt-4 border-t border-zinc-100 flex items-center justify-between">
+                  <span className="text-[10px] font-black text-zinc-400 uppercase tracking-widest leading-none">Average / Day</span>
+                  <span className="text-xs font-black text-blue-600 leading-none">
+                     {Math.round((attendanceData?.total_attendance || 0) / (attendanceTrend?.length || 1))} Scans
+                  </span>
+               </div>
             </div>
           )}
         </div>
         
+        {/* Pie Chart Distribution */}
         <div className="h-[300px] w-full lg:col-span-1">
            {loading ? (
             <div className="gradient-card h-full animate-pulse bg-zinc-100 rounded-xl" />
@@ -202,7 +224,7 @@ export default function Reports() {
           ) : (
             <div className="gradient-card h-full flex flex-col items-center justify-center text-zinc-400">
                <AlertCircle size={24} className="mb-2 opacity-50" />
-               <p className="text-sm">Not enough data for pie chart</p>
+               <p className="text-sm">Not enough data for chart</p>
             </div>
           )}
         </div>

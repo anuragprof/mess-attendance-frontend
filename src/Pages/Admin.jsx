@@ -11,7 +11,6 @@ import {
   SelectValue,
 } from "@/Pages/ui/select";
 import MealDistributionChart from "../Components/MealDistributionChart";
-import DailyTrendChart from "../Components/DailyTrendChart";
 import { Search, UserPlus, FileText, Trash2, Edit3, RotateCw, MoreVertical, Phone, MessageCircle } from "lucide-react";
 
 export default function Admin() {
@@ -388,35 +387,60 @@ window.open(whatsappUrl, "_blank");
 </div>
 
 {/* Analytics Section */}
-<div className="mt-2 text-zinc-800">
-  <div className="mb-1 flex items-center justify-between">
-    <div>
-      <h2 className="text-lg font-bold tracking-tight">Analytics</h2>
-      <p className="text-[10px] text-zinc-500">Meal distribution and daily scan trend</p>
-    </div>
+<div className="mt-3 text-zinc-800">
+  <div className="mb-2">
+    <h2 className="text-lg font-bold tracking-tight">Analytics</h2>
+    <p className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">Attendance Breakdown</p>
   </div>
   
   <div className="grid md:grid-cols-2 gap-3">
+    {/* Distribution Chart */}
     <div className="h-[240px]">
       {mealDistribution ? (
         <MealDistributionChart data={mealDistribution} />
       ) : (
         <div className="h-full w-full flex items-center justify-center bg-white rounded-2xl shadow-sm border border-zinc-100">
-          <p className="text-zinc-500 animate-pulse">Loading meal distribution...</p>
+          <p className="text-zinc-500 animate-pulse">Loading distribution...</p>
         </div>
       )}
     </div>
-    
+
+    {/* Daily Count Card */}
     <div className="h-[240px]">
       {dailyTrend ? (
-        <DailyTrendChart 
-          data={dailyTrend.trend} 
-          todayTotal={dailyTrend.today_total} 
-          yesterdayTotal={dailyTrend.yesterday_total} 
-        />
+        <div className="gradient-card p-4 h-full flex flex-col justify-between border border-zinc-100 overflow-hidden">
+          <h3 className="text-base font-black text-zinc-800 mb-1 lg:mb-2 uppercase tracking-tight">Today's Consumption</h3>
+          <div className="flex-1 flex flex-col items-center justify-center -mt-2">
+             <div className="text-6xl font-black text-slate-800 tracking-tighter animate-in fade-in zoom-in-95 duration-700">
+                {dailyTrend.today_total}
+             </div>
+             <p className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em] mt-1 opacity-80">Total Scans Today</p>
+          </div>
+          
+          <div className="border-t border-zinc-100 pt-3 flex items-center justify-between">
+             <div className="text-center flex-1 border-r border-zinc-100">
+                <p className="text-[9px] font-bold text-zinc-400 uppercase tracking-tighter">Breakfast</p>
+                <p className="text-base font-black text-amber-600">
+                   {mealDistribution?.find(m => m.name === "Breakfast")?.value || 0}
+                </p>
+             </div>
+             <div className="text-center flex-1 border-r border-zinc-100">
+                <p className="text-[9px] font-bold text-zinc-400 uppercase tracking-tighter">Lunch</p>
+                <p className="text-base font-black text-blue-600">
+                   {mealDistribution?.find(m => m.name === "Lunch")?.value || 0}
+                </p>
+             </div>
+             <div className="text-center flex-1">
+                <p className="text-[9px] font-bold text-zinc-400 uppercase tracking-tighter">Dinner</p>
+                <p className="text-base font-black text-emerald-600">
+                   {mealDistribution?.find(m => m.name === "Dinner")?.value || 0}
+                </p>
+             </div>
+          </div>
+        </div>
       ) : (
         <div className="h-full w-full flex items-center justify-center bg-white rounded-2xl shadow-sm border border-zinc-100">
-          <p className="text-zinc-500 animate-pulse">Loading daily trend...</p>
+          <p className="text-zinc-500 animate-pulse">Loading stats...</p>
         </div>
       )}
     </div>
