@@ -115,16 +115,6 @@ export default function PaymentForm({ onPaymentRecorded }) {
              <h2 className="text-2xl font-black text-zinc-900 tracking-tight">Record Payment</h2>
              <p className="text-xs font-bold text-zinc-400 uppercase tracking-widest">Collect fee from customer</p>
           </div>
-          {selectedCustomer && (
-            <div className="flex gap-2">
-                <button 
-                    onClick={openHistory}
-                    className="text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1.5 rounded-xl border border-black/10 hover:border-black/30 hover:bg-blue-100 transition-colors"
-                >
-                    View History
-                </button>
-            </div>
-          )}
         </div>
 
         <div className="space-y-6">
@@ -268,44 +258,34 @@ export default function PaymentForm({ onPaymentRecorded }) {
             </div>
           )}
 
-          <div className="space-y-2">
-            <Label className="text-sm font-semibold text-zinc-700">Internal Notes</Label>
-            <Textarea
-              className="rounded-2xl bg-zinc-50 border-black/15 focus:bg-white focus:border-black transition-all font-medium placeholder:text-zinc-400 min-h-[100px]"
-              placeholder="e.g. Received by someone else, partial payment details..."
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-            />
+          <div className="pt-4">
+            <Button
+              onClick={handleSubmit}
+              disabled={loadingPayment || !selectedCustomer || isPaidInFull}
+              className={`w-full h-14 rounded-2xl font-black text-lg shadow-xl outline-none border-none transition-all duration-500 ${
+                  isPaidInFull
+                    ? "bg-emerald-50 text-emerald-400 border border-emerald-200 cursor-not-allowed"
+                    : loadingPayment 
+                      ? "bg-zinc-100 text-zinc-400" 
+                      : "bg-zinc-900 text-white hover:bg-black hover:-translate-y-1 shadow-zinc-900/10 active:scale-95 disabled:bg-zinc-50 disabled:text-zinc-300"
+              }`}
+            >
+              {loadingPayment ? (
+                <Loader2 className="h-6 w-6 animate-spin" />
+              ) : isPaidInFull ? (
+                <div className="flex items-center gap-3">
+                  <CheckCircle2 size={20} />
+                  Plan Already Paid
+                </div>
+              ) : (
+                <div className="flex items-center gap-3">
+                  <Save size={20} />
+                  Confirm Payment
+                </div>
+              )}
+            </Button>
           </div>
         </div>
-      </div>
-
-      <div className="flex-shrink-0 pt-6">
-        <Button
-          onClick={handleSubmit}
-          disabled={loadingPayment || !selectedCustomer || isPaidInFull}
-          className={`w-full h-14 rounded-2xl font-black text-lg shadow-xl transition-all duration-500 ${
-              isPaidInFull
-                ? "bg-emerald-50 text-emerald-400 border border-emerald-200 cursor-not-allowed"
-                : loadingPayment 
-                  ? "bg-zinc-100 text-zinc-400" 
-                  : "bg-zinc-900 text-white hover:bg-black hover:-translate-y-1 shadow-zinc-900/10 active:scale-95 disabled:bg-zinc-50 disabled:text-zinc-300"
-          }`}
-        >
-          {loadingPayment ? (
-            <Loader2 className="h-6 w-6 animate-spin" />
-          ) : isPaidInFull ? (
-            <div className="flex items-center gap-3">
-              <CheckCircle2 size={20} />
-              Plan Already Paid
-            </div>
-          ) : (
-            <div className="flex items-center gap-3">
-              <Save size={20} />
-              Confirm Payment
-            </div>
-          )}
-        </Button>
       </div>
 
       <PaymentHistoryModal
