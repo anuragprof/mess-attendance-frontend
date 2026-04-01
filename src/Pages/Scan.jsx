@@ -8,37 +8,37 @@ import { Clock, Users, Utensils, Phone, Mail, Calendar, Hash, ArrowRight, Camera
    ============================================================ */
 function ScannerCard({ onScan, loading }) {
   return (
-    <div className="relative h-full flex flex-col bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 rounded-[2.5rem] shadow-2xl overflow-hidden border border-white/5 p-6 md:p-8">
+    <div className="relative h-full flex flex-col bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 rounded-[2rem] lg:rounded-[2.5rem] shadow-2xl overflow-hidden border border-white/5 p-4 md:p-8">
       
       {/* 1. Top Status Badge */}
       <div className="mb-4 flex justify-center">
-         <div className="flex items-center gap-2 px-5 py-2 bg-emerald-500/10 backdrop-blur-md rounded-full border border-emerald-400/30">
-            <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_10px_#34d399]"></div>
-            <span className="text-[11px] font-black uppercase tracking-[0.2em] text-emerald-400">Live Scanner</span>
-            <Camera size={14} className="text-emerald-400 ml-1" />
+         <div className="flex items-center gap-2 px-4 py-1.5 bg-emerald-500/10 backdrop-blur-md rounded-full border border-emerald-400/30">
+            <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div>
+            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-400">Live Scanner</span>
+            <Camera size={12} className="text-emerald-400 ml-1" />
          </div>
       </div>
 
       {/* 2. MAIN SCANNER FRAME */}
       <div className="flex-1 flex items-center justify-center min-h-0">
-         <div className="relative w-full max-w-[720px] aspect-square rounded-[3rem] overflow-hidden border-[6px] border-white/10 shadow-[0_0_40px_rgba(16,185,129,0.3)] group bg-black/40">
+         <div className="relative w-full max-w-[500px] lg:max-w-[720px] aspect-square rounded-[2rem] lg:rounded-[3rem] overflow-hidden border-[4px] lg:border-[6px] border-white/10 shadow-[0_0_40px_rgba(16,185,129,0.3)] group bg-black/40">
             
             <ScanQR onDetected={onScan} />
 
-            <div className="absolute inset-0 pointer-events-none flex flex-col items-center justify-center p-8 lg:p-12">
+            <div className="absolute inset-0 pointer-events-none flex flex-col items-center justify-center p-4 lg:p-12">
                <div className="w-full h-full relative opacity-90">
-                  <div className="absolute top-0 left-0 w-16 h-16 border-t-[10px] border-l-[10px] border-emerald-500 rounded-tl-3xl shadow-[0_0_20px_rgba(16,185,129,0.8)]"></div>
-                  <div className="absolute top-0 right-0 w-16 h-16 border-t-[10px] border-r-[10px] border-emerald-500 rounded-tr-3xl shadow-[0_0_20px_rgba(16,185,129,0.8)]"></div>
-                  <div className="absolute bottom-0 left-0 w-16 h-16 border-b-[10px] border-l-[10px] border-emerald-500 rounded-bl-3xl shadow-[0_0_20px_rgba(16,185,129,0.8)]"></div>
-                  <div className="absolute bottom-0 right-0 w-16 h-16 border-b-[10px] border-r-[10px] border-emerald-500 rounded-br-3xl shadow-[0_0_20px_rgba(16,185,129,0.8)]"></div>
+                  <div className="absolute top-0 left-0 w-12 h-12 border-t-[8px] border-l-[8px] border-emerald-500 rounded-tl-2xl shadow-[0_0_20px_rgba(16,185,129,0.8)]"></div>
+                  <div className="absolute top-0 right-0 w-12 h-12 border-t-[8px] border-r-[8px] border-emerald-500 rounded-tr-2xl shadow-[0_0_20px_rgba(16,185,129,0.8)]"></div>
+                  <div className="absolute bottom-0 left-0 w-12 h-12 border-b-[8px] border-l-[8px] border-emerald-500 rounded-bl-2xl shadow-[0_0_20px_rgba(16,185,129,0.8)]"></div>
+                  <div className="absolute bottom-0 right-0 w-12 h-12 border-b-[8px] border-r-[8px] border-emerald-500 rounded-br-2xl shadow-[0_0_20px_rgba(16,185,129,0.8)]"></div>
                   <div className="absolute top-0 left-2 right-2 h-1 bg-emerald-500 shadow-[0_0_30px_#10b981] opacity-70 animate-scan-line"></div>
                </div>
             </div>
 
             {loading && (
               <div className="absolute inset-0 bg-slate-950/70 backdrop-blur-[2px] flex flex-col items-center justify-center z-50 animate-in fade-in duration-300">
-                 <div className="w-16 h-16 border-4 border-emerald-500/20 border-t-emerald-500 rounded-full animate-spin"></div>
-                 <p className="mt-4 text-emerald-400 font-black uppercase tracking-widest text-xs">Verifying Identity...</p>
+                 <div className="w-12 h-12 border-4 border-emerald-500/20 border-t-emerald-500 rounded-full animate-spin"></div>
+                 <p className="mt-4 text-emerald-400 font-black uppercase tracking-widest text-[9px]">Verifying Identity...</p>
               </div>
             )}
          </div>
@@ -46,7 +46,7 @@ function ScannerCard({ onScan, loading }) {
 
       {/* 3. Bottom Label */}
       <div className="mt-4 text-center">
-         <h2 className="text-3xl font-black text-white tracking-tight">Scan Student QR</h2>
+         <h2 className="text-xl md:text-3xl font-black text-white tracking-tight">Scan Student QR</h2>
          <p className="text-indigo-400/40 font-bold uppercase tracking-[0.2em] text-[10px] mt-1">Ready for next detection</p>
       </div>
     </div>
@@ -59,7 +59,7 @@ function ScannerCard({ onScan, loading }) {
 function ScanResultCard({ status, formatDate }) {
   if (!status) {
     return (
-      <div className="h-full flex flex-col items-center justify-center bg-white rounded-[2.5rem] border-2 border-dashed border-zinc-100 text-zinc-300">
+      <div className="h-full flex flex-col items-center justify-center bg-white rounded-[2rem] lg:rounded-[2.5rem] border-2 border-dashed border-zinc-100 text-zinc-300 p-8">
          <div className="w-16 h-16 bg-zinc-50 rounded-[2rem] mb-4 flex items-center justify-center shadow-inner">
             <Users size={28} />
          </div>
@@ -83,72 +83,71 @@ function ScanResultCard({ status, formatDate }) {
   const StatusIcon = isSuccess ? CheckCircle2 : isWarning ? AlertCircle : XCircle
 
   return (
-    <div className={`h-full p-10 rounded-[2.5rem] border-2 shadow-sm transition-all duration-500 flex flex-col ${bgClass}`}>
+    <div className={`h-full p-6 lg:p-10 rounded-[2rem] lg:rounded-[2.5rem] border-2 shadow-sm transition-all duration-500 flex flex-col ${bgClass}`}>
       
       {/* 1. Spacious Result Header */}
-      <div className="flex items-center gap-5 mb-6">
-         <StatusIcon size={48} className={iconClass} strokeWidth={3} />
+      <div className="flex items-center gap-4 lg:gap-5 mb-6">
+         <StatusIcon size={40} className={`lg:w-12 lg:h-12 ${iconClass}`} strokeWidth={3} />
          <div className="flex-1">
-            <p className="text-[10px] font-black uppercase tracking-[0.2rem] opacity-50 mb-0.5 text-zinc-900">Verification Status</p>
-            <h4 className="text-2xl font-black text-zinc-900 tracking-tight leading-none">{status.text}</h4>
+            <p className="text-[9px] font-black uppercase tracking-widest opacity-50 mb-0.5 text-zinc-900">Verification Status</p>
+            <h4 className="text-lg lg:text-2xl font-black text-zinc-900 tracking-tight leading-tight">{status.text}</h4>
          </div>
-         <div className="h-10 w-10 flex items-center justify-center rounded-xl bg-white/40 border border-white/50 text-zinc-700">
+         <div className="h-8 w-8 lg:h-10 lg:w-10 flex items-center justify-center rounded-xl bg-white/40 border border-white/50">
             {isSuccess ? "✅" : "⚠️"}
          </div>
       </div>
 
       {/* Visual Separation Divider */}
-      <div className={`border-t mb-8 ${dividerClass}`}></div>
+      <div className={`border-t mb-6 lg:mb-8 ${dividerClass}`}></div>
 
       {/* 2. Main Identity Section (Horizontal Balance) */}
-      <div className="flex-1 flex flex-col lg:flex-row gap-10 items-center lg:items-start justify-between">
+      <div className="flex-1 flex flex-col lg:flex-row gap-6 lg:gap-10 items-center lg:items-start justify-between overflow-hidden">
          
          {/* LEFT SUB-SECTION: PROFILE + PRIMARY DETAILS */}
-         <div className="flex items-center gap-6">
+         <div className="flex items-center gap-4 lg:gap-6 w-full lg:w-auto">
             <img 
                src={status.customer.photo_url} 
-               className="w-24 h-24 rounded-3xl object-cover border-4 border-white shadow-2xl" 
+               className="w-16 h-16 lg:w-24 lg:h-24 rounded-2xl lg:rounded-3xl object-cover border-2 lg:border-4 border-white shadow-xl" 
                alt={status.customer.name} 
             />
-            <div className="space-y-3">
+            <div className="space-y-2 lg:space-y-3 flex-1 min-w-0">
                <div>
-                  <h3 className="text-2xl font-black text-zinc-900 leading-tight">{status.customer.name}</h3>
-                  <div className="mt-1.5 inline-flex items-center px-3 py-1 bg-zinc-900 text-white rounded-lg shadow-sm">
-                     <span className="text-[10px] font-black tracking-widest uppercase">ID: {status.customer.id}</span>
+                  <h3 className="text-xl lg:text-2xl font-black text-zinc-900 leading-tight truncate">{status.customer.name}</h3>
+                  <div className="mt-1 inline-flex items-center px-2 py-0.5 bg-zinc-900 text-white rounded shadow-sm">
+                     <span className="text-[9px] font-black tracking-widest uppercase">ID: {status.customer.id}</span>
                   </div>
                </div>
                
-               <div className="space-y-2">
-                  <div className="flex items-center gap-2.5">
-                     <div className="w-7 h-7 bg-white/40 rounded-lg flex items-center justify-center border border-white/20"><Phone size={12} className="text-zinc-600" /></div>
-                     <p className="text-sm font-bold text-zinc-800">{status.customer.phone || "—"}</p>
+               <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                     <Phone size={10} className="text-zinc-600" />
+                     <p className="text-xs font-bold text-zinc-800">{status.customer.phone || "—"}</p>
                   </div>
-                  <div className="flex items-center gap-2.5">
-                     <div className="w-7 h-7 bg-white/40 rounded-lg flex items-center justify-center border border-white/20"><Mail size={12} className="text-zinc-600" /></div>
-                     <p className="text-sm font-bold text-zinc-800 truncate max-w-[200px]">{status.customer.email || "—"}</p>
+                  <div className="flex items-center gap-2">
+                     <Mail size={10} className="text-zinc-600" />
+                     <p className="text-xs font-bold text-zinc-800 truncate">{status.customer.email || "—"}</p>
                   </div>
                </div>
             </div>
          </div>
 
          {/* RIGHT SUB-SECTION: KEY STATS CENTERED/BALANCED */}
-         <div className="flex flex-row lg:flex-col items-center lg:items-end justify-between w-full lg:w-auto lg:text-right gap-8 lg:gap-5 border-t lg:border-t-0 lg:border-l border-white/30 pt-6 lg:pt-0 lg:pl-10">
-            <div className="space-y-1">
-               <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Plan Expiry Date</p>
-               <p className="text-lg font-black text-zinc-900 tracking-tight">{formatDate(status.customer.subscription_expiry)}</p>
+         <div className="flex flex-row lg:flex-col items-center lg:items-end justify-between w-full lg:w-auto lg:text-right gap-4 lg:gap-5 border-t lg:border-t-0 lg:border-l border-white/30 pt-4 lg:pt-0 lg:pl-10">
+            <div className="space-y-0.5">
+               <p className="text-[9px] font-black text-zinc-500 uppercase tracking-widest">Plan Expiry Date</p>
+               <p className="text-md lg:text-lg font-black text-zinc-900 tracking-tight">{formatDate(status.customer.subscription_expiry)}</p>
             </div>
-            <div className="space-y-1">
-               <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Days Remaining</p>
-               <div className="flex items-baseline justify-end gap-2">
-                  <span className={`text-3xl font-black ${status.customer.days_left <= 3 ? 'text-rose-600' : 'text-emerald-700'}`}>
+            <div className="space-y-0.5">
+               <p className="text-[9px] font-black text-zinc-500 uppercase tracking-widest">Days Remaining</p>
+               <div className="flex items-baseline justify-end gap-1.5">
+                  <span className={`text-2xl lg:text-3xl font-black ${status.customer.days_left <= 3 ? 'text-rose-600' : 'text-emerald-700'}`}>
                      {status.customer.days_left}
                   </span>
-                  <span className="text-xs font-black text-zinc-500 uppercase tracking-tighter">Days</span>
+                  <span className="text-[10px] font-black text-zinc-500 uppercase tracking-tighter">Days</span>
                </div>
             </div>
          </div>
       </div>
-
     </div>
   )
 }
@@ -305,34 +304,34 @@ export default function Scan() {
   }
 
   return (
-    <div className="fixed inset-0 flex flex-col p-4 md:p-10 bg-[#f8fafc] overflow-hidden">
+    <div className="min-h-screen flex flex-col p-4 md:p-10 bg-[#f8fafc] overflow-y-auto lg:overflow-hidden lg:h-screen">
       
-      {/* 🚀 Top Header (Fixed Height) */}
+      {/* 🚀 Top Header (Fixed height on desktop, natural on mobile) */}
       <div className="flex-shrink-0 mb-6 px-2">
-         <h1 className="text-3xl font-black text-slate-900 tracking-tight leading-none">Attendance Scanner</h1>
+         <h1 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight leading-none">Attendance Scanner</h1>
          <div className="mt-2 flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_#10b981]"></span>
             <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Live Meal Redemption System</p>
          </div>
       </div>
 
-      {/* 🚀 Main Split Layout (Grid) */}
-      <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-8 overflow-hidden">
+      {/* 🚀 Main Split Layout (Stack on mobile, Grid on LG) */}
+      <div className="flex-1 flex flex-col lg:grid lg:grid-cols-2 gap-6 lg:gap-8 min-h-0">
         
-        {/* LEFT: SCANNER (50%) */}
-        <div className="h-full min-h-0 overflow-hidden">
+        {/* LEFT: SCANNER (50% on desktop, auto on mobile) */}
+        <div className="h-auto lg:h-full min-h-0">
            <ScannerCard onScan={handleScan} loading={loading} />
         </div>
 
-        {/* RIGHT: OUTPUT & HISTORY (50%) */}
-        <div className="h-full flex flex-col gap-6 min-h-0 overflow-hidden">
+        {/* RIGHT: OUTPUT & HISTORY (50% on desktop, stack on mobile) */}
+        <div className="h-auto lg:h-full flex flex-col gap-6 min-h-0">
            {/* Section 1: Result Display */}
-           <div className="flex-1 min-h-0">
+           <div className="h-auto lg:flex-1 min-h-[300px] lg:min-h-0">
               <ScanResultCard status={status} formatDate={formatDate} />
            </div>
 
            {/* Section 2: Recent Activity */}
-           <div className="flex-1 min-h-0">
+           <div className="h-auto lg:flex-1 min-h-[300px] lg:min-h-0 pb-10 lg:pb-0">
               <LastScansList scans={recentScans} />
            </div>
         </div>
