@@ -3,7 +3,11 @@ import { apiWrapper } from "./apiUtils";
 
 export const getExpenses = async (params = {}) => {
   return apiWrapper(async () => {
-    const res = await api.get("/accounting/expenses", { params });
+    // Strip empty strings and nulls — FastAPI's date validator rejects empty strings (causes 422)
+    const cleanParams = Object.fromEntries(
+      Object.entries(params).filter(([, v]) => v !== "" && v !== null && v !== undefined)
+    );
+    const res = await api.get("/accounting/expenses", { params: cleanParams });
     // Normalize: ensure it returns { data, total, page, limit }
     return {
       data: res.data.expenses || [],

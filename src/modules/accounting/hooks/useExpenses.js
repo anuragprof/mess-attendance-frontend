@@ -28,11 +28,11 @@ export const useExpenses = (filters = {}) => {
 
   const addExpense = async (data) => {
     try {
-      const response = await expenseApi.createExpense(data);
-      // Optional: instead of refetching, prepend for zero-reload feel
-      setExpenses(prev => [response.data, ...prev].slice(0, pagination.limit));
-      setTotal(prev => prev + 1);
-      return response.data;
+      await expenseApi.createExpense(data);
+      // Refetch instead of optimistic prepend — raw API response uses snake_case
+      // keys (expense_date, category_id) which mismatch the alias keys (expenseDate, categoryId)
+      // the frontend expects, causing React error #31.
+      await fetchExpenses();
     } catch (err) {
       setError(err.message);
       throw err;
