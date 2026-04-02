@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { QRCodeSVG } from "qrcode.react";
 import { Link } from "react-router-dom";
 import Card from "../Components/Card";
 import { toast } from "sonner";
@@ -11,7 +12,7 @@ import {
   SelectValue,
 } from "@/Pages/ui/select";
 import MealDistributionChart from "../Components/MealDistributionChart";
-import { Search, UserPlus, FileText, Trash2, Edit3, RotateCw, MoreVertical, Phone, MessageCircle, Sun, Moon, Cloud, Sparkles } from "lucide-react";
+import { Search, UserPlus, FileText, Trash2, Edit3, RotateCw, MoreVertical, Phone, MessageCircle, Sun, Moon, Cloud, Sparkles, Clock, AlertCircle } from "lucide-react";
 
 export default function Admin() {
 const [customers, setCustomers] = useState([]);
@@ -25,12 +26,14 @@ const [previewCustomer, setPreviewCustomer] = useState(null);
 // Analytics State
 const [mealDistribution, setMealDistribution] = useState(null);
 const [dailyTrend, setDailyTrend] = useState(null);
+const [expiringSoon, setExpiringSoon] = useState([]);
 
 useEffect(() => {
   fetchCustomers();
   fetchPlans();
   fetchMealDistribution();
   fetchDailyTrend();
+  fetchExpiringSoon();
 }, []);
 
 const fetchCustomers = async () => {
@@ -90,6 +93,17 @@ const fetchDailyTrend = async () => {
   }
 };
 
+const fetchExpiringSoon = async () => {
+  try {
+    const res = await axios.get("/analytics/expiring-soon", {
+      withCredentials: true,
+    });
+    setExpiringSoon(Array.isArray(res.data) ? res.data : []);
+  } catch (error) {
+    console.error("Failed to fetch expiring soon:", error);
+  }
+};
+
 const deleteCustomer = async (id) => {
 try {
 await axios.delete(`/customers/${id}`, {
@@ -103,22 +117,23 @@ toast.error("Delete failed");
 };
 
 const handleUpdate = async () => {
-const data = new FormData();
-data.append("full_name", editingCustomer.full_name);
-data.append("phone_number", editingCustomer.phone_number);
-data.append("email", editingCustomer.email);
-data.append("plan_id", editingCustomer.plan_id);
+  try {
+    const payload = {
+      full_name: editingCustomer.full_name,
+      phone_number: editingCustomer.phone_number,
+      email: editingCustomer.email,
+    };
 
+    await axios.patch(`/customers/${editingCustomer.id}`, payload, {
+      withCredentials: true,
+    });
 
-await axios.put(`/customers/${editingCustomer.id}`, data, {
-  withCredentials: true,
-});
-
-toast.success("Customer updated");
-setEditingCustomer(null);
-fetchCustomers();
-
-
+    toast.success("Customer updated");
+    setEditingCustomer(null);
+    fetchCustomers();
+  } catch (err) {
+    toast.error(err.response?.data?.detail || "Update failed");
+  }
 };
 
 const handleRenew = async () => {
@@ -258,8 +273,12 @@ window.open(whatsappUrl, "_blank");
             >
               <td className="p-1">
                 <img
-                  src={customer.photo_url}
+                  src={customer.photo_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(customer.full_name)}&background=random`}
                   alt="customer"
+                  onError={(e) => {
+                    e.target.onerror = null; 
+                    e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(customer.full_name)}&background=random`;
+                  }}
                   onClick={() => setPreviewCustomer(customer)}
                   className="w-8 h-8 object-cover rounded-full border border-zinc-100 shadow-sm cursor-pointer hover:scale-105 transition"
                 />
@@ -288,12 +307,21 @@ window.open(whatsappUrl, "_blank");
               {/* <td className="p-1">{customer.email}</td> */}
 
               <td className="p-1">
-                <img
-                  src={customer.qr_url}
-                  alt="qr"
+                <div
+                  className="flex items-center justify-center cursor-pointer hover:scale-105 transition"
                   onClick={() => setPreviewCustomer(customer)}
-                  className="w-10 h-10 border rounded-md cursor-pointer hover:scale-105 transition"
-                />
+                >
+                  {customer.qr_value ? (
+                    <QRCodeSVG
+                      value={customer.qr_value}
+                      size={48}
+                      level="H"
+                      className="rounded"
+                    />
+                  ) : (
+                    <span className="text-[10px] text-zinc-400">N/A</span>
+                  )}
+                </div>
               </td>
 
               <td className="p-1">
@@ -393,7 +421,7 @@ window.open(whatsappUrl, "_blank");
   </div>
   
   <div className="grid md:grid-cols-2 gap-3">
-    {/* Distribution Chart */}
+    {/* Distribution Chart (Restored) */}
     <div className="h-[240px]">
       {mealDistribution ? (
         <MealDistributionChart data={mealDistribution} />
@@ -411,43 +439,44 @@ window.open(whatsappUrl, "_blank");
           <h3 className="text-base font-black text-zinc-800 mb-1 lg:mb-2 uppercase tracking-tight">Today's Consumption</h3>
           <div className="flex-1 flex flex-col items-center justify-center -mt-2 relative">
              {/* Dynamic CSS Scenery Background */}
-             <div className="absolute inset-0 pointer-events-none transition-all duration-1000 overflow-hidden opacity-[0.12]">
+             <div className="absolute inset-0 pointer-events-none transition-all duration-1000 overflow-hidden opacity-[0.18]">
                 {(() => {
-                  const hour = (new Date().getUTCHours() + 5.5) % 24;
-                  if (hour >= 5 && hour < 16) {
+                  const hour = (new Date().getHours()) % 24; // Use local hour for realistic scenery
+                  if (hour >= 6 && hour < 18) {
                     return (
-                      <div className="w-full h-full bg-gradient-to-b from-blue-100 to-blue-50/0 flex flex-col items-center justify-center">
+                      <div className="w-full h-full bg-gradient-to-b from-sky-400/30 via-blue-100/20 to-transparent flex flex-col items-center justify-center">
                         {/* Sun */}
-                        <div className="w-24 h-24 bg-amber-200 rounded-full blur-xl absolute top-1/2 left-1/2 -translate-x-[110%] -translate-y-1/2 animate-pulse" />
-                        <div className="w-16 h-16 bg-amber-400 rounded-full shadow-[0_0_40px_rgba(245,158,11,0.5)] absolute top-1/2 left-1/2 -translate-x-[110%] -translate-y-1/2" />
+                        <div className="w-24 h-24 bg-amber-200 rounded-full blur-2xl absolute top-1/2 left-1/2 -translate-x-[120%] -translate-y-1/2 animate-pulse opacity-60" />
+                        <div className="w-14 h-14 bg-gradient-to-tr from-amber-400 to-yellow-300 rounded-full shadow-[0_0_50px_rgba(245,158,11,0.6)] absolute top-1/2 left-1/2 -translate-x-[120%] -translate-y-1/2" />
                         
-                        {/* Hills */}
-                        <div className="w-[150%] h-32 bg-emerald-500/20 rounded-[100%] absolute -bottom-16 left-[-25%]" />
-                        <div className="w-[150%] h-24 bg-emerald-600/30 rounded-[100%] absolute -bottom-14 left-[5%]" />
+                        {/* Day Hills */}
+                        <div className="w-[160%] h-36 bg-gradient-to-t from-emerald-600/30 to-emerald-500/10 rounded-[100%] absolute -bottom-16 left-[-30%]" />
+                        <div className="w-[160%] h-28 bg-gradient-to-t from-green-600/40 to-green-500/10 rounded-[100%] absolute -bottom-12 left-[0%]" />
                       </div>
                     );
                   } else {
                     return (
-                      <div className="w-full h-full bg-gradient-to-b from-indigo-950 to-indigo-900/0 flex flex-col items-center justify-center">
+                      <div className="w-full h-full bg-gradient-to-br from-blue-900 via-indigo-950 to-blue-950 flex flex-col items-center justify-center">
                          {/* Moon */}
-                         <div className="w-16 h-16 bg-zinc-100 rounded-full shadow-[0_0_60px_rgba(255,255,255,0.2)] absolute top-1/2 left-1/2 -translate-x-[110%] -translate-y-1/2" />
-                         <div className="w-12 h-12 bg-indigo-950 rounded-full absolute top-1/2 left-1/2 -translate-x-[95%] -translate-y-2/3" />
+                         <div className="w-16 h-16 bg-blue-50 rounded-full shadow-[0_0_80px_rgba(59,130,246,0.3)] absolute top-1/2 left-1/2 -translate-x-[120%] -translate-y-1/2" />
+                         <div className="w-12 h-12 bg-indigo-950 rounded-full absolute top-1/2 left-1/2 -translate-x-[105%] -translate-y-2/3" />
                          
-                         {/* Stars */}
-                         {[1,2,3,4,5].map(i => (
+                         {/* Sparkling Stars */}
+                         {[1,2,3,4,5,6,7,8].map(i => (
                            <div key={i} 
-                             className={`w-0.5 h-0.5 bg-white rounded-full absolute animate-pulse`} 
+                             className={`w-0.5 h-0.5 bg-blue-100 rounded-full absolute animate-pulse`} 
                              style={{ 
-                               top: `${Math.random() * 60}%`, 
-                               left: `${Math.random() * 90}%`,
-                               animationDelay: `${i * 0.5}s`
+                               top: `${10 + Math.random() * 60}%`, 
+                               left: `${10 + Math.random() * 80}%`,
+                               animationDelay: `${i * 0.4}s`,
+                               opacity: 0.4 + Math.random() * 0.6
                              }} 
                            />
                          ))}
 
-                         {/* Night Hills */}
-                         <div className="w-[150%] h-32 bg-zinc-950/40 rounded-[100%] absolute -bottom-16 left-[-25%]" />
-                         <div className="w-[150%] h-24 bg-zinc-950/60 rounded-[100%] absolute -bottom-14 left-[5%]" />
+                         {/* Night Hills (Richer Blues) */}
+                         <div className="w-[160%] h-36 bg-indigo-900/40 rounded-[100%] absolute -bottom-16 left-[-30%] blur-[1px]" />
+                         <div className="w-[160%] h-28 bg-blue-900/50 rounded-[100%] absolute -bottom-12 left-[0%] blur-[1px]" />
                       </div>
                     );
                   }
@@ -649,11 +678,19 @@ window.open(whatsappUrl, "_blank");
 
           <div className="flex flex-col items-center">
             <p className="font-medium mb-2">QR Code</p>
-            <img
-              src={previewCustomer.qr_url}
-              alt="qr"
-              className="w-64 h-64 border rounded-xl shadow-lg"
-            />
+            {previewCustomer.qr_value ? (
+              <div className="p-3 border rounded-xl shadow-lg bg-white">
+                <QRCodeSVG
+                  value={previewCustomer.qr_value}
+                  size={240}
+                  level="H"
+                />
+              </div>
+            ) : (
+              <div className="w-64 h-64 flex items-center justify-center border rounded-xl shadow-lg bg-zinc-50 text-zinc-400 text-sm">
+                No QR Data
+              </div>
+            )}
           </div>
         </div>
 
@@ -670,7 +707,62 @@ window.open(whatsappUrl, "_blank");
   )}
 
   <div className="grid md:grid-cols-2 gap-4">
-    <Card title="Issue QR / Student">Coming soon…</Card>
+    {/* Expiring Soon Card */}
+    <div className="min-h-[200px]">
+      <div className="gradient-card p-4 h-full flex flex-col border border-zinc-100 overflow-hidden shadow-sm shadow-blue-500/5">
+        <div className="flex items-center justify-between mb-3 border-b border-zinc-50 pb-2">
+          <h3 className="text-sm font-black text-zinc-800 uppercase tracking-tight flex items-center gap-2">
+             <AlertCircle size={14} className="text-rose-500" />
+             Renewal Alerts {"(< 4d)"}
+          </h3>
+          <span className="text-[9px] bg-rose-50 text-rose-600 px-2 py-0.5 rounded-full font-black border border-rose-100 uppercase tracking-widest">
+             Action Required
+          </span>
+        </div>
+        
+        <div className="flex-1 space-y-2 overflow-y-auto pr-1 max-h-[160px]">
+          {expiringSoon.length > 0 ? (
+             expiringSoon.map((person) => (
+               <div 
+                 key={person.id} 
+                 className="flex items-center gap-3 p-2 rounded-xl bg-white/50 border border-zinc-50 hover:border-blue-100 hover:bg-white transition-all group"
+               >
+                 <div className="relative">
+                   <img 
+                     src={person.photo_url} 
+                     alt={person.name} 
+                     className="w-10 h-10 rounded-full object-cover border border-zinc-100 shadow-sm"
+                   />
+                   <div className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white flex items-center justify-center ${person.days_left === 0 ? 'bg-rose-500' : 'bg-amber-500'}`}>
+                     <Clock size={8} className="text-white" />
+                   </div>
+                 </div>
+                 
+                 <div className="flex-1 min-w-0">
+                   <p className="text-xs font-bold text-zinc-900 truncate">{person.name}</p>
+                   <p className="text-[9px] text-zinc-400 font-mono">CUST-{person.id}</p>
+                 </div>
+                 
+                 <div className="text-right">
+                   <p className={`text-[10px] font-black ${person.days_left === 0 ? 'text-rose-600' : 'text-amber-600'}`}>
+                     {person.days_left === 0 ? 'Expired' : `${person.days_left} Days`}
+                   </p>
+                   <p className="text-[8px] text-zinc-400 uppercase tracking-tighter">
+                    Ends {new Date(person.end_date).toLocaleDateString("en-IN", { day: "numeric", month: "short" })}
+                   </p>
+                 </div>
+               </div>
+             ))
+          ) : (
+            <div className="h-full flex flex-col items-center justify-center text-zinc-400/50 py-4">
+               <Sparkles className="w-8 h-8 mb-2 opacity-20" />
+               <p className="text-[10px] font-black uppercase tracking-widest">No Urgent Renewals</p>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+
     <Card title="Meals & Slots">Coming soon…</Card>
   </div>
 </div>
