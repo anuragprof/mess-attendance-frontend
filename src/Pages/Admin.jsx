@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { QRCodeSVG } from "qrcode.react";
 import { Link } from "react-router-dom";
 import Card from "../Components/Card";
 import { toast } from "sonner";
@@ -311,12 +310,15 @@ window.open(whatsappUrl, "_blank");
                   className="flex items-center justify-center cursor-pointer hover:scale-105 transition"
                   onClick={() => setPreviewCustomer(customer)}
                 >
-                  {customer.qr_value ? (
-                    <QRCodeSVG
-                      value={customer.qr_value}
-                      size={48}
-                      level="H"
-                      className="rounded"
+                  {customer.qr_url ? (
+                    <img
+                      src={customer.qr_url}
+                      alt="qr"
+                      className="w-10 h-10 border rounded shadow-sm object-cover"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = "https://placehold.co/100x100/f4f4f5/71717a?text=QR";
+                      }}
                     />
                   ) : (
                     <span className="text-[10px] text-zinc-400">N/A</span>
@@ -678,14 +680,16 @@ window.open(whatsappUrl, "_blank");
 
           <div className="flex flex-col items-center">
             <p className="font-medium mb-2">QR Code</p>
-            {previewCustomer.qr_value ? (
-              <div className="p-3 border rounded-xl shadow-lg bg-white">
-                <QRCodeSVG
-                  value={previewCustomer.qr_value}
-                  size={240}
-                  level="H"
-                />
-              </div>
+            {previewCustomer.qr_url ? (
+              <img
+                src={previewCustomer.qr_url}
+                alt="qr"
+                className="w-64 h-64 border rounded-xl shadow-lg object-contain bg-white"
+                onError={(e) => {
+                   e.target.onerror = null;
+                   e.target.src = "https://placehold.co/400x400/f4f4f5/71717a?text=No+QR+Found";
+                }}
+              />
             ) : (
               <div className="w-64 h-64 flex items-center justify-center border rounded-xl shadow-lg bg-zinc-50 text-zinc-400 text-sm">
                 No QR Data
