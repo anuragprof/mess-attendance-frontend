@@ -99,7 +99,7 @@ export default function LibraryDashboard() {
   // Recent 5 active members (sorted by expiry desc)
   const recentAdmissions = [...customers]
     .sort((a, b) => (b.id ?? 0) - (a.id ?? 0))
-    .slice(0, 5);
+    .slice(0, 3);
 
   // ── stat cards config ──────────────────────────────────
   const CARDS = [
