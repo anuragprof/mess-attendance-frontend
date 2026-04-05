@@ -101,8 +101,10 @@ export default function LibrarySidebar({ me, setMe, isOpen, onClose }) {
             <div className="w-8 h-8 bg-indigo-500 rounded-lg flex items-center justify-center shadow-md shadow-indigo-700/50">
               <BookOpen size={16} className="text-white" />
             </div>
-            <div className="leading-tight">
-              <p className="text-sm font-bold text-white tracking-tight">Vachanalay</p>
+            <div className="leading-tight overflow-hidden">
+              <p className="text-sm font-bold text-white tracking-tight truncate">
+                {me?.name || "Vachanalay"}
+              </p>
               <p className="text-[10px] text-slate-400 leading-none">vip</p>
             </div>
           </div>
