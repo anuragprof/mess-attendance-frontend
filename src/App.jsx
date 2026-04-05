@@ -10,6 +10,8 @@ import Login from "./Pages/Login";
 import Scan from "./Pages/Scan";
 import CustomerRegistration from "./Pages/CusReg";
 import Admin from "./Pages/Admin";
+import LibraryDashboard from "./Pages/Dashboard";
+import Admissions from "./Pages/Admissions";
 import Billing from "./Pages/Billing";
 import Reports from "./Pages/Reports";
 
@@ -69,7 +71,8 @@ export default function App() {
             <Route path="/billing" element={<BillingPage />} />
             <Route path="/renew-plan" element={<Billing />} />
             <Route path="/register" element={<CustomerRegistration />} />
-            <Route path="/dashboard" element={<Admin />} />
+            <Route path="/dashboard" element={<LibraryDashboard />} />
+            <Route path="/admissions" element={<Admissions />} />
             <Route path="/reports" element={<Reports />} />
 
             {/* Accounting Module Routes */}
