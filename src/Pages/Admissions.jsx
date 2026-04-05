@@ -390,13 +390,6 @@ export default function Admissions() {
                           </div>
 
                           {/* Exit / Quick action */}
-                          <button
-                            onClick={() => { setRenewCustomer(c); }}
-                            className="flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold text-slate-500 hover:text-indigo-600 border border-slate-200 hover:border-indigo-300 rounded-lg transition-all"
-                            title="Renew / Exit"
-                          >
-                            <LogOut size={12} /> Exit
-                          </button>
                         </div>
                       </td>
                     </tr>
