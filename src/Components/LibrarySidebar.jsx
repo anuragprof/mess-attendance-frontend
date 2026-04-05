@@ -7,9 +7,9 @@ import {
   RefreshCw,
   BarChart3,
   Scan as ScanIcon,
+  UtensilsCrossed,
   LogOut,
   X,
-  BookOpen,
   Landmark,
   Receipt,
   FolderOpen,
@@ -99,7 +99,7 @@ export default function LibrarySidebar({ me, setMe, isOpen, onClose }) {
         <div className="h-16 flex items-center justify-between px-5 border-b border-white/10">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 bg-indigo-500 rounded-lg flex items-center justify-center shadow-md shadow-indigo-700/50">
-              <BookOpen size={16} className="text-white" />
+              <UtensilsCrossed size={16} className="text-white" />
             </div>
             <div className="leading-tight overflow-hidden">
               <p className="text-sm font-bold text-white tracking-tight truncate">
