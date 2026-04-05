@@ -3,7 +3,7 @@ import { IndianRupee, Clock, Smartphone, Banknote } from "lucide-react";
 export default function RecentPayments({ payments = [] }) {
   const recentPayments = [...payments]
     .sort((a, b) => new Date(b.date) - new Date(a.date))
-    .slice(0, 8); // Slightly fewer for better layout
+    .slice(0, 5); // Reduced to 5 as requested
 
   return (
     <div className="bg-white rounded-[2.5rem] p-8 h-full flex flex-col shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100">
@@ -20,8 +20,8 @@ export default function RecentPayments({ payments = [] }) {
         </div>
       </div>
 
-      {/* List */}
-      <div className="flex-grow space-y-3 overflow-y-auto pr-2 -mr-2 custom-scrollbar">
+      {/* List (Scrollable) */}
+      <div className="flex-grow space-y-3 overflow-y-auto pr-2 -mr-2 custom-scrollbar max-h-[360px]">
         {recentPayments.length > 0 ? (
           recentPayments.map((p, idx) => (
             <div
