@@ -1,7 +1,10 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Menu, Bell, UserPlus } from "lucide-react";
 
 export default function Topbar({ title, subtitle, onMenuToggle }) {
+  const location = useLocation();
+  const isAccounting = location.pathname.startsWith("/accounting");
+
   return (
     <header className="h-16 bg-white/80 backdrop-blur-md border-b border-zinc-200 sticky top-0 z-10 flex items-center justify-between px-4 lg:px-8 shadow-sm">
       
@@ -30,15 +33,18 @@ export default function Topbar({ title, subtitle, onMenuToggle }) {
           <span className="absolute top-2 right-2 w-2 h-2 bg-rose-500 rounded-full border-2 border-white animate-pulse"></span>
         </button>
 
-        <div className="h-6 w-px bg-zinc-200 mx-1 hidden sm:block"></div>
-
-        <Link
-          to="/register"
-          className="bg-blue-600 hover:bg-blue-700 text-white shadow-md shadow-blue-600/20 px-3 lg:px-4 py-2 rounded-xl text-sm font-bold flex items-center gap-2 transition-all transform hover:-translate-y-0.5 active:scale-95"
-        >
-          <UserPlus size={18} />
-          <span className="hidden sm:inline">Add Customer</span>
-        </Link>
+        {!isAccounting && (
+          <>
+            <div className="h-6 w-px bg-zinc-200 mx-1 hidden sm:block"></div>
+            <Link
+              to="/register"
+              className="bg-blue-600 hover:bg-blue-700 text-white shadow-md shadow-blue-600/20 px-3 lg:px-4 py-2 rounded-xl text-sm font-bold flex items-center gap-2 transition-all transform hover:-translate-y-0.5 active:scale-95"
+            >
+              <UserPlus size={18} />
+              <span className="hidden sm:inline">Add Customer</span>
+            </Link>
+          </>
+        )}
       </div>
     </header>
   );
