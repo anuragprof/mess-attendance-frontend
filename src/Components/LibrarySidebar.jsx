@@ -11,9 +11,17 @@ import {
   LogOut,
   X,
   BookOpen,
+  Landmark,
+  Receipt,
+  FolderOpen,
+  PieChart as PieChartIcon,
+  RefreshCw,
+  Scan as ScanIcon,
 } from "lucide-react";
+import ModuleSwitcher from "./ModuleSwitcher";
+import { useModule, MODULES } from "../context/ModuleContext";
 
-const NAV_ITEMS = [
+const ATTENDANCE_NAV = [
   { to: "/dashboard",   icon: <LayoutDashboard size={18} />, label: "Dashboard"  },
   { to: "/admissions",  icon: <UserCheck size={18} />,       label: "Admissions" },
   { to: "/members",     icon: <Users size={18} />,           label: "Members"    },
@@ -21,6 +29,13 @@ const NAV_ITEMS = [
   { to: "/billing",     icon: <CreditCard size={18} />,      label: "Payments"   },
   { to: "/discounts",   icon: <Tag size={18} />,             label: "Discounts"  },
   { to: "/reports",     icon: <BarChart3 size={18} />,       label: "Reports"    },
+];
+
+const ACCOUNTING_NAV = [
+  { to: "/accounting/dashboard",  icon: <Landmark size={18} />,      label: "Finance Dash"  },
+  { to: "/accounting/expenses",   icon: <Receipt size={18} />,       label: "Expenses"      },
+  { to: "/accounting/categories", icon: <FolderOpen size={18} />,     label: "Categories"    },
+  { to: "/accounting/reports",    icon: <PieChartIcon size={18} />, label: "Finance Reps"  },
 ];
 
 function SidebarItem({ to, icon, label, onClick }) {
@@ -47,6 +62,7 @@ function SidebarItem({ to, icon, label, onClick }) {
 
 export default function LibrarySidebar({ me, setMe, isOpen, onClose }) {
   const navigate = useNavigate();
+  const { activeModule } = useModule();
 
   const handleLogout = async () => {
     try {
@@ -61,6 +77,8 @@ export default function LibrarySidebar({ me, setMe, isOpen, onClose }) {
   const handleNavClick = () => {
     if (onClose) onClose();
   };
+
+  const navItems = activeModule === MODULES.ATTENDANCE ? ATTENDANCE_NAV : ACCOUNTING_NAV;
 
   return (
     <>
@@ -100,13 +118,19 @@ export default function LibrarySidebar({ me, setMe, isOpen, onClose }) {
           </button>
         </div>
 
-        {/* Nav */}
+        {/* Module Switcher & Nav */}
         <div className="flex-1 overflow-y-auto px-3 py-5">
+          
+          {/* Module Switcher Integration */}
+          <div className="px-1 scale-90 origin-left mb-2">
+             <ModuleSwitcher />
+          </div>
+
           <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest px-2 mb-3">
             Main Menu
           </p>
           <nav className="flex flex-col gap-0.5">
-            {NAV_ITEMS.map((item) => (
+            {navItems.map((item) => (
               <SidebarItem key={item.to} {...item} onClick={handleNavClick} />
             ))}
           </nav>
