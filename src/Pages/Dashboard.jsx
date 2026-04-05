@@ -227,28 +227,28 @@ export default function Dashboard() {
               <Zap size={18} className="text-amber-400" />
               <h3 className="font-bold text-slate-800">Quick Actions</h3>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 lg:gap-4">
               <ActionCard
-                title="New Admission"
-                icon={<UserPlus size={24} />}
+                label="New Admission"
+                icon={<UserPlus size={22} />}
                 color="emerald"
                 onClick={() => navigate("/register")}
               />
               <ActionCard
-                title="Renew Plan"
-                icon={<RefreshCw size={24} />}
+                label="Renew Plan"
+                icon={<RefreshCw size={22} />}
                 color="indigo"
                 onClick={() => navigate("/renew-plan")}
               />
               <ActionCard
-                title="Payments"
-                icon={<Wallet size={24} />}
+                label="Payments"
+                icon={<Wallet size={22} />}
                 color="amber"
                 onClick={() => navigate("/billing")}
               />
               <ActionCard
-                title="Reports"
-                icon={<BarChart3 size={24} />}
+                label="Reports"
+                icon={<BarChart3 size={22} />}
                 color="purple"
                 onClick={() => navigate("/reports")}
               />
