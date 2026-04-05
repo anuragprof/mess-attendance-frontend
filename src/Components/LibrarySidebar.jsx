@@ -122,7 +122,7 @@ export default function LibrarySidebar({ me, setMe, isOpen, onClose }) {
         <div className="flex-1 overflow-y-auto px-3 py-5">
           
           {/* Module Switcher Integration */}
-          <div className="px-1 scale-90 origin-left mb-2">
+          <div className="px-1 mb-2">
              <ModuleSwitcher />
           </div>
 
