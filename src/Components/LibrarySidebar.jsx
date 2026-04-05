@@ -2,12 +2,11 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { logoutVendor } from "../features/auth/api";
 import {
   LayoutDashboard,
-  Users,
   UserCheck,
-  Armchair,
   CreditCard,
-  Tag,
+  RefreshCw,
   BarChart3,
+  Scan as ScanIcon,
   LogOut,
   X,
   BookOpen,
@@ -15,8 +14,6 @@ import {
   Receipt,
   FolderOpen,
   PieChart as PieChartIcon,
-  RefreshCw,
-  Scan as ScanIcon,
 } from "lucide-react";
 import ModuleSwitcher from "./ModuleSwitcher";
 import { useModule, MODULES } from "../context/ModuleContext";
@@ -24,11 +21,10 @@ import { useModule, MODULES } from "../context/ModuleContext";
 const ATTENDANCE_NAV = [
   { to: "/dashboard",   icon: <LayoutDashboard size={18} />, label: "Dashboard"  },
   { to: "/admissions",  icon: <UserCheck size={18} />,       label: "Admissions" },
-  { to: "/members",     icon: <Users size={18} />,           label: "Members"    },
-  { to: "/seats",       icon: <Armchair size={18} />,        label: "Seats"      },
+  { to: "/renew-plan",  icon: <RefreshCw size={18} />,       label: "Renew Plan" },
   { to: "/billing",     icon: <CreditCard size={18} />,      label: "Payments"   },
-  { to: "/discounts",   icon: <Tag size={18} />,             label: "Discounts"  },
   { to: "/reports",     icon: <BarChart3 size={18} />,       label: "Reports"    },
+  { to: "/scan",        icon: <ScanIcon size={18} />,        label: "Scan QR"    },
 ];
 
 const ACCOUNTING_NAV = [
