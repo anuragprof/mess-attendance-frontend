@@ -59,7 +59,6 @@ export default function Dashboard() {
   const dayName = today.toLocaleDateString("en-US", { weekday: "long" });
 
   const stats = useMemo(() => {
-    // 1. Dues calculation
     const duesList = customers.map(c => ({
       name: c.full_name,
       due: (c.total_amount || 0) - (c.total_amount_paid || 0)
@@ -129,20 +128,12 @@ export default function Dashboard() {
       iconBg: "bg-emerald-50",
       iconColor: "text-emerald-500",
     },
-    {
-      title: "PENDING DUES",
-      value: `₹${(stats.pendingDuesAmount || 0).toLocaleString()}`,
-      subtext: `${stats.pendingCount} unpaid`,
-      icon: <AlertCircle size={16} />,
-      iconBg: "bg-rose-50",
-      iconColor: "text-rose-500",
-    },
   ];
 
   return (
     <div className="space-y-6">
-      {/* 1. COMPACT STATS GRID */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 lg:gap-4">
+      {/* 1. COMPACT STATS GRID (5 COLUMNS) */}
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 lg:gap-4">
         {CARDS.map((c) => (
           <div key={c.title} className="bg-white p-3.5 rounded-2xl border border-slate-100 shadow-sm transition-all hover:shadow-md h-[95px] flex flex-col justify-between">
             <div className="flex items-center justify-between">
@@ -160,10 +151,7 @@ export default function Dashboard() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Main Sections (Left/Center) */}
         <div className="lg:col-span-9 space-y-6">
-          
-          {/* Recent Admissions */}
           <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
             <div className="p-5 border-b border-slate-50 flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -203,7 +191,7 @@ export default function Dashboard() {
                           </div>
                         </td>
                         <td className="px-5 py-3">
-                           <Badge label="PERMANENT" variant="monthly" />
+                           <Badge label={c.meal_plan || "Monthly"} variant="monthly" />
                         </td>
                         <td className="px-5 py-3">
                            <Badge label="FULL DAY" variant="fullday" />
@@ -221,7 +209,6 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* Quick Actions Panel */}
           <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
             <div className="flex items-center gap-2 mb-6">
               <Zap size={18} className="text-amber-400" />
@@ -256,9 +243,7 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Right Sidebar Panels */}
         <div className="lg:col-span-3 space-y-6">
-          {/* Expires Soon */}
           <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-5">
             <div className="flex items-center gap-2 mb-4">
               <Clock size={16} className="text-amber-500" />
@@ -290,7 +275,6 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* NEW Pending Dues Component (replaces Library Status) */}
           <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-5 relative overflow-hidden">
             <div className="absolute top-0 right-0 p-4 opacity-5">
                 <AlertCircle size={80} className="text-rose-600" />
@@ -301,13 +285,11 @@ export default function Dashboard() {
             </div>
             
             <div className="space-y-4">
-               {/* Total Amount Card */}
                <div className="bg-rose-50/50 rounded-2xl p-4 border border-rose-100/50">
                   <p className="text-[10px] font-bold text-rose-500 uppercase tracking-widest mb-1.5">Total Unpaid Amount</p>
                   <p className="text-2xl font-black text-rose-600">₹{(stats.pendingDuesAmount || 0).toLocaleString()}</p>
                </div>
 
-               {/* Largest Due Member */}
                {stats.largestDue ? (
                  <div className="pt-2">
                     <div className="flex items-center gap-2 mb-2.5">
