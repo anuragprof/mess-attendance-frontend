@@ -87,7 +87,6 @@ export default function Dashboard() {
   const fetchExpiringSoon = async () => {
     try {
       const res = await axios.get("/analytics/expiring-soon", { withCredentials: true });
-      // Backend returns array with { id, name, end_date, days_left, photo_url }
       const data = Array.isArray(res.data) ? res.data : [];
       setExpiringSoon(data);
     } catch (err) {
@@ -97,6 +96,19 @@ export default function Dashboard() {
       setExpiringLoading(false);
     }
   };
+
+  const recordGuestLunch = async () => {
+    try {
+      await axios.post("/guest-lunch/", {}, { withCredentials: true });
+      toast.success("Guest lunch recorded! (₹100)");
+      // Refresh stats
+      fetchDashStats();
+      fetchDailyTrend();
+    } catch (err) {
+      toast.error("Failed to record guest lunch");
+    }
+  };
+
 
   // ── calculations ────────────────────────────────────────
   const stats = useMemo(() => {
@@ -116,8 +128,10 @@ export default function Dashboard() {
     return {
       totalMembers: customers.length,
       activeMembers: customers.filter(c => !isExpired(c)).length,
-      // Guest lunch comes from the /analytics/stats endpoint
-      guestLunch: dashStats?.pending_lunch ?? 0,
+      // Guest lunch comes from the /analytics/stats endpoint (Walk-ins)
+      guestLunchCount: dashStats?.guest_lunch_count_today ?? 0,
+      // Pending lunch for subscription users
+      pendingLunchCount: dashStats?.pending_lunch_count ?? 0,
       // Revenue from subscription totals
       monthlyRevenue: customers.reduce((sum, c) => sum + (c.total_amount || 0), 0),
       // Pending dues
@@ -127,6 +141,7 @@ export default function Dashboard() {
       // Today stats from daily-trend
       todayTotal: dailyTrend?.today_total ?? 0,
     };
+
   }, [customers, dashStats, dailyTrend]);
 
   const recentAdmissions = [...customers]
@@ -145,11 +160,19 @@ export default function Dashboard() {
     },
     {
       title: "GUEST LUNCH",
-      value: statsLoading ? "…" : stats.guestLunch,
-      subtext: "pending today",
+      value: statsLoading ? "…" : stats.guestLunchCount,
+      subtext: `₹${(stats.guestLunchCount * 100).toLocaleString()} total`,
       icon: <UtensilsCrossed size={16} />,
       iconBg: "bg-orange-50",
       iconColor: "text-orange-500",
+    },
+    {
+      title: "PENDING LUNCH",
+      value: statsLoading ? "…" : stats.pendingLunchCount,
+      subtext: "to be served",
+      icon: <Clock size={16} />,
+      iconBg: "bg-amber-50",
+      iconColor: "text-amber-500",
     },
     {
       title: "REVENUE",
@@ -161,10 +184,12 @@ export default function Dashboard() {
     },
   ];
 
+
   return (
     <div className="space-y-6">
       {/* ── 1. COMPACT STATS GRID ──────────────────────────── */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 lg:gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 lg:gap-4">
+
         {CARDS.map((c) => (
           <div
             key={c.title}
@@ -305,7 +330,8 @@ export default function Dashboard() {
               <Zap size={18} className="text-amber-400" />
               <h3 className="font-bold text-slate-800">Quick Actions</h3>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 lg:gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 lg:gap-4">
+
               <ActionCard
                 label="New Admission"
                 icon={<UserPlus size={22} />}
@@ -330,7 +356,14 @@ export default function Dashboard() {
                 color="purple"
                 onClick={() => navigate("/reports")}
               />
+              <ActionCard
+                label="Guest Lunch"
+                icon={<UtensilsCrossed size={22} />}
+                color="orange"
+                onClick={recordGuestLunch}
+              />
             </div>
+
           </div>
         </div>
 
