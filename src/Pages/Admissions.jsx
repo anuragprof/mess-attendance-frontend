@@ -225,7 +225,6 @@ export default function Admissions() {
                 <th className="px-5 py-3.5 text-left font-semibold">Member</th>
                 <th className="px-5 py-3.5 text-left font-semibold">Subscription</th>
                 <th className="px-5 py-3.5 text-left font-semibold">End Date</th>
-                <th className="px-5 py-3.5 text-left font-semibold">Shift</th>
                 <th className="px-5 py-3.5 text-left font-semibold">Fee</th>
                 <th className="px-5 py-3.5 text-left font-semibold">Seat</th>
                 <th className="px-5 py-3.5 text-left font-semibold">Status</th>
@@ -237,7 +236,7 @@ export default function Admissions() {
               {loading ? (
                 Array.from({ length: 4 }).map((_, i) => (
                   <tr key={i} className="border-b border-slate-50">
-                    {Array.from({ length: 8 }).map((__, j) => (
+                    {Array.from({ length: 7 }).map((__, j) => (
                       <td key={j} className="px-5 py-4">
                         <div className="h-3 bg-slate-100 rounded animate-pulse" />
                       </td>
@@ -246,7 +245,7 @@ export default function Admissions() {
                 ))
               ) : filtered.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="px-5 py-12 text-center text-slate-400">
+                  <td colSpan={7} className="px-5 py-12 text-center text-slate-400">
                     No members found
                   </td>
                 </tr>
@@ -314,10 +313,7 @@ export default function Admissions() {
                         </div>
                       </td>
 
-                      {/* Shift */}
-                      <td className="px-5 py-3.5">
-                        <Badge label="Full Day" variant="fullday" />
-                      </td>
+
 
                       {/* Fee */}
                       <td className="px-5 py-3.5">

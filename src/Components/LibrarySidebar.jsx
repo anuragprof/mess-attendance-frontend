@@ -103,9 +103,8 @@ export default function LibrarySidebar({ me, setMe, isOpen, onClose }) {
             </div>
             <div className="leading-tight overflow-hidden">
               <p className="text-sm font-bold text-white tracking-tight truncate">
-                {me?.name || "Vachanalay"}
+                {me?.name || "Mess"}
               </p>
-              <p className="text-[10px] text-slate-400 leading-none">vip</p>
             </div>
           </div>
           <button
@@ -124,9 +123,7 @@ export default function LibrarySidebar({ me, setMe, isOpen, onClose }) {
              <ModuleSwitcher />
           </div>
 
-          <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest px-2 mb-3">
-            Main Menu
-          </p>
+
           <nav className="flex flex-col gap-0.5">
             {navItems.map((item) => (
               <SidebarItem key={item.to} {...item} onClick={handleNavClick} />
