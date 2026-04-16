@@ -226,7 +226,7 @@ export default function Admissions() {
                 <th className="px-5 py-3.5 text-left font-semibold">Subscription</th>
                 <th className="px-5 py-3.5 text-left font-semibold">End Date</th>
                 <th className="px-5 py-3.5 text-left font-semibold">Fee</th>
-                <th className="px-5 py-3.5 text-left font-semibold">Seat</th>
+                <th className="px-5 py-3.5 text-left font-semibold">Cust-ID</th>
                 <th className="px-5 py-3.5 text-left font-semibold">Status</th>
                 <th className="px-5 py-3.5 text-center font-semibold">Actions</th>
               </tr>
