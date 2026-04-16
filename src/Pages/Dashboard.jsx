@@ -213,14 +213,13 @@ export default function Dashboard() {
                   <tr>
                     <th className="px-5 py-3 font-semibold">Member</th>
                     <th className="px-5 py-3 font-semibold">Plan</th>
-                    <th className="px-5 py-3 font-semibold">Shift</th>
                     <th className="px-5 py-3 font-semibold">Days Left</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-50">
                   {loading ? (
                     <tr>
-                      <td colSpan={4} className="py-10 text-center">
+                      <td colSpan={3} className="py-10 text-center">
                         <Loader2 size={20} className="animate-spin text-indigo-400 mx-auto" />
                       </td>
                     </tr>
@@ -265,15 +264,7 @@ export default function Dashboard() {
                           />
                         </td>
 
-                        {/* Shift (derived from meals_per_day) */}
-                        <td className="px-5 py-3">
-                          <Badge
-                            label={getShiftLabel(c.meals_per_day)}
-                            variant={c.meals_per_day === 2 ? "fullday" : "halfday"}
-                          />
-                        </td>
-
-                        {/* Days Left (real data, replaces fake "Seat") */}
+                        {/* Days Left */}
                         <td className="px-5 py-3">
                           {typeof c.days_left === "number" ? (
                             <span
@@ -296,7 +287,7 @@ export default function Dashboard() {
                   ) : (
                     <tr>
                       <td
-                        colSpan={4}
+                        colSpan={3}
                         className="py-10 text-center text-slate-400 text-xs italic"
                       >
                         No admissions yet
