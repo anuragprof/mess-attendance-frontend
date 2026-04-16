@@ -1,14 +1,12 @@
 import React, { forwardRef } from "react";
 import * as LabelPrimitive from "@radix-ui/react-label";
 import { cva } from "class-variance-authority";
-import { cn } from "@/Lib/utils"; // ensure path matches your actual folder casing
+import { cn } from "@/Lib/utils";
 
-// Define base label styles using cva
 const labelVariants = cva(
-  "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+  "text-xs font-semibold text-slate-600 leading-none tracking-wide peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
 );
 
-// Converted Label component (JSX version)
 const Label = forwardRef(function Label({ className, ...props }, ref) {
   return (
     <LabelPrimitive.Root

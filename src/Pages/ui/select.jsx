@@ -1,14 +1,12 @@
 import React, { forwardRef } from "react";
 import * as SelectPrimitive from "@radix-ui/react-select";
 import { Check, ChevronDown, ChevronUp } from "lucide-react";
-import { cn } from "@/Lib/utils"; // ensure path matches your actual folder name/case
+import { cn } from "@/Lib/utils";
 
-// Basic Radix Select parts
 const Select = SelectPrimitive.Root;
 const SelectGroup = SelectPrimitive.Group;
 const SelectValue = SelectPrimitive.Value;
 
-// ---------- Trigger ----------
 const SelectTrigger = forwardRef(function SelectTrigger(
   { className, children, ...props },
   ref
@@ -17,21 +15,20 @@ const SelectTrigger = forwardRef(function SelectTrigger(
     <SelectPrimitive.Trigger
       ref={ref}
       className={cn(
-        "flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
+        "flex h-11 w-full items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-800 ring-offset-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-200 [&>span]:line-clamp-1",
         className
       )}
       {...props}
     >
       {children}
       <SelectPrimitive.Icon asChild>
-        <ChevronDown className="h-4 w-4 opacity-50" />
+        <ChevronDown className="h-4 w-4 text-slate-400" />
       </SelectPrimitive.Icon>
     </SelectPrimitive.Trigger>
   );
 });
 SelectTrigger.displayName = "SelectTrigger";
 
-// ---------- Scroll Buttons ----------
 const SelectScrollUpButton = forwardRef(function SelectScrollUpButton(
   { className, ...props },
   ref
@@ -42,7 +39,7 @@ const SelectScrollUpButton = forwardRef(function SelectScrollUpButton(
       className={cn("flex cursor-default items-center justify-center py-1", className)}
       {...props}
     >
-      <ChevronUp className="h-4 w-4" />
+      <ChevronUp className="h-4 w-4 text-slate-400" />
     </SelectPrimitive.ScrollUpButton>
   );
 });
@@ -58,13 +55,12 @@ const SelectScrollDownButton = forwardRef(function SelectScrollDownButton(
       className={cn("flex cursor-default items-center justify-center py-1", className)}
       {...props}
     >
-      <ChevronDown className="h-4 w-4" />
+      <ChevronDown className="h-4 w-4 text-slate-400" />
     </SelectPrimitive.ScrollDownButton>
   );
 });
 SelectScrollDownButton.displayName = "SelectScrollDownButton";
 
-// ---------- Content ----------
 const SelectContent = forwardRef(function SelectContent(
   { className, children, position = "popper", ...props },
   ref
@@ -74,7 +70,7 @@ const SelectContent = forwardRef(function SelectContent(
       <SelectPrimitive.Content
         ref={ref}
         className={cn(
-          "relative z-50 max-h-96 min-w-[8rem] overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+          "relative z-50 max-h-96 min-w-[8rem] overflow-hidden rounded-xl border border-slate-200 bg-white text-slate-800 shadow-lg shadow-slate-200/50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
           position === "popper" &&
             "data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1",
           className
@@ -99,7 +95,6 @@ const SelectContent = forwardRef(function SelectContent(
 });
 SelectContent.displayName = "SelectContent";
 
-// ---------- Label ----------
 const SelectLabel = forwardRef(function SelectLabel(
   { className, ...props },
   ref
@@ -107,14 +102,13 @@ const SelectLabel = forwardRef(function SelectLabel(
   return (
     <SelectPrimitive.Label
       ref={ref}
-      className={cn("py-1.5 pl-8 pr-2 text-sm font-semibold", className)}
+      className={cn("py-1.5 pl-8 pr-2 text-xs font-semibold text-slate-500", className)}
       {...props}
     />
   );
 });
 SelectLabel.displayName = "SelectLabel";
 
-// ---------- Item ----------
 const SelectItem = forwardRef(function SelectItem(
   { className, children, ...props },
   ref
@@ -123,14 +117,14 @@ const SelectItem = forwardRef(function SelectItem(
     <SelectPrimitive.Item
       ref={ref}
       className={cn(
-        "relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 focus:bg-accent focus:text-accent-foreground",
+        "relative flex w-full cursor-default select-none items-center rounded-lg py-2 pl-8 pr-2 text-sm font-medium outline-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 focus:bg-indigo-50 focus:text-indigo-700 transition-colors",
         className
       )}
       {...props}
     >
       <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
         <SelectPrimitive.ItemIndicator>
-          <Check className="h-4 w-4" />
+          <Check className="h-4 w-4 text-indigo-600" />
         </SelectPrimitive.ItemIndicator>
       </span>
 
@@ -140,7 +134,6 @@ const SelectItem = forwardRef(function SelectItem(
 });
 SelectItem.displayName = "SelectItem";
 
-// ---------- Separator ----------
 const SelectSeparator = forwardRef(function SelectSeparator(
   { className, ...props },
   ref
@@ -148,7 +141,7 @@ const SelectSeparator = forwardRef(function SelectSeparator(
   return (
     <SelectPrimitive.Separator
       ref={ref}
-      className={cn("-mx-1 my-1 h-px bg-muted", className)}
+      className={cn("-mx-1 my-1 h-px bg-slate-100", className)}
       {...props}
     />
   );

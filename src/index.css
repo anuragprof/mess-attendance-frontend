@@ -2,7 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 @reference "tailwindcss";
 
-/* 2️⃣ Define your theme mapping to CSS vars (this creates utilities like bg-card, border-border, etc.) */
+/* ── Theme Tokens ──────────────────────────────────────── */
 @theme {
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
@@ -28,15 +28,14 @@
   --color-input: hsl(var(--input));
   --color-ring: hsl(var(--ring));
 
-  /* optional radii */
   --radius-lg: 1rem;
   --radius-md: 0.75rem;
   --radius-sm: 0.5rem;
 
-  --font-inter: 'Inter', sans-serif;
+  --font-inter: 'Inter', ui-sans-serif, system-ui, sans-serif;
 }
 
-/* 3️⃣ Now define your actual design tokens (light + dark modes) */
+/* ── Design Tokens (Light / Dark) ──────────────────────── */
 @layer base {
   :root {
     --background: 220 30% 96%;
@@ -76,7 +75,6 @@
   }
 
   .dark {
-    /* (omitted for brevity) kept existing dark mode unchanged */
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
 
@@ -113,44 +111,55 @@
   }
 }
 
-@layer components {
-  .gradient-card {
-    @apply bg-gradient-to-b from-blue-50/50 to-white border border-blue-100 rounded-3xl shadow-sm transition-all hover:shadow-md;
+/* ── Global Reset & Font ───────────────────────────────── */
+@layer base {
+  * {
+    @apply border-slate-200;
   }
 
-  .premium-input {
-    @apply h-12 px-6 rounded-2xl border border-zinc-200 bg-white/70 backdrop-blur-sm focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-600/5 transition-all outline-none text-zinc-900 placeholder:text-zinc-400 font-medium;
+  body {
+    @apply bg-[#F9FAFB] text-slate-800 antialiased;
+    font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
-  .search-wrapper {
-    @apply relative flex items-center w-full shadow-sm shadow-zinc-200/50 rounded-2xl;
+  /* ── Global Typography Hierarchy ─────────────────────── */
+  h1 { @apply text-2xl font-bold text-slate-800 tracking-tight; }
+  h2 { @apply text-xl font-bold text-slate-800 tracking-tight; }
+  h3 { @apply text-lg font-bold text-slate-800; }
+  h4 { @apply text-base font-semibold text-slate-700; }
+  h5 { @apply text-sm font-semibold text-slate-700; }
+  h6 { @apply text-xs font-semibold text-slate-600; }
+
+  /* ── Consistent input font ───────────────────────────── */
+  input, select, textarea, button {
+    font-family: inherit;
   }
 }
 
-/* Sidebar backdrop fade-in animation */
+/* ── Reusable Component Utilities ──────────────────────── */
+@layer components {
+  .gradient-card {
+    @apply bg-white border border-slate-100 rounded-2xl shadow-sm transition-all hover:shadow-md;
+  }
+
+  .premium-input {
+    @apply h-11 px-4 rounded-xl border border-slate-200 bg-white focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/20 transition-all outline-none text-slate-800 placeholder:text-slate-400 font-medium text-sm;
+  }
+
+  .search-wrapper {
+    @apply relative flex items-center w-full shadow-sm shadow-slate-100 rounded-xl;
+  }
+}
+
+/* ── Animations ────────────────────────────────────────── */
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
 }
 
-@layer utilities {
-  .animate-fade-in {
-    animation: fadeIn 0.2s ease-out;
-  }
-}
-
-/* 4️⃣ After all this, you can safely use @apply */
-@layer base {
-  * {
-    @apply border-zinc-200;
-  }
-
-  body {
-    @apply bg-[#F9FAFB] text-zinc-900 font-inter antialiased;
-  }
-}
-
-/* Premium Scanner Animations */
 @keyframes pulseGentle {
   0%, 100% { transform: scale(1); opacity: 0.7; }
   50% { transform: scale(1.05); opacity: 1; }
@@ -164,6 +173,10 @@
 }
 
 @layer utilities {
+  .animate-fade-in {
+    animation: fadeIn 0.2s ease-out;
+  }
+
   .animate-pulse-gentle {
     animation: pulseGentle 2s ease-in-out infinite;
   }
@@ -172,7 +185,7 @@
     animation: scanLine 3s ease-in-out infinite;
   }
 
-  /* Sleek Custom Scrollbar */
+  /* ── Custom Scrollbar ────────────────────────────────── */
   .custom-scrollbar::-webkit-scrollbar {
     width: 5px;
   }
@@ -180,10 +193,10 @@
     background: transparent;
   }
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: #e4e4e7;
+    background: #e2e8f0;
     border-radius: 10px;
   }
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: #d4d4d8;
+    background: #cbd5e1;
   }
 }
