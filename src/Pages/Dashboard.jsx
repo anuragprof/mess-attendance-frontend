@@ -140,6 +140,10 @@ export default function Dashboard() {
       largestDue: largestDueMember,
       // Today stats from daily-trend
       todayTotal: dailyTrend?.today_total ?? 0,
+      // Session based pending
+      pendingMorning: dashStats?.pending_morning ?? 0,
+      pendingEvening: dashStats?.pending_evening ?? 0,
+      pendingToday: dashStats?.pending_meals_today ?? 0,
     };
 
   }, [customers, dashStats, dailyTrend]);
@@ -167,9 +171,9 @@ export default function Dashboard() {
       iconColor: "text-orange-500",
     },
     {
-      title: "PENDING LUNCH",
-      value: statsLoading ? "…" : stats.pendingLunchCount,
-      subtext: "to be served",
+      title: "PENDING MEALS",
+      value: statsLoading ? "…" : stats.pendingMorning,
+      subtext: `Evening: ${stats.pendingEvening} | Total: ${stats.pendingToday}`,
       icon: <Clock size={16} />,
       iconBg: "bg-amber-50",
       iconColor: "text-amber-500",
